@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1:  -->
+<!-- Health increased -->
+<!-- Health regen increased -->
+<!-- (line 28-32) -->
+<!-- update ablative armor tooltip -->
+
+<!-- Change 2: -->
+<!-- Basic Attack damage to primary target increased -->
+<!-- (line 35-75) -->
+
+<!-- Change 3: -->
+<!-- Defense Matrix now counts as Healing if the target of the attack is a Hero -->
+<!-- Fixed Tracking Innaccuracies -->
+<!-- (Also fix percent damage getting multiplied) -->
+<!-- (line 80-113) -->
+<!-- and libhdva and dvalayoutoverride -->
+
+
+<!-- Change 4:  -->
+<!-- Diverting Power no longer reduces movespeed  -->
+<!-- (line 115-119) -->
+
+<!-- Change 5: -->
+<!-- Bunny Hop Cooldown reduced from 100 seconds to 75 seconds -->
+<!-- (line 123-130) -->
+
+<!-- Change 6: -->
+<!-- When the Mech dies, the Death Recap is filled out -->
+<!-- libhdva -->
+
+<!-- Change 7: -->
+<!-- New 20 talent to cause Defense Matrix to no longer be interrupted by Stuns, Silences, Sleep or similar effects(Polymorph still affects it) -->
+ 
+  <CUnit id="HeroDVaMech">
+    <LifeStart value="2060" />
+    <LifeMax value="2060" />
+    <LifeRegenRate value="4.291" />
+  </CUnit>
+
+  <CActorSquib id="DVaMechAttackImpactSoundSquib">
+    <On Terms="Effect.DVaMechWeaponPrimaryTargetImpactSet.Start; At Target" Send="Create" />
+    <On Terms="Effect.DVaMechWeaponBounceTargetImpactSet.Start; At Target" Send="Create" />
+  </CActorSquib>
+  <CActorModel id="DVaMechWeaponImpactPersistentFXModel">
+    <On Terms="Effect.DVaMechWeaponPrimaryTargetImpactSet.Start; At Target" Send="Create" />
+    <On Terms="Effect.DVaMechWeaponBounceTargetImpactSet.Start; At Target" Send="Create" />
+  </CActorModel>
+  <CEffectSet id="DVaMechWeaponNewTargetImpactSet">
+    <EffectArray index="3" value="DVaMechWeaponPrimaryTargetImpactSet" />
+  </CEffectSet>
+  <CEffectEnumArea id="DVaMechWeaponTargetSearch">
+    <AreaArray index="0" Effect="DVaMechWeaponBounceTargetImpactSet"/>
+  </CEffectEnumArea>
+  <CEffectSet id="DVaMechWeaponPrimaryTargetImpactSet">
+    <EffectArray value="DVaMechWeaponDamage" />
+    <EffectArray value="DVaMechDefenseMatrixAggressionMatrixCooldownReduction" />
+  </CEffectSet>
+  <CEffectSet id="DVaMechWeaponBounceTargetImpactSet">
+    <EffectArray value="DVaMechWeaponBounceDamage" />
+    <EffectArray value="DVaMechDefenseMatrixAggressionMatrixCooldownReduction" />
+  </CEffectSet>
+  <CEffectDamage id="DVaMechWeaponDamage">
+    <MultiplicativeModifierArray index="DVaBounce" Modifier="0.2" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechWeaponBounceDamage" parent="DVaMechWeaponDamage">
+    <MultiplicativeModifierArray index="DVaBounce" Modifier="0.0" />
+  </CEffectDamage>
+  <CHero id="DVa">
+    <TalentTreeArray index="23" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" />
+    <TalentTreeArray index="24" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" />
+    <TalentTreeArray index="25" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" />
+    <LevelScalingArray>
+      <Modifications>
+        <Catalog value="Effect" />
+        <Entry value="DVaMechWeaponBounceDamage" />
+        <Field value="Amount" />
+        <Value value="0.040000" />
+        <AffectedByOverdrive value="1" />
+      </Modifications>
+    </LevelScalingArray>
+  </CHero>
+  
+  <CEffectSet id="DVaMechDefenseMatrixImpactSet">
+    <EffectArray index="0" value="DVaMechDefenseMatrixApplyDebuff" />
+    <EffectArray index="1" value="DVaMechDefenseMatrixApplyNonHeroesDebuff" />
+    <EffectArray index="2" value="DVaMechDefenseMatrixFusionGeneratorApplyDebuff" />
+    <EffectArray index="3" value="DVaMechDefenseMatrixDazerZoneApplySlow" />
+    <EffectArray index="4" value="DVaMechDefenseMatrixImpactRevealer" />
+    <EffectArray value="AbilityImpactRevealDummyDamage" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyNonHeroesDebuff">
+    <Behavior value="DVaMechDefenseMatrixDebuffNonHeroes" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMechDefenseMatrixDebuff">
+    <DamageResponse>
+      <ModifyScoreArray Value="Healing" />
+      <ModifyScoreArray Value="GenericHeroRealScoreValue1" />
+	  <TargetFilters value="Heroic;-"/>
+    </DamageResponse>
+  </CBehaviorBuff>
+  <CBehaviorBuff id="DVaMechDefenseMatrixDebuffNonHeroes" parent="StormDamageReduction">
+    <BuffFlags index="RefreshStack" value="1" />
+    <Duration value="0.3125" />
+    <DamageResponse>
+      <Chance value="1" />
+      <Handled value="DVaMechDefenseMatrixDamageReducedNotification" />
+      <ValidateEffectAliasesOp value="ExcludeHasAny" />
+      <Location value="Attacker" />
+      <ModifyFraction value="0.25" />
+      <ValidateEffectAliases value="PercentDamage" />
+      <ModifyScoreArray Value="GenericHeroRealScoreValue1" />
+	  <TargetFilters value="-;Heroic"/>
+    </DamageResponse>
+    <BehaviorCategories index="DebuffAbilityPower" value="1" />
+    <BehaviorCategories index="DebuffAutoattackDPS" value="1" />
+  </CBehaviorBuff>
+
+  <CBehaviorBuff id="DVaMechDefenseMatrixDivertingPowerPeriodicSearch">
+    <Modification>
+      <UnifiedMoveSpeedFactor value="0.0" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CAbilBehavior id="DVaMechBunnyHopHeroic">
+    <OffCost index="0">
+      <Cooldown Location="Player" TimeUse="75" />
+    </OffCost>
+    <ExpireCost index="0">
+      <Cooldown Location="Player" TimeUse="75" />
+    </ExpireCost>
+  </CAbilBehavior>
+  
+  
+
+  <CBehaviorBuff id="DVaMechDefenseMatrixChannelling">
+    <RemoveValidatorArray index="0" value="CasterNotDeadOrStasisOrPolymorphedOrSilencedOrStunnedUnlessDVaDNied" />
+  </CBehaviorBuff>
+  <CButton id="DVaDefenseMatrixDNied" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  <CTalent id="DVaDefenseMatrixDNied">
+    <Face value="DVaDefenseMatrixDNied" />
+    <Abil value="DVaMechDefenseMatrixOn" />
+  </CTalent>
+  <CValidatorPlayerTalent id="DVaHasDefenseMatrixDNied">
+    <WhichPlayer Value="Caster" />
+    <Find value="1" />
+    <Value value="DVaDefenseMatrixDNied" />
+  </CValidatorPlayerTalent>
+  
+
+  <CValidatorCombine id="CasterNotDeadOrStasisOrPolymorphedOrSilencedOrStunnedUnlessDVaDNied">
+    <Type value="And" />
+    <CombineArray value="CasterNotDead" />
+    <CombineArray value="CasterNotStasis" />
+    <CombineArray value="CasterNotPolymorphed" />
+    <CombineArray value="CasterNotSilencedUnlessDVaDNied" />
+    <CombineArray value="CasterNotStunnedUnlessDVaDNied" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="CasterNotStunnedUnlessDVaDNied">
+    <CombineArray value="CasterNotStunned" />
+    <CombineArray value="DVaHasDefenseMatrixDNied" />
+  </CValidatorCombine>
+  <CValidatorCombine id="CasterNotSilencedUnlessDVaDNied">
+    <CombineArray value="CasterNotSilenced" />
+    <CombineArray value="DVaHasDefenseMatrixDNied" />
+  </CValidatorCombine>
+  
+</Catalog>

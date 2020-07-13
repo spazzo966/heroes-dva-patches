@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1:  -->
+<!-- Pilot D.Va Health increased -->
+<!-- Pilot D.Va Health regen increased -->
+
+<!-- Change 2: -->
+<!-- Pilot D.Va Basic Attack damage decreased -->
+
+<!-- Change 3: -->
+<!-- Nuclear Option now also grants an active to cast Defense Matrix from the exploding mech as Pilot D.Va -->
+<!-- Nuclear Option bonus reduced -->
+
+<!-- Change 4:  -->
+<!-- Expensive Plating: Each time D.Va damage an enemy Hero with a basic ability or talent, the cooldown for her Heroic ability is reduced by 3% -->
+
+<!-- Change 5: -->
+<!-- Suppressing Fire now also applies slows to big shot and concussive pulse -->
+
+<!-- Change 6: -->
+<!-- Concussive Pulse now grants 1 second cooldown reduction per hero hit -->
+
+<!-- Change 7: -->
+<!-- Pilot D.Va can now see the amount of Self-Destruct charge that D.Va has on the dynamic ability hotbar  -->
+<!-- D.Va can now callout her Self Destruct charge percentage(this works for both Pilot and Mech form)  -->
+
+
+  <CTalent id="DVaSelfDestructNuclearOption">
+    <RankArray>
+      <BehaviorArray value="NuclearOptionAbilityDefenseMatrix" />
+      <BehaviorArray value="DVaPilotMechUnitTracker" />
+    </RankArray>
+  </CTalent>
+  <CActorModel id="DVaMechDefenseMatrixArea">
+    <On Terms="Behavior.DVaMechDefenseMatrixChannellingRemote.On" Send="Create" />
+    <On Terms="Behavior.DVaMechDefenseMatrixChannellingRemote.Off" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.DVaMechDefenseMatrixChannellingRemote.off" Target="DVaMech_DefenseMatrix_Loop" Send="Destroy Immediate" />
+  </CActorModel>
+  <CBehaviorAbility id="NuclearOptionAbilityDefenseMatrix">
+    <Buttons Face="NuclearOptionAbilityDefenseMatrix" Type="AbilCmd" AbilCmd="NuclearOptionAbilityDefenseMatrix,Execute" />
+    <ButtonOverrideDataFrame value="DVaLayoutOverride/DVaPilotNuclearOptionRetargetButtonOverrideFrame" />
+  </CBehaviorAbility>
+  <CEffectSet id="DVaMechPilotUnloadAbilitiesAndTalentsSetup">
+    <EffectArray value="DVaPilotAddMechToUnitTracker" />
+    <EffectArray value="DVaPilotApplyNuclearOptionTimer" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaPilotApplyNuclearOptionTimer">
+    <ValidatorArray value="DVaSelfDestructNuclearOptionHasTalent"/>
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaPilotNuclearOptionTimer" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotNuclearOptionTimer">
+    <TimeScaleSource Value="Caster"/>
+    <RemoveValidatorArray value="DVaSelfDestructNuclearOptionHasTalent"/>
+    <Duration value="7" />
+  </CBehaviorBuff>
+  <CEffectAddTrackedUnit id="DVaPilotAddMechToUnitTracker">
+    <ValidatorArray value="DVaSelfDestructNuclearOptionHasTalent"/>
+    <BehaviorLink value="DVaPilotMechUnitTracker" />
+    <TrackerUnit Value="Target" />
+    <TrackedUnit Value="Caster" />
+  </CEffectAddTrackedUnit>
+  <CButton id="NuclearOptionAbilityDefenseMatrix" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  <CBehaviorUnitTracker id="DVaPilotMechUnitTracker">
+    <BehaviorFlags index="Permanent" value="1" />
+    <BehaviorFlags index="EnabledWhileDead" value="1" />
+    <MaxTrackedUnits value="1" />
+    <UnitAddedAtMaxRule value="ReplaceOldest" />
+  </CBehaviorUnitTracker>
+  <CAbilEffectTarget id="NuclearOptionAbilityDefenseMatrix">
+    <Flags index="RequireTargetVision" value="0" />
+    <Range value="500" />
+    <Arc value="360" />
+    <UninterruptibleArray index="Cast" value="1" />
+    <UninterruptibleArray index="Channel" value="1" />
+    <UninterruptibleArray index="Finish" value="1" />
+    <!-- <CursorEffect value="DVaMechDefenseMatrixSearch" /> -->
+    <Effect value="DVaNuclearOptionDefenseMatrixCast" />
+    <CmdButtonArray index="Execute" DefaultButtonFace="NuclearOptionAbilityDefenseMatrix" UseValidator="DVaNuclearOptionHasMechUnitTrackedAndHasTimer" />
+    <!-- <CmdButtonArray index="Execute" DefaultButtonFace="NuclearOptionAbilityDefenseMatrix" /> -->
+    <Cost>
+      <Cooldown TimeUse="0.0625" />
+    </Cost>
+  </CAbilEffectTarget>
+  <CEffectSet id="DVaNuclearOptionDefenseMatrixCast">
+    <EffectArray value="DVaPilotRemoveNuclearOptionCountdownTimer" />
+    <EffectArray value="DVaNuclearOptionEnumMech" />
+    <TargetLocationType value="Point" />
+  </CEffectSet>
+  <CEffectRemoveBehavior id="DVaPilotRemoveNuclearOptionCountdownTimer">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaPilotNuclearOptionTimer" />
+  </CEffectRemoveBehavior>
+  <CEffectEnumTrackedUnits id="DVaNuclearOptionEnumMech">
+    <BehaviorLink value="DVaPilotMechUnitTracker" />
+    <Effect value="DVaMechDefenseMatrixApplyChannelRemote" />
+  </CEffectEnumTrackedUnits>
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyChannelRemote">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaMechDefenseMatrixChannellingRemote" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMechDefenseMatrixChannellingRemote">
+    <InfoFlags index="Hidden" value="0" />
+    <BehaviorCategories index="Restorable" value="1" />
+    <Duration value="3" />
+    <InitialEffect value="DVaMechDefenseMatrixOnInitialSetRemote" />
+    <FinalEffect value="DVaMechDefenseMatrixOffFinalSetRemote" />
+    <Modification>
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="CaptureMacGuffin" />
+      <AbilLinkDisableArray value="CaptureMacGuffinTwo" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+    </Modification>
+    <RemoveValidatorArray value="TargetNotDeadOrSilencedOrStasisOrStunned" />
+    <RemoveValidatorArray value="DVaMechNotinDeathTimeoutState" />
+    <Face value="DVaMechDefenseMatrixFace" />
+  </CBehaviorBuff>
+  <CEffectSet id="DVaMechDefenseMatrixOnInitialSetRemote">
+    <EffectArray value="DVaMechDefenseMatrixSetTurretTargetRemote" />
+    <EffectArray value="DVaMechDefenseMatrixDisableTurretRotationRemote" />
+    <EffectArray value="DVaMechDefenseMatrixApplyPeriodicSearchRemote" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaMechDefenseMatrixSetTurretTargetRemote">
+    <ImpactUnit Value="Target" />
+    <ModifyTurret Turret="DVaMechWeaponTurret">
+      <Target Effect="DVaNuclearOptionDefenseMatrixCast" Value="TargetPoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="IgnoreTurnRate" value="1" />
+    </ModifyTurret>
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMechDefenseMatrixDisableTurretRotationRemote">
+    <ImpactUnit Value="Target" />
+    <ModifyTurret Action="DisableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyPeriodicSearchRemote">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaMechDefenseMatrixPeriodicSearchRemote" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMechDefenseMatrixPeriodicSearchRemote">
+    <RemoveValidatorArray value="DVaMechDefenseMatrixTargetChannellingRemote" />
+    <Period value="0.0625" />
+    <PeriodicEffect value="DVaMechDefenseMatrixSearch" />
+  </CBehaviorBuff>
+  <CValidatorUnitCompareBehaviorCount id="DVaMechDefenseMatrixTargetChannellingRemote">
+    <WhichUnit Value="Target" />
+    <Compare value="GT" />
+    <Behavior value="DVaMechDefenseMatrixChannellingRemote" />
+  </CValidatorUnitCompareBehaviorCount>
+  <CEffectSet id="DVaMechDefenseMatrixOffFinalSetRemote">
+    <EffectArray value="DVaMechDefenseMatrixEnableTurretRotationRemote" />
+    <EffectArray value="DVaMechDefenseMatrixClearTurretTargetRemote" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaMechDefenseMatrixEnableTurretRotationRemote">
+    <ImpactUnit Value="Target" />
+    <ModifyTurret Action="EnableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMechDefenseMatrixClearTurretTargetRemote">
+    <ImpactUnit Value="Target" />
+    <ModifyTurret Action="ClearTarget" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CValidatorCombine id="DVaNuclearOptionHasMechUnitTrackedAndHasTimer">
+    <Type value="And" />
+    <CombineArray value="DVaSelfDestructNuclearOptionPilotHasTimerBehavior" />
+    <CombineArray value="DVaSelfDestructNuclarOptionMechUnitIsTracked" />
+  </CValidatorCombine>
+  <CValidatorCompareTrackedUnitsCount id="DVaSelfDestructNuclarOptionMechUnitIsTracked">
+    <Compare value="GT" />
+    <BehaviorLink value="DVaPilotMechUnitTracker" />
+    <TrackedUnitValidatorArray value="DVaMechMechTargetSelfDestructing" />
+  </CValidatorCompareTrackedUnitsCount>
+  <CValidatorUnitHasBehavior id="DVaSelfDestructNuclearOptionPilotHasTimerBehavior">
+    <Behavior value="DVaPilotNuclearOptionTimer" />
+  </CValidatorUnitHasBehavior>
+  <CEffectModifyUnit id="DVaPilotDummyEstablish">
+    <ImpactUnit Value="Target" />
+  </CEffectModifyUnit>
+  <CValidatorCombine id="TargetNotDeadOrSilencedOrStasisOrStunned">
+    <Type value="And" />
+    <CombineArray value="TargetNotStunned" />
+    <CombineArray value="TargetNotDead" />
+    <CombineArray value="TargetNotSilenced" />
+    <CombineArray value="TargetNotStasis" />
+  </CValidatorCombine>
+  <CActorUnit id="HeroDVaPilot">
+    <On Terms="Effect.DVaPilotDummyEstablish.Start" Send="Create DVaNuclearOptionLinkSite" />
+    <On Terms="Abil.NuclearOptionAbilityDefenseMatrix.TargetOff" Target="DVaMechDefenseMatrixRemoteGuide" Send="Destroy" />
+    <On Terms="Abil.NuclearOptionAbilityDefenseMatrix.TargetOn" Send="Create DVaMechDefenseMatrixRemoteGuide" />
+    <On Terms="Behavior.DVaPilotNuclearOptionTimer.Off" Target="DVaMechDefenseMatrixRemoteGuide" Send="Destroy" />
+    <On Terms="Behavior.DVaPilotNuclearOptionTimer.Off" Target="DVaNuclearOptionLinkSite" Send="Destroy" />
+    <On Terms="UnitDeath" Target="DVaMechDefenseMatrixRemoteGuide" Send="Destroy" />
+  </CActorUnit>
+  <CActorModel id="DVaNuclearOptionLinkSite">
+    <Aliases value="_NuclearOptionLinkSite" />
+    <HostSiteOps Ops="SOpTargetUnit SOpAttachCenter" />
+    <Model value="Invisible" />
+  </CActorModel>
+  <CActorTriangle id="DVaMechDefenseMatrixRemoteGuide" parent="StormGuideVisualTriangleAttachAtBase">
+    <Host Subject="_NuclearOptionLinkSite" Actor="Find" />
+    <Remove Terms="ActorCreation" Send="Create StormGuideRegionTriangleAttachAtBase" />
+    <On Terms="ActorCreation" Send="Create DVaMechDefenseMatrixPolygonRegion" />
+    <On Terms="ActorCreation; ValidatePlayer" Send="ArcSetAngle 30.000000" />
+    <HostSiteOps Ops="SOpDVaMechDefenseMatrixForward SOpMoveForwardByDot1 SOpLookAtCursor SOp2DRotation" />
+    <Model value="DVaMechDefenseMatrixTriangleGuide" />
+  </CActorTriangle>
+
+  <CAbilEffectInstant id="DVaMechSelfDestruct">
+    <Cost>
+      <CostEventEffectArray index="ChargeDecrease" value="DVaChargeDecreaseEventCheck" />
+      <CostEventEffectArray index="ChargeIncrease" value="DVaChargeIncreaseEventCheck" />
+    </Cost>
+  </CAbilEffectInstant>
+  <CEffectModifyUnit id="DVaChargeIncreaseEventCheck">
+    <ValidatorArray value="DVaTargetIsPilot"/>
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaPilotSelfDestructChargeCounter,Execute" ChargeCountUse="-1" CooldownOperation="Add" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaChargeDecreaseEventCheck">
+    <ValidatorArray value="DVaTargetIsPilot"/>
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaPilotSelfDestructChargeCounter,Execute" ChargeCountUse="100" CooldownOperation="Add" />
+  </CEffectModifyUnit>
+  <CEffectSet id="DVaMechPilotLoadSet">
+    <!-- <EffectArray value="DVaMechPilotAddTrackedUnit" /> -->
+  </CEffectSet>
+  <CUnit id="HeroDVaPilot">
+    <LifeStart value="1140" />
+    <LifeMax value="1140" />
+    <LifeRegenRate value="2.6511" />
+    <!-- <BehaviorArray Link="NuclearOptionAbilityDefenseMatrix" /> -->
+    <!-- <BehaviorArray Link="DVaPilotMechUnitTracker" /> -->
+    <BehaviorArray Link="DVaPilotSelfDestructChecker" />
+  </CUnit>
+  <CBehaviorAbility id="DVaPilotSelfDestructChecker">
+    <Buttons Face="DVaMechSelfDestruct" Type="AbilCmd" AbilCmd="DVaPilotSelfDestructChargeCounter,Execute" />
+    <ButtonOverrideDataFrame value="DVaLayoutOverride/DVaPilotSelfDestructChargeButtonOverrideFrame" />
+  </CBehaviorAbility>
+  <CAbilEffectInstant id="DVaPilotSelfDestructChargeCounter">
+    <Effect value="DVaPilotSelfDestructDoesNothing" />
+    <Cost>
+      <Charge CountMax="100" CountUse="100" HideCount="1" />
+      <!-- <Charge CountMax="100" CountUse="100" /> -->
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechSelfDestruct">
+    </CmdButtonArray>
+    <Flags index="ValidateButtonState" value="0" />
+  </CAbilEffectInstant>
+  <CEffectModifyUnit id="DVaPilotSelfDestructDoesNothing">
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaPilotSelfDestructChargeCounter,Execute" ChargeCountUse="-100" CooldownOperation="Add" />
+  </CEffectModifyUnit>
+  
+
+  <CEffectDamage id="DVaPilotWeaponDamage" parent="StormWeapon">
+    <Amount value="48" />
+    <MultiplicativeModifierArray index="0" Validator="DVaPilotGGWPHasTalent" Modifier="0.7" />
+  </CEffectDamage>
+  
+
+  <CEffectSet id="DVaBigShotImpactSet">
+    <EffectArray value="DVaPilotSuppressingFireApplySlowAbility" />
+    <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" /> -->
+    <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" /> -->
+  </CEffectSet>
+  <CEffectSet id="DVaPilotConcussivePulseImpactSet">
+    <EffectArray value="DVaPilotSuppressingFireApplySlowAbility" />
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" />
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" />
+    <EffectArray value="DVaConcussivePulseCooldownReductionHeroHit" />
+  </CEffectSet>
+
+  <CEffectModifyUnit id="DVaConcussivePulseCooldownReductionHeroHit">
+    <ValidatorArray value="TargetIsHero" />
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaPilotConcussivePulse,Execute" CooldownOperation="Add" CooldownTimeUse="-1" />
+  </CEffectModifyUnit>
+
+  <CEffectApplyBehavior id="DVaPilotSuppressingFireApplySlowAbility">
+    <ValidatorArray value="DVaPilotSuppressingFireHasTalent"/>
+    <Behavior value="DVaPilotSuppressingFireSlow" />
+  </CEffectApplyBehavior>
+  
+  <CEffectSet id="DVaBoostersImpactSet">
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" />
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechBunnyHopImpactSet">
+    <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" /> -->
+    <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" /> -->
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechSelfDestructDetonationSearchImpactSet">
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" />
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaPilotCallMechMEKAfallImpactSet">
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" />
+    <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" />
+  </CEffectSet>
+
+  <CEffectModifyUnit id="DVaExpensivePlatingHeroicCooldownReductionBigShot">
+    <ValidatorArray value="DVaCasterExpensivePlatingHasTalent" />
+    <ValidatorArray value="TargetIsHero" />
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaPilotBigShot,Execute" CooldownOperation="Add">
+      <Fraction Cooldown="-0.03" />
+    </Cost>
+    <!-- <Cost Abil="DVaMechBunnyHopHeroic,Execute" CooldownOperation="Add"> -->
+      <!-- <Fraction Cooldown="-0.05" /> -->
+    <!-- </Cost> -->
+  </CEffectModifyUnit>
+  <CEffectModifyPlayer id="DVaExpensivePlatingHeroicCooldownReductionBunnyHop">
+    <ValidatorArray value="DVaCasterExpensivePlatingHasTalent" />
+    <ValidatorArray value="TargetIsHero" />
+    <WhichPlayer Value="Caster" />
+    <Cost>
+      <Cooldown>
+        <Link value="Abil/DVaMechBunnyHopHeroic" />
+        <Location value="Player" />
+        <Operation value="Add" />
+        <TimeUse value="-2.25" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  
+  <CValidatorPlayerTalent id="DVaCasterExpensivePlatingHasTalent">
+    <WhichPlayer Value="Caster" />
+    <Find value="1" />
+    <Value value="DVaMechExpensivePlating" />
+  </CValidatorPlayerTalent>
+  
+</Catalog>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Desc>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton02/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaMechSelfDestruct" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaMechSelfDestruct" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaMechSelfDestruct" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton30/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton31/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton32/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton33/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton34/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  <Frame type="AnnounceableFrame" name="GameUI/UIContainer/ConsoleUIContainer/CommandPanel/CommandButton35/Announcer" file="GameUI">
+    <StateGroup name="AnnounceState">
+      <DefaultState val="Invalid" />
+      <State name="DVaMechSelfDestructDisabled">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="DVaMechSelfDestruct">
+        <When type="Property" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <When type="Property" frame="$parent" CommandDisabled="false" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+      <State name="AurielRayOfHeaven">
+        <When type="Property" AbilityLink="AurielRayOfHeaven" />
+        <When type="Property" frame="$parent/CooldownLabel" Visible="false" />
+        <Action type="SetProperty" Announcement="VitalAmount" />
+        <Action type="SetProperty" Vital="Energy" />
+      </State>
+      <State name="TracerPulseBomb">
+        <When type="Property" AbilityLink="TracerPulseBomb" />
+        <When type="Property" frame="$parent" CommandDisabled="true" />
+        <Action type="SetProperty" Announcement="UltimateCharging" />
+      </State>
+      <State name="Invalid">
+        <When type="Property" AbilityLink="invalid" />
+        <When type="Property" BehaviorLink="invalid" />
+        <Action type="SetProperty" Announcement="Disabled" />
+      </State>
+      <State name="Behavior">
+        <When type="Property" AbilityLink="invalid" />
+        <Action type="SetProperty" Announcement="Behavior" />
+      </State>
+      <State name="Ability">
+        <When type="Property" BehaviorLink="invalid" />
+        <When type="Property" Operator="NotEqual" AbilityLink="DVaPilotSelfDestructChargeCounter" />
+        <Action type="SetProperty" Announcement="AbilityReady" />
+      </State>
+    </StateGroup>
+  </Frame>
+  
+</Desc>

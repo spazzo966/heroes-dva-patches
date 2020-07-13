@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StyleFile>
+  <Style name="DummyDamageTitle" template="StandardGlueButtonSmallLeft" height="16" vjustify="Middle" hjustify="Left" styleflags="Shadow | Glow" textcolor="255,192,192,192 - 255,181,193,255" highlightcolor="255,255,255,255" disabledcolor="255,75,65,135" hotkeycolor="255,255,255,255" hyperlinkcolor="255,0,0,0" glowcolor="255,0,0,0" shadowoffset="1" outlinewidth="0"/>
+  <Style name="Storm_TabButton_Label_Modified" template="HeaderExtendedTemplate" height="16" textcolor="d5cff9-aaa1ed" vjustify="Middle" hjustify="Center" glowcolor="030212" highlightglowcolor="030212" highlightcolor="ffffff-b6acff" styleflags="!Shadow|Glow" disabledcolor="6d64a9" disabledglowcolor="030212" />
+  <Style name="Storm_TabButton_Label_Selected_Modified" template="HeaderExtendedTemplate" height="16" textcolor="ffffff-eeecff" vjustify="Middle" hjustify="Center" glowcolor="1200ff" highlightglowcolor="1200ff" highlightcolor="#ColorWhite" styleflags="!Shadow|Glow" disabledcolor="6d64a9" disabledglowcolor="030212" />
+  <Style name="Storm_VitalsLabel_Modified" template="Storm_VitalsLabel_R" height="12" vjustify="Middle" hjustify="Center" />
+  <Style name="Storm_VitalsLabel_ModifiedCore" template="Storm_VitalsLabel_Modified" height="16" />
+  <Style name="Storm_VitalsLabel_ModifiedTowns" template="Storm_VitalsLabel_Modified" height="12" />
+  <Style name="Storm_AbilityTopBar_Modified" template="Storm_LeaderTalentHeader" height="19" />
+  <Style name="Storm_LeaderHeroNameModified" template="Storm_LeaderHeroName" height="16" />
+  <Style name="Storm_PersonalizedStats_HeaderModified" template="Storm_PersonalizedStats_Header" height="14" vjustify="Middle" hjustify="Center" />
+</StyleFile>
