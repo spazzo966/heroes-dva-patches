@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1:  -->
+<!-- You can now select the other Heroic option by picking its upgrade at level 20 -->
+
+<!-- Change 2: -->
+<!-- Crash Course now instantly grants its reward -->
+
+<!-- Change 3: -->
+<!-- Dazer Zone slow effect is now increased by 10% for each additional enemy hero affected by defense matrix(1 hero = 20%, 2 heroes = 30%, 3 heroes = 40%, 4 heroes = 40%, 5 heroes = 40%, 6 heroes = 40%, 7 heroes = 40%) -->
+
+<!-- Change 4:  -->
+<!-- New level 13 talent: Capacative Matrix: When Defese Matrix end, D.Va's Mech heals for 25% of the damage prevented by it -->
+<!-- New level 13 talent: Capacative Matrix: When Defese Matrix prevents damage to a hero other than D.Va, D.Va's Mech heals for 50% of the damage prevented -->
+<!-- New level 13 talent: Persistent Matrix: When Defese Matrix expires or is manually cancelled, targets currently affected by Defense Matrix remain under the affect of Defense Matrix for a further 2 seconds -->
+<!-- New level 13 talent: Enhanced Shells: When Self-Destruct is fully charged, D.Va's Basic Attack damage is increased by 20% against Heroes, and the Mech heals for 20% of the damage dealt to Enemy Heroes with Basic Attacks -->
+<!-- New level 13 talent: Captain's Duty: If D.Va's mech takes fatal damage when Self-Destruct is available, rather than die, the mech starts Self-Destructing, and D.Va is only ejected once it has exploded. D.Va may still move the mech while this Self-Destruct is counting down, but its movement speed is reduced by 50%. The cooldown of Call Mech is not reset from this Self-Destruct, but Self-Destruct loses all charge progress -->
+
+<!-- Change 5: -->
+<!-- Nanoweave Suit: Damaging an enemy Hero with Pilot Mode Basic Attacks extends Nanoweave Suit duration by 0.5 seconds, up to a maximum of 4 seconds -->
+
+<!-- Change 6: -->
+<!-- Defense Matrix now features floating combat text when it ends to display the damage prevented by that cast -->
+
+<!-- Change 7: -->
+<!-- Increased Maximum Charge per use of Fusion Generator to 20, now only requires the target to have the debuff rather than d.va to be channeling -->
+
+  <CTalent id="DVaBoostersCrashCourse">
+    <Abil value="DVaBoostersOn" />
+    <AbilityModificationArray index="0">
+      <Modifications index="0">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechBoostersCrashCourseSwitch" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+      <Modifications index="1">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaCrashCourseCompleteApplyPendingCDR" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications index="2">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaCrashCourseCompleteRemovePendingCDRStacks" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications index="3">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersCrashCourseTransferToMech" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+      <Modifications index="4">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersCrashCourseTransferToPilot" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+      <Modifications index="5">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersCrashCourseApplyMechAutoPilotTokenCheck" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+      <Modifications index="6">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersCrashCourseMechAutoPilotTransferToPilot" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+      <Modifications index="6">
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersCrashCourseIncrementQuestToken" />
+        <Field value="Chance" />
+        <Value value="0.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+    <Face value="DVaBoostersCrashCourse" />
+    <RankArray index="0">
+      <BehaviorArray index="0" value="" />
+    </RankArray>
+    <QuestData StackBehavior="" TargetCount="" />
+  </CTalent>
+  
+
+  <CEffectSet id="DVaPilotWeaponImpactSet">
+    <EffectArray index="0" value="DVaPilotWeaponCallMechCooldownSwitch" />
+    <EffectArray index="1" value="DVaPilotSuppressingFireApplySlow" />
+    <EffectArray index="2" value="DVaPilotNanoweaveSuitExtendDuration" />
+    <EffectArray index="3" value="DVaPilotNanoweaveSuitIncrementExtenderTokenCounter" />
+    <EffectArray index="4" value="DVaPilotWeaponDamage" />
+  </CEffectSet>
+  <CEffectModifyBehaviorBuffDuration id="DVaPilotNanoweaveSuitExtendDuration">
+    <ValidatorArray value="CasterNotBlindedAndTargetNotEvading" />
+    <ValidatorArray value="DVaPilotNanoweaveSuitHasBuff" />
+    <ValidatorArray value="DVaPilotHasLT8NanoweaveExtenderTokens" />
+    <ValidatorArray value="TargetIsHero" />
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotNanoweaveSuitBuff" />
+    <Value value="0.5" />
+  </CEffectModifyBehaviorBuffDuration>
+  <CEffectRemoveBehavior id="DVaPilotNanoweaveSuitRemoveExtenderTokenCounterBehavior">
+    <BehaviorLink value="DVaPilotNanoweaveSuitExtenderTokenCounter" />
+    <Count value="8" />
+  </CEffectRemoveBehavior>
+  <CEffectApplyBehavior id="DVaPilotNanoweaveSuitApplyExtenderTokenCounterBehavior">
+    <Behavior value="DVaPilotNanoweaveSuitExtenderTokenCounter" />
+  </CEffectApplyBehavior>
+  <CValidatorUnitCompareTokenCount id="DVaPilotHasLT8NanoweaveExtenderTokens">
+    <WhichUnit Value="Caster" />
+    <Compare value="LT" />
+    <Value value="8" />
+    <TokenId value="DVaPilotNanoweaveSuitExtenderTokenCounter" />
+  </CValidatorUnitCompareTokenCount>
+  <CEffectModifyTokenCount id="DVaPilotNanoweaveSuitIncrementExtenderTokenCounter" parent="BaseEffectModifyTokenCount">
+    <ValidatorArray value="CasterNotBlindedAndTargetNotEvading" />
+    <ValidatorArray value="DVaPilotNanoweaveSuitHasBuff" />
+    <ValidatorArray value="TargetIsHero" />
+    <TokenId value="DVaPilotNanoweaveSuitExtenderTokenCounter" />
+  </CEffectModifyTokenCount>
+  <CBehaviorBuff id="DVaPilotNanoweaveSuitBuff">
+    <InitialEffect value="DVaPilotNanoweaveSuitApplyExtenderTokenCounterBehavior"/>
+	<FinalEffect value="DVaPilotNanoweaveSuitRemoveExtenderTokenCounterBehavior"/>
+  </CBehaviorBuff>
+  <CBehaviorTokenCounter id="DVaPilotNanoweaveSuitExtenderTokenCounter" parent="StormGenericToken">
+    <Max value="8" />
+  </CBehaviorTokenCounter>
+  
+
+<!--   <CEffectSet id="DVaBoostersInitialSet">
+    <ValidatorArray value="DVaMechCasterIsNotBoosting" />
+    <ValidatorArray value="CasterNotRooted" />
+    <EffectArray index="0" value="DVaMechDefenseMatrixBoostersActivateSet"/>
+    <EffectArray index="1" value="DvaMechBunnyHopRemoveBehavior" />
+    <EffectArray index="2" value="DVaBoostersApplyBoosterBehavior" />
+    <EffectArray index="3" value="DVaBoostersRushdownApplyCombatMonitor" />
+  </CEffectSet>
+  
+
+  <CEffectSet id="DVaMechDefenseMatrixBoostersActivateSet">
+    <EffectArray value="DVaMechDefenseMatrixEnableTurretRotation" />
+    <EffectArray value="DVaMechDefenseMatrixClearTurretTarget" />
+  </CEffectSet>
+
+  <CEffectSet id="DVaBoostersFinalSet">
+    <EffectArray value="DVaBoostersUpdateDefenseMatrixTargetPersistent" />
+  </CEffectSet>
+  
+  <CEffectCreatePersistent id="DVaBoostersUpdateDefenseMatrixTargetPersistent">
+    <ValidatorArray value="DVaMechDefenseMatrixCasterChannelling"/>
+    <WhichLocation Value="CasterPoint" />
+    <PeriodCount value="1" />
+    <PeriodicEffectArray value="DVaMechDefenseMatrixSetTurretTargetBoostersFollowthrough" />
+    <PeriodicOffsetArray Y="-10" />
+    <PeriodicPeriodArray value="0" />
+    <Marker>
+      <MatchFlags index="Id" value="1" />
+    </Marker>
+    <FinalEffect value="DVaMechDefenseMatrixDisableTurretRotation" />
+  </CEffectCreatePersistent>
+  
+  <CEffectModifyUnit id="DVaMechDefenseMatrixSetTurretTargetBoostersFollowthrough">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Turret="DVaMechWeaponTurret">
+      <Target Value="TargetPoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="IgnoreTurnRate" value="1" />
+    </ModifyTurret>
+  </CEffectModifyUnit> -->
+  
+
+  <CRequirement id="BlankRequirement">
+  </CRequirement>
+
+  <CAbilEffectTarget id="DVaPilotBigShot">
+    <CmdButtonArray index="Execute" Requirements="BlankRequirement" ShowValidator="DVaBigShotAbilityValidatorCombine" UseValidator="DVaBigShotAbilityUseValidatorCombine" />
+  </CAbilEffectTarget>
+  
+  <CValidatorCombine id="DVaBigShotAbilityUseValidatorCombine">
+    <Type value="And" />
+    <CombineArray value="DVaCasterisPilot" />
+    <CombineArray value="DVaBigShotAbilityValidatorCombine" />
+  </CValidatorCombine>
+
+  <CValidatorCombine id="DVaBigShotAbilityValidatorCombine">
+    <CombineArray value="DVaBigShotAbilityValidatorHasBigShotAndDoesNotHaveStopAndPop" />
+    <CombineArray value="DVaBigShotAbilityValidatorHasBunnyHopAndPewPewPewAndInPilot" />
+    <CombineArray value="DVaBigShotAbiltyValidatorHasBigShotAndStopAndPopAndInPilot" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBigShotAbilityValidatorHasBunnyHopAndPewPewPewAndInPilot">
+    <Type value="And" />
+    <CombineArray value="DVaBunnyHopHasTalent" />
+    <CombineArray value="DVaBigShotPewPewPewHasReplacedTalent" />
+    <CombineArray value="DVaCasterisPilot" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBigShotAbiltyValidatorHasBigShotAndStopAndPopAndInPilot">
+    <Type value="And" />
+    <CombineArray value="DVaBigShotHasTalent" />
+    <CombineArray value="DVaBunnyHopStopAndPopHasTalent" />
+    <CombineArray value="DVaCasterisPilot" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBigShotAbilityValidatorHasBigShotAndDoesNotHaveStopAndPop">
+    <Type value="And" />
+    <CombineArray value="DVaBigShotHasTalent" />
+    <CombineArray value="DVaStopAndPopDoesNotHaveTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorUnitType id="DVaCasterisPilot">
+    <WhichUnit Value="Caster" />
+    <Value value="HeroDVaPilot" />
+    <Find value="1" />
+  </CValidatorUnitType>
+
+  <CAbilBehavior id="DVaMechBunnyHopHeroic">
+    <CmdButtonArray index="On" Requirements="BlankRequirement" ShowValidator="DVaBunnyHopAbilityValidatorCombine" UseValidator="DVaBunnyHopAbilityUseValidatorCombine" />
+  </CAbilBehavior>
+  
+
+  <CValidatorCombine id="DVaBunnyHopAbilityUseValidatorCombine">
+    <Type value="And" />
+    <CombineArray value="DVaCasterisMech" />
+    <CombineArray value="DVaBunnyHopAbilityValidatorCombine" />
+  </CValidatorCombine>
+
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorCombine">
+    <CombineArray value="DVaBunnyHopAbilityValidatorHasBunnyHopAndDoesNotHavePewPewPew" />
+    <CombineArray value="DVaBunnyHopAbilityValidatorHasBunnyHopAndPewPewPewInMech" />
+    <CombineArray value="DVaBunnyHopAbilityValidatorHasBigShotAndStopAndPopAndInMech" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorHasBunnyHopAndPewPewPewInMech">
+    <Type value="And" />
+    <CombineArray value="DVaBunnyHopHasTalent" />
+    <CombineArray value="DVaBigShotPewPewPewHasReplacedTalent" />
+    <CombineArray value="DVaCasterisMech" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorHasBigShotAndStopAndPopAndInMech">
+    <Type value="And" />
+    <CombineArray value="DVaBigShotHasTalent" />
+    <CombineArray value="DVaBunnyHopStopAndPopHasTalent" />
+    <CombineArray value="DVaCasterisMech" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorHasBunnyHopAndDoesNotHavePewPewPew">
+    <Type value="And" />
+    <CombineArray value="DVaBunnyHopHasTalent" />
+    <CombineArray value="DVaPewPewPewDoesNotHaveTalent" />
+  </CValidatorCombine>
+
+  <CValidatorCombine id="DVaBunnyHopStopAndPopCombine">
+    <CombineArray value="DVaBunnyHopHasTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorPlayerTalent id="DVaBunnyHopHasTalent">
+    <Find value="1" />
+    <Value value="DVaBunnyHop" />
+  </CValidatorPlayerTalent>
+  <CValidatorPlayerTalent id="DVaBigShotHasTalent">
+    <Find value="1" />
+    <Value value="DVaBigShot" />
+  </CValidatorPlayerTalent>
+  <CValidatorPlayerTalent id="DVaPewPewPewDoesNotHaveTalent">
+    <Find value="0" />
+    <Value value="DVaBigShotPewPewPewReplaced" />
+  </CValidatorPlayerTalent>
+  <CValidatorPlayerTalent id="DVaStopAndPopDoesNotHaveTalent">
+    <Find value="0" />
+    <Value value="DVaBunnyHopStopAndPop" />
+  </CValidatorPlayerTalent>
+  
+
+  <CValidatorCombine id="DVaBigShotPewPewPewCombine">
+    <Type value="And" />
+    <CombineArray value="DVaBigShotHasTalent" />
+    <CombineArray value="DVaBigShotPewPewPewHasReplacedTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="DVaBunnyHopStopAndPopButtonCombine">
+    <Type value="And" />
+    <CombineArray value="DVaBunnyHopHasTalent" />
+    <CombineArray value="DVaBunnyHopStopAndPopHasTalent" />
+  </CValidatorCombine>
+  
+
+  <CValidatorUnitType id="DVaCasterisMech">
+    <WhichUnit Value="Caster" />
+    <Value value="HeroDVaMech" />
+    <Find value="1" />
+  </CValidatorUnitType>
+
+
+  <CButton id="DVaPilotBigShot" parent="StormButtonParent">
+    <TooltipAppender Validator="DVaBigShotPewPewPewCombine" Face="DVaBigShotPewPewPew" />
+    <Icon value="Assets\Textures\storm_ui_icon_dva_bigshot.dds" />
+  </CButton>
+  
+  <CButton id="DVaBunnyHopOn" parent="StormButtonParent">
+    <TooltipAppender Validator="DVaBunnyHopStopAndPopButtonCombine" Face="DVaBunnyHopStopAndPop" />
+    <TooltipCooldownOverrideText value="Button/OverrideText/DVaBunnyHop" />
+    <Icon value="Assets\Textures\storm_ui_icon_dva_bunnyhop.dds" />
+  </CButton>
+  
+  <CValidatorPlayerTalent id="DVaBigShotPewPewPewHasReplacedTalent">
+    <Find value="1" />
+    <Value value="DVaBigShotPewPewPewReplaced" />
+  </CValidatorPlayerTalent>
+
+  <CTalent id="DVaBigShotPewPewPewReplaced">
+    <Face value="DVaBigShotPewPewPew" />
+    <Abil value="DVaPilotBigShot" />
+  </CTalent>
+  
+  <CHero id="DVa">
+    <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" />
+    <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" />
+    <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" />
+    <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" />
+    <TalentTreeArray index="4" Talent="DVaDefenseMatrixDivertingPower" Tier="2" Column="1" />
+    <TalentTreeArray index="5" Talent="DVaDefenseMatrixGetThroughThis" Tier="2" Column="2" />
+    <TalentTreeArray index="6" Talent="DVaDefenseMatrixFusionGenerator" Tier="2" Column="3" />
+    <TalentTreeArray index="7" Talent="DVaSelfDestructBringItOn" Tier="2" Column="4" />
+    <TalentTreeArray index="8" Talent="DVaBoostersComingThrough" Tier="3" Column="1" />
+    <TalentTreeArray index="9" Talent="DVaDefenseMatrixDazerZone" Tier="3" Column="2" />
+    <TalentTreeArray index="10" Talent="DVaDefenseMatrixAggressionMatrix" Tier="3" Column="3" />
+    <TalentTreeArray index="11" Talent="DVaSelfDestructNuclearOption" Tier="3" Column="4" />
+    <TalentTreeArray index="12" Talent="DVaBunnyHop" Tier="4" Column="1" />
+    <TalentTreeArray index="13" Talent="DVaBigShot" Tier="4" Column="2" />
+    <TalentTreeArray index="14" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" />
+    <TalentTreeArray index="15" Talent="DVaMechExpensivePlating" Tier="5" Column="2" />
+    <TalentTreeArray index="16" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" />
+    <TalentTreeArray index="17" Talent="DVaMechAblativeArmor" Tier="5" Column="4" />
+    <TalentTreeArray index="18" Talent="DVaPilotTorpedoDash" Tier="6" Column="1" />
+    <TalentTreeArray index="19" Talent="DVaPilotGGWP" Tier="6" Column="2" />
+    <TalentTreeArray index="20" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="3" />
+    <TalentTreeArray index="21" Talent="DVaPilotSuppressingFire" Tier="6" Column="4" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="22" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="23" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <!-- <TalentTreeArray index="25" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
+    <!-- <TalentTreeArray index="26" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
+    <!-- <TalentTreeArray index="27" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
+  </CHero>
+  
+  <CEffectSwitch id="DVaPilotBigShotDamageSwitch">
+    <CaseArray index="0" Validator="DVaBigShotPewPewPewCombine" />
+  </CEffectSwitch>
+  <CEffectSwitch id="DVaBigShotTalentSwitch">
+    <CaseArray index="0" Validator="DVaBigShotPewPewPewCombine" />
+  </CEffectSwitch>
+  
+   <CActorUnit id="HeroDVaPilot">
+    <Remove Terms="Abil.DVaPilotBigShot.SourceCastStart; !ValidatePlayer DVaBigShotPewPewPewHasTalent" Send="AnimPlay Spell Spell,C 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <Remove Terms="Abil.DVaPilotBigShot.SourceCastStart; ValidatePlayer DVaBigShotPewPewPewHasTalent" Send="AnimPlay Spell Spell,D 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStart; !ValidatePlayer DVaBigShotPewPewPewCombine" Send="AnimPlay Spell Spell,C 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStart; ValidatePlayer DVaBigShotPewPewPewCombine" Send="AnimPlay Spell Spell,D 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+   </CActorUnit>
+   
+
+  <CActorModel id="DVaBigShotAttackBeam" parent="StormModelAnimationStyleOneShotUnit">
+    <On index="0" Send="AnimBracketStart BSD {} Stand Death ContentPlayOnce" />
+    <On Terms="Effect.DVaBigShotMissileScan.Start; !ValidatePlayer DVaBigShotPewPewPewCombine" Send="Create" />
+    <Host Subject="_Hero" />
+    <HostSiteOps Ops="SOpAttachWeapon SOpForwardTargetPoint SOp2DRotation" HoldPosition="1" HoldRotation="1" />
+  </CActorModel>
+  <CActorModel id="DVaBigShotAttackBeamPewPewPew" parent="StormModelAnimationStyleOneShotUnit">
+    <On index="0" Send="AnimBracketStart BSD {} Stand Death ContentPlayOnce" />
+    <On Terms="Effect.DVaBigShotMissileScan.Start; ValidatePlayer DVaBigShotPewPewPewCombine" Send="Create" />
+    <Host Subject="_Hero" />
+    <HostSiteOps Ops="SOpAttachWeapon SOpForwardTargetPoint SOp2DRotation" HoldPosition="1" HoldRotation="1" />
+  </CActorModel>
+
+  <CActorModel id="DVaBigShotCast" parent="StormModelAnimationStyleOneShotUnit">
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStart; !ValidatePlayer DVaBigShotPewPewPewCombine" Send="Create" />
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStop; ValidateUnit CasterIsDazedOrDeadOrSilencedOrStasisOrStunned" Send="AnimBracketStop BSD" />
+    <On Terms="ActorCreation" Send="Create DVaBigShotCastSound" />
+    <HostSiteOps Ops="SOpAttachWeapon" />
+    <!-- <On Terms="ActorCreation" Send="SetOpacity 0.000000" /> -->
+  </CActorModel>
+  <CActorModel id="DVaBigShotCastPewPewPew" parent="StormModelAnimationStyleOneShotUnit">
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStart; ValidatePlayer DVaBigShotPewPewPewCombine" Send="Create" />
+    <On Terms="Abil.DVaPilotBigShot.SourceCastStop; ValidateUnit CasterIsDazedOrDeadOrSilencedOrStasisOrStunned" Send="AnimBracketStop BSD" />
+    <On Terms="ActorCreation" Send="Create DVaBigShotCastSound" />
+    <HostSiteOps Ops="SOpAttachWeapon" />
+    <!-- <On Terms="ActorCreation" Send="SetOpacity 0.000000" /> -->
+  </CActorModel>
+
+
+  <CUnit id="HeroDVaMech">
+    <BehaviorArray Link="DVaDefenseMatrixUnitTracker" />
+  </CUnit>
+  
+  <CAccumulatorTrackedUnitCount id="DVaDefenseMatrixDazerZoneAccumulator" parent="BaseAccumulator">
+    <MinAccumulation value="-0.3" />
+    <MaxAccumulation value="0" />
+    <ApplicationRule value="Add" />
+    <Scale value="-0.1" />
+    <TrackerUnit Value="Caster" />
+    <TrackingBehavior value="DVaDefenseMatrixUnitTracker" />
+  </CAccumulatorTrackedUnitCount>
+  
+  <CBehaviorUnitTracker id="DVaDefenseMatrixUnitTracker">
+    <BehaviorFlags index="Permanent" value="1" />
+    <TrackingValidatorArray value="DVaMechDefenseMatrixHasDebuff" />
+    <MaxTrackedUnits value="15" />
+  </CBehaviorUnitTracker>
+
+
+  <CBehaviorBuff id="DVaMechDefenseMatrixDebuff">
+    <InitialEffect value="DVaMechDefenseMatrixAddUnitToTracker"/>
+	<FinalEffect value="DVaMechDefenseMatrixRemoveUnitFromTracker"/>
+  </CBehaviorBuff>
+
+  <CBehaviorBuff id="DVaDefenseMatrixDazerZoneSlow">
+    <Modification>
+      <UnifiedMoveSpeedFactor value="-0.1">
+	    <AccumulatorArray value="DVaDefenseMatrixDazerZoneAccumulator"/>
+	  </UnifiedMoveSpeedFactor>
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CEffectAddTrackedUnit id="DVaMechDefenseMatrixAddUnitToTracker">
+    <BehaviorLink value="DVaDefenseMatrixUnitTracker" />
+    <TrackedUnit Value="Target" />
+  </CEffectAddTrackedUnit>
+  <CEffectRemoveTrackedUnit id="DVaMechDefenseMatrixRemoveUnitFromTracker">
+    <BehaviorLink value="DVaDefenseMatrixUnitTracker" />
+    <TrackedUnit Value="Target" />
+  </CEffectRemoveTrackedUnit>
+  
+  
+  <!-- Scrapped plan to have symbiote transfer from willing ejection, too jank -->
+  <!-- <CBehaviorBuff id="DVaMechSelfDestructAbandoned"> -->
+    <!-- <BehaviorFlags index="Permanent" value="1" /> -->
+    <!-- <BehaviorFlags index="EnabledWhileDead" value="1" /> -->
+    <!-- <Modification> -->
+      <!-- <StateFlags index="Hallucination" value="1" /> -->
+      <!-- <StateFlags index="Benign" value="1" /> -->
+      <!-- <StateFlags index="Uncommandable" value="1" /> -->
+      <!-- <VitalMaxAdditiveMultiplierArray index="Life" value="-0.9997" /> -->
+      <!-- <BehaviorCategoriesDisable index="TemporaryCloak" value="1" /> -->
+      <!-- <BehaviorLinkDisableArray value="DVaMechFatalDamageDisabledTimeout" /> -->
+      <!-- <BehaviorLinkDisableArray value="AbathurUltimateEvolutionControlBehavior" /> -->
+      <!-- <BehaviorLinkDisableArray index="2" removed="1" /> -->
+      <!-- <WeaponDisableArray value="DVaMechWeapon" /> -->
+      <!-- <TurretDisableArray value="DVaMechWeaponTurret" /> -->
+    <!-- </Modification> -->
+  <!-- </CBehaviorBuff> -->
+
+
+  <CEffectSet id="DVaMechDefenseMatrixInitialSet">
+    <EffectArray index="3" value="DVaMechDefenseMatrixApplyFusionGeneratorController" />
+  </CEffectSet>
+  <CEffectSet id="DVaMechDefenseMatrixOffFinalSet">
+    <EffectArray index="3" value="DVaMechDefenseMatrixDummyContinuation" />
+    <EffectArray index="4" removed="1" />
+    <!-- <EffectArray index="4" value="DVaMechDefenseMatrixPersistentMatrixEnumTrackedUnits" /> -->
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyFusionGeneratorController">
+    <ValidatorArray value="DVaDefenseMatrixFusionGeneratorHasTalent"/>
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaMechDefenseMatrixFusionGeneratorControllerBehavior" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaMechDefenseMatrixFusionGeneratorControllerBehavior">
+    <RemoveValidatorArray value="DVaDefenseMatrixFusionGeneratorHasTalent"/>
+    <RemoveValidatorArray value="DVaMechDefenseMatrixFusionGeneratorCombine"/>
+    <InitialEffect value="DVaMechDefenseMatrixFusionGeneratorApplyCounterToken"/>
+	<FinalEffect value="DVaMechDefenseMatrixFusionGeneratorRemoveCounterToken"/>
+  </CBehaviorBuff>
+  
+  <CValidatorCombine id="DVaMechDefenseMatrixFusionGeneratorCombine">
+    <CombineArray value="DVaMechDefenseMatrixCasterChannelling" />
+    <CombineArray value="DVaMechDefenseMatrixGE1UnitTracked" />
+  </CValidatorCombine>
+  
+  <CValidatorCompareTrackedUnitsCount id="DVaMechDefenseMatrixGE1UnitTracked">
+    <Compare value="GE" />
+    <BehaviorLink value="DVaDefenseMatrixUnitTracker" />
+    <TrackerUnit Value="Caster" />
+    <Value value="1" />
+  </CValidatorCompareTrackedUnitsCount>
+  <CBehaviorTokenCounter id="DVaDefenseMatrixFusionGeneratorCounterToken">
+    <Max value="20" />
+  </CBehaviorTokenCounter>
+
+
+  <CAbilEffectInstant id="DVaMechDefenseMatrixOff">
+    <Effect value="DVaMechDefenseMatrixManualCancelSet" />
+  </CAbilEffectInstant>
+  
+  <CEffectSet id="DVaMechBunnyHopInitialSet">
+    <EffectArray index="1" value="DVaMechDefenseMatrixManualCancelSet" />
+  </CEffectSet>
+  <CEffectSet id="DVaBoostersInitialSet">
+    <EffectArray index="0" value="DVaMechDefenseMatrixManualCancelSet" />
+  </CEffectSet>
+  <CEffectSet id="DVaMechSelfDestructInitialAbilityCancelSet">
+    <EffectArray index="1" value="DVaMechDefenseMatrixManualCancelSet" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechDefenseMatrixManualCancelSet">
+    <EffectArray value="DVaMechDefenseMatrixPersistentMatrixEnumTrackedUnitsEarlyCancel" />
+    <EffectArray value="DVaMechDefenseMatrixRemoveChannel" />
+  </CEffectSet>
+  
+  <CBehaviorBuff id="DVaMechDefenseMatrixChannelling">
+    <ExpireEffect value="DVaMechDefenseMatrixPersistentMatrixEnumTrackedUnitsExpired" />
+  </CBehaviorBuff>
+
+  <CEffectEnumTrackedUnits id="DVaMechDefenseMatrixPersistentMatrixEnumTrackedUnitsExpired">
+    <ValidatorArray value="DVaDefenseMatrixPersistentMatrixHasTalent"/>
+    <ValidatorArray value="DVaMechDefenseMatrixGE1UnitTracked"/>
+    <BehaviorLink value="DVaDefenseMatrixUnitTracker" />
+    <Effect value="DVaMechDefenseMatrixExtendDurationSet" />
+  </CEffectEnumTrackedUnits>
+  
+  <CEffectEnumTrackedUnits id="DVaMechDefenseMatrixPersistentMatrixEnumTrackedUnitsEarlyCancel">
+    <ValidatorArray value="DVaDefenseMatrixPersistentMatrixHasTalent"/>
+    <ValidatorArray value="DVaDefenseMatrixPersistentMatrixCombine"/>
+    <ValidatorArray value="DVaMechDefenseMatrixGE1UnitTracked"/>
+    <BehaviorLink value="DVaDefenseMatrixUnitTracker" />
+    <Effect value="DVaMechDefenseMatrixExtendDurationSet" />
+  </CEffectEnumTrackedUnits>
+  
+  <CEffectSet id="DVaMechDefenseMatrixExtendDurationSet">
+    <EffectArray value="DVaDefenseMatrixPersistentMatrixExtendDebuff" />
+    <EffectArray value="DVaDefenseMatrixPersistentMatrixExtendNonHeroDebuff" />
+    <EffectArray value="DVaDefenseMatrixPersistentMatrixExtendDazerZoneDebuff" />
+  </CEffectSet>
+  
+  <CEffectModifyBehaviorBuffDuration id="DVaDefenseMatrixPersistentMatrixExtendDebuff">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaMechDefenseMatrixDebuff" />
+    <Operation value="Max" />
+    <Value value="2" />
+  </CEffectModifyBehaviorBuffDuration>
+  <CEffectModifyBehaviorBuffDuration id="DVaDefenseMatrixPersistentMatrixExtendNonHeroDebuff">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaMechDefenseMatrixDebuffNonHeroes" />
+    <Operation value="Max" />
+    <Value value="2" />
+  </CEffectModifyBehaviorBuffDuration>
+  <CEffectModifyBehaviorBuffDuration id="DVaDefenseMatrixPersistentMatrixExtendDazerZoneDebuff">
+    <ValidatorArray value="DVaDefenseMatrixDazerZoneHasTalent"/>
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaDefenseMatrixDazerZoneSlow" />
+    <Operation value="Max" />
+    <Value value="2" />
+  </CEffectModifyBehaviorBuffDuration>
+
+  <CValidatorPlayerTalent id="DVaDefenseMatrixGetThroughThisDoesNotHaveTalent">
+    <Find value="0" />
+    <Value value="DVaDefenseMatrixGetThroughThis" />
+  </CValidatorPlayerTalent>
+  <CValidatorPlayerTalent id="DVaDefenseMatrixPersistentMatrixHasTalent">
+    <Find value="1" />
+    <Value value="DVaDefenseMatrixPersistentMatrix" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaDefenseMatrixPersistentMatrix" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  <CTalent id="DVaDefenseMatrixPersistentMatrix">
+    <Face value="DVaDefenseMatrixPersistentMatrix" />
+    <Abil value="DVaMechDefenseMatrixOn" />
+  </CTalent>
+  
+  <CValidatorCombine id="DVaDefenseMatrixPersistentMatrixCombine">
+    <CombineArray value="DVaDefenseMatrixPersistentMatrixDoesNotHaveGetThroughThis" />
+    <CombineArray value="DVaDefenseMatrixPersistentMatrixHasGetThroughThis" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="DVaDefenseMatrixPersistentMatrixDoesNotHaveGetThroughThis">
+    <Type value="And" />
+    <CombineArray value="DVaDefenseMatrixPersistentMatrixValidatorCheck" />
+    <CombineArray value="DVaDefenseMatrixGetThroughThisDoesNotHaveTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="DVaDefenseMatrixPersistentMatrixHasGetThroughThis">
+    <Type value="And" />
+    <CombineArray value="DVaDefenseMatrixPersistentMatrixValidatorCheckGetThroughThis" />
+    <CombineArray value="DVaDefenseMatrixGetThroughThisHasTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorUnitCompareBehaviorDuration id="DVaDefenseMatrixPersistentMatrixValidatorCheckGetThroughThis">
+    <Compare value="LE" />
+    <Value value="5" />
+    <SucceedIfUnitLacksBehavior value="1" />
+    <Behavior value="DVaMechDefenseMatrixChannelling" />
+    <WhichUnit Value="Caster" />
+  </CValidatorUnitCompareBehaviorDuration>
+  <CValidatorUnitCompareBehaviorDuration id="DVaDefenseMatrixPersistentMatrixValidatorCheck">
+    <Compare value="LE" />
+    <Value value="2" />
+    <SucceedIfUnitLacksBehavior value="1" />
+    <Behavior value="DVaMechDefenseMatrixChannelling" />
+    <WhichUnit Value="Caster" />
+  </CValidatorUnitCompareBehaviorDuration>
+  
+  <CButton id="DVaMechDefenseMatrix">
+    <TooltipAppender Validator="DVaDefenseMatrixPersistentMatrixHasTalent" Face="DVaDefenseMatrixPersistentMatrix" />
+    <TooltipAppender Validator="DVaHasDefenseMatrixDNied" Face="DVaDefenseMatrixDNied" />
+  </CButton>
+
+</Catalog>

@@ -921,6 +921,9 @@ bool libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Func (bool testConds, bool
     }
 
     if ((EventUnitBehaviorChange() == c_unitBehaviorChangeIncrease)) {
+		Wait(0.3125, c_timeGame);
+		// We wait because enemies can still be affected by Defense Matrix for this period. Ignoring the potential for things like Timestopped Orphea's with eternal feast going and stuff like that, not worth worrying about
+		FloatingCombatElementCreateNumberTextAtUnit(PlayerGroupSingle(lv_dVaPlayer), "FloatingCombatElements/FloatingCombatAmountReadable", "", lv_dVaUnit, FixedToInt(PlayerScoreValueGetAsFixed(lv_dVaPlayer, "GenericHeroRealScoreValue1")), StringExternal("Param/Value/lib_DVaPatchWeek2_Var1"), libNtve_gv_FloatingCombatTextAutoRandomSeed);
     }
     else {
         PlayerScoreValueSetFromFixed(lv_dVaPlayer, "GenericHeroRealScoreValue1", 0.0);

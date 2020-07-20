@@ -333,9 +333,5 @@
     <Value value="DVaMechExpensivePlating" />
   </CValidatorPlayerTalent>
   
-
-  <CButton id="DVaMechDefenseMatrix">
-    <TooltipAppender Validator="DVaHasDefenseMatrixDNied" Face="DVaDefenseMatrixDNied" />
-  </CButton>
   
 </Catalog>

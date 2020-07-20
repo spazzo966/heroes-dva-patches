@@ -2,4 +2,5 @@
 <Includes>
  	<Catalog path="Mods/DVaPatchWeek0.xml" />
  	<Catalog path="Mods/DVaPatchWeek1.xml" />
+ 	<Catalog path="Mods/DVaPatchWeek2.xml" />
 </Includes>
