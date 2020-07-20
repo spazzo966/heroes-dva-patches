@@ -28,11 +28,11 @@ Week 1:
 
 Week 2:
 
-  * D.Va can now select her other Heroic option by selecting the upgrade for at Level 20. This does not grant access to the benefits conferred from that upgrade  
+  * D.Va can now select her other Heroic option by selecting the upgrade for it at Level 20. This does not grant access to the benefits conferred from that upgrade  
   * Crash Course no longer requires D.Va to hit 20 enemies to gain the cooldown reduction from hitting Heroes with Boosters, and it is instead available as soon as the talent is chosen  
   * Dazer Zone slow strength is now increased by 10% for each enemy Hero beyond the first affected by Defense Matrix. This slow cannot exceed 40% slow in power  
   * Fusion Generator's Maximum Charge per use of Defense Matrix is increased from 15 to 20  
   * Fusion Generator charge handler is now only removed once no targets are affected by Defense Matrix, rather than when D.Va stops channeling Defense Matrix  
   * D.Va now has a new talent to choose at level 13: Persistent Matrix. When chosen, it will cause enemies currently affected by Defense Matrix when it is manually cancelled or when it expires due to duration to remain under the effects of Defense Matrix for an additional 2 seconds. Note that if cancelled in less than 1 second after being cast, this will not apply, and nor will it apply if Defense Matrix was interrupted due to D.Va being Stunned or the like, only manual cancels  
-  * Nanoweave Suit now extends it's duration when enemy Heroes are the target of D.Va's basic attacks by 0.5 seconds. This can occur up to 8 times per Nanoweave Suit, meaning the maximum duration is 8 seconds(4+4)  
+  * Nanoweave Suit now is extended in duration by 0.5 seconds if you basic attack an enemy hero. This can occur up to 8 times per Nanoweave Suit, meaning the maximum duration is 8 seconds(4+4)  
   * Defense Matrix now features a floating combat text element to display the amount of damage prevented with it.  
