@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1:  -->
+<!-- Boosters: Now deals an additional 40% damage to minions & mercs, but the cooldown is increased to 10 seconds -->
+
+<!-- Change 2: -->
+<!-- Rush Down: Replaced Functionality: Reduce the cooldown of Boosters to 1 second. Each non-hero hit increases this cooldown by 2 second, and each hero hit by 6 seconds, up to a maximum combined cooldown of 10 seconds -->
+
+<!-- Change 3: -->
+<!-- Hit the Nitrous: Damage bonus increased from 50% to 75%, now features crit kickers, and is additive rather than multiplicative -->
+
+<!-- Change 4:  -->
+<!-- Coming Through: Now also increases the boosters damage bonus against minions & mercs from 40% to 100% so long as a hero has not been hit in that cast of Boosters -->
+
+<!-- Change 5: -->
+<!-- Pro Moves: Decay timer increased from 1.5 seconds to 2.5 seconds -->
+
+<!-- Change 6: -->
+<!-- Emergency Shielding: Renamed to Emergency Protocols. Replaced Functionality: When this activates, the cooldown of Boosters is instantly reset, and the Mech becomes Unkillable for 3 seconds. 75 second cooldown -->
+
+<!-- Change 7: -->
+<!-- Ablative Armor now increases SelfHealing when it prevents damage -->
+<!-- Same goes for Emergency Protocol when it prevents death and damage -->
+<!-- Stop and Pop: When at least 2 enemy Heroes take bonus damage because of Stop and Pop, the duration of Bunny Hop is increased by 0.5 seconds. This can only occur once per damage instance, and the bonus damage now features crit kickers -->
+
+<!-- Adjusments to earlier additions: -->
+<!-- Nuclear Option's Defense Matrix now gains the bonuses from talents? -->
+<!-- Increase mech max health to 2100? -->
+
+<!-- potential replacements: -->
+<!-- swapped tier 2 and tier 3(level 4 and level 7) -->
+
+
+  <CBehaviorBuff id="DVaMechProMovesDecayController">
+    <Period value="2.5" />
+  </CBehaviorBuff>
+
+  <CEffectModifyUnit id="DVaBoostersApplyCooldown">
+    <ImpactUnit Value="Caster" />
+    <Cost index="0" Abil="DVaBoostersOn,Execute" CooldownTimeUse="10" />
+  </CEffectModifyUnit>
+
+  <CEffectDamage id="DVaBoostersImpactDamage" parent="StormSpell">
+    <Amount value="135" />
+    <MultiplicativeModifierArray index="MinionDamage" Validator="TargetMinionOrMerc" Modifier="0.4" />
+    <MultiplicativeModifierArray index="ComingThrough" Validator="TargetMinionOrMercAndDVaHasNoHeroHitBehavior" Modifier="0.6" />
+    <SourceButtonFace value="DVaMechBoosters" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaBoostersHitTheNitrousImpactDamage" parent="StormSpell">
+    <Amount value="135" />
+	<MultiplicativeModifierArray index="HTN" Modifier="0.75" Crit="1"/>
+    <MultiplicativeModifierArray index="MinionDamage" Validator="TargetMinionOrMerc" Modifier="0.4" />
+    <MultiplicativeModifierArray index="ComingThrough" Validator="TargetMinionOrMercAndDVaHasNoHeroHitBehavior" Modifier="0.6" />
+    <SourceButtonFace value="DVaMechBoosters" />
+  </CEffectDamage>
+  
+  <CValidatorCombine id="TargetMinionOrMercAndDVaHasNoHeroHitBehavior">
+    <CombineArray value="TargetMinionOrMerc" />
+    <CombineArray value="DVaBoostersComingThroughHasNoHeroHitBehavior" />
+    <Type value="And" />
+  </CValidatorCombine>
+  <CValidatorUnitHasBehavior id="DVaBoostersComingThroughHasNoHeroHitBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBoostersComingThroughHeroNotHitBehavior" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectSet id="DVaBoostersInitialSet">
+    <EffectArray index="3" value="DVaBoostersRushdownApplyCombatMonitor" />
+    <EffectArray value="DVaBoostersComingThroughApplyHeroNotHitBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaBoostersComingThroughApplyHeroNotHitBehavior">
+    <ValidatorArray value="DVaBoostersComingThroughHasTalent"/>
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBoostersComingThroughHeroNotHitBehavior" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaBoostersComingThroughHeroNotHitBehavior">
+    <RemoveValidatorArray value="DVaBoostersComingThroughHasTalent" />
+  </CBehaviorBuff>
+  
+
+  <CEffectSet id="DVaBoostersFinalSet">
+    <EffectArray value="DVaBoostersComingThroughRemoveHeroHitBehaviorFinal" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaBoostersComingThroughRemoveHeroHitBehavior">
+    <ValidatorArray value="TargetIsHero"/>
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersComingThroughHeroNotHitBehavior" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaBoostersComingThroughRemoveHeroHitBehaviorFinal">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersComingThroughHeroNotHitBehavior" />
+  </CEffectRemoveBehavior>
+  <CEffectSet id="DVaBoostersImpactSet">
+    <EffectArray value="DVaBoostersComingThroughRemoveHeroHitBehavior" />
+    <EffectArray value="DVaBoostersRushdownRemoveBehaviorSwitch" />
+  </CEffectSet>
+  
+  
+  <CEffectApplyBehavior id="DVaBoostersRushdownApplyCombatMonitor">
+    <Count value="8"/>
+  </CEffectApplyBehavior>
+  <CEffectSwitch id="DVaBoostersRushdownRemoveBehaviorSwitch">
+    <CaseArray Validator="TargetIsHero" Effect="DVaBoostersRushdownRemoveBehaviorHeroHit" />
+    <CaseDefault value="DVaBoostersRushdownRemoveBehaviorMinionHit" />
+  </CEffectSwitch>
+  <CEffectRemoveBehavior id="DVaBoostersRushdownRemoveBehaviorHeroHit">
+    <WhichUnit Value="Caster" />
+    <Count value="6"/>
+    <BehaviorLink value="DVaBoostersRushdownCombatMonitor" />
+    <CancelBehavior value="0" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaBoostersRushdownRemoveBehaviorMinionHit">
+    <WhichUnit Value="Caster" />
+    <Count value="2"/>
+    <BehaviorLink value="DVaBoostersRushdownCombatMonitor" />
+    <CancelBehavior value="0" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaBoostersRushdownRemoveBehavior">
+    <ValidatorArray value="AlwaysReturnsFalse"/>
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersRushdownCombatMonitor" />
+  </CEffectRemoveBehavior>
+
+  <CBehaviorBuff id="DVaBoostersRushdownCombatMonitor">
+    <RemoveValidatorArray index="1" removed="1" />
+    <MaxStackCount value="8" />
+    <CancelEffect value="DVaBoostersRushdownCancelCooldownReduction" />
+  </CBehaviorBuff>
+  
+  <CEffectModifyUnit id="DVaBoostersRushdownCancelCooldownReduction">
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaBoostersOn,Execute" CooldownOperation="Add" CooldownTimeUse="-1" />
+  </CEffectModifyUnit>
+  
+
+  <CEffectSet id="DVaBoostersRushdownFinalSet">
+    <EffectArray index="0" value="DVaBoostersRushdownCancelBehavior" />
+    <EffectArray index="1" value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <EffectArray value="DVaBoostersRushdownCancelBehavior"/>
+    <ValidatorArray value="DVaBoostersRushdownSourceHasBuff" />
+    <Chance value="0" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaBoostersRushdownCancelBehavior">
+    <ValidatorArray value="DVaBoostersRushdownSourceHasBuff" />
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersRushdownCombatMonitor" />
+    <Count value="1" />
+    <CancelBehavior value="1" />
+  </CEffectRemoveBehavior>
+
+
+  <CEffectSet id="DVaMechEmergencyShieldingProcSet">
+    <!-- <EffectArray index="1" value="DVaMechEmergencyShieldingApplyCooldown" /> -->
+    <EffectArray value="DVaMechEmergencyShieldingBoostersCooldownReset" />
+  </CEffectSet>
+  
+  <CEffectModifyPlayer id="DVaMechEmergencyShieldingApplyCooldown">
+    <WhichPlayer Value="Origin" />
+    <Cost index="0">
+      <Cooldown>
+        <Link value="Abil/DVaMechTraitEmergencyShieldingCooldownAbility" />
+        <Location value="Player" />
+        <Operation value="Set" />
+        <TimeUse value="75" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  <CBehaviorBuff id="DVaMechEmergencyShieldingCooldownBehavior">
+    <Duration value="75" />
+  </CBehaviorBuff>
+  <CAbilEffectInstant id="DVaMechTraitEmergencyShieldingCooldownAbility">
+    <Cost index="0">
+      <Charge TimeUse="75" />
+      <Cooldown TimeUse="75" />
+    </Cost>
+  </CAbilEffectInstant>
+
+  <CEffectModifyUnit id="DVaMechEmergencyShieldingBoostersCooldownReset">
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaBoostersOn,Execute" CooldownOperation="Add" CooldownTimeUse="-10" />
+  </CEffectModifyUnit>
+
+  <CBehaviorBuff id="DVaMechEmergencyShieldingShield">
+    <BehaviorCategories index="Restorable" value="1" />
+    <BehaviorCategories index="Unkillable" value="1" />
+    <BehaviorCategories index="BuffTempMaxHealth" value="0" />
+    <DisplayDuration index="Self" value="1" />
+    <DisplayDuration index="Ally" value="1" />
+    <DisplayDuration index="Neutral" value="1" />
+    <DisplayDuration index="Enemy" value="1" />
+    <Duration value="3" />
+    <DamageResponse>
+      <Chance value="1" />
+      <Priority value="23" />
+      <Fatal value="1" />
+      <RecordBehaviorShieldDamage value="1" />
+      <RestoreLifeAfterFatal value="1" />
+      <ModifyFraction value="0" />
+      <ModifyMinimumDamage value="1" />
+      <ModifyLimit value="0" />
+      <ProvideCategories index="Shield" value="1" />
+      <PreventCategories index="Shield" value="1" />
+    </DamageResponse>
+  </CBehaviorBuff>
+  
+
+  <CEffectSet id="DVaMechBunnyHopPeriodicSet">
+    <EffectArray index="0" value="DVaMechBunnyHopStopAndPopExtendSearch" />
+    <EffectArray index="1" value="DVaMechBunnyHopSearch" />
+    <EffectArray value="CameraShakeMediumCasterDummySet" />
+  </CEffectSet>
+  
+
+  <CEffectEnumArea id="DVaMechBunnyHopStopAndPopExtendSearch">
+    <ValidatorArray value="DVaBunnyHopStopAndPopCombine"/>
+    <ImpactLocation Value="SourceUnit" />
+    <SearchFilters value="Heroic;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Stasis,Dead,Hidden,Invulnerable" />
+    <AreaArray MaxCount="1" Effect="DVaMechBunnyHopStopAndPopExtendBehaviorDuration">
+      <Radius value="5" />
+    </AreaArray>
+    <RevealerParams Duration="0.75">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+    <MinCount value="2" />
+  </CEffectEnumArea>
+  <CEffectModifyBehaviorBuffDuration id="DVaMechBunnyHopStopAndPopExtendBehaviorDuration">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DvaMechBunnyHopActive" />
+    <Value value="0.5" />
+  </CEffectModifyBehaviorBuffDuration>
+  
+  <CEffectDamage id="DVaMechBunnyHopImpactDamage">
+    <MultiplicativeModifierArray index="0" Crit="1" />
+  </CEffectDamage>
+
+</Catalog>
