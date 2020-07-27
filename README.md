@@ -36,3 +36,14 @@ Week 2:
   * D.Va now has a new talent to choose at level 13: Persistent Matrix. When chosen, it will cause enemies currently affected by Defense Matrix when it is manually cancelled or when it expires due to duration to remain under the effects of Defense Matrix for an additional 2 seconds. Note that if cancelled in less than 1 second after being cast, this will not apply, and nor will it apply if Defense Matrix was interrupted due to D.Va being Stunned or the like, only manual cancels  
   * Nanoweave Suit now is extended in duration by 0.5 seconds if you basic attack an enemy hero. This can occur up to 8 times per Nanoweave Suit, meaning the maximum duration is 8 seconds(4+4)  
   * Defense Matrix now features a floating combat text element to display the amount of damage prevented with it.  
+
+Week 3:
+
+  * Boosters Damage is increased by 40% against Minions and Mercenaries, but the cooldown of Boosters is increased from 9 seconds to 10 seconds.  
+  * Rush Down: Replaced Functionality: Reduce the cooldown of Boosters to 1 second. Each non-hero hit increases this cooldown by 2 second, and each hero hit by 6 seconds, up to a maximum combined cooldown of 10 seconds  
+  * Hit the Nitrous: Damage bonus increased from 50% to 75%, now features crit kickers, and is additive rather than multiplicative  
+  * Pro Moves: Decay timer increased from 1.5 seconds to 2.5 seconds  
+  * Coming Through: Additional Functionality: Now also increases the boosters damage bonus against minions & mercs from 40% to 100% so long as a hero has not been hit in that cast of Boosters  
+  * Emergency Shielding: Renamed to Emergency Protocols. Replaced Functionality: When this activates, the cooldown of Boosters is instantly reset, and the Mech becomes Unkillable for 3 seconds. 75 second cooldown  
+  * Stop and Pop: Additional Functionality: When at least 2 enemy Heroes take bonus damage because of Stop and Pop, the duration of Bunny Hop is increased by 0.5 seconds. This can only occur once per damage instance, and the bonus damage now features crit kickers  
+  * No bug fixes this week.
