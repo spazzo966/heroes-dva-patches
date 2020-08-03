@@ -47,3 +47,13 @@ Week 3:
   * Emergency Shielding: Renamed to Emergency Protocols. Replaced Functionality: When this activates, the cooldown of Boosters is instantly reset, and the Mech becomes Unkillable for 3 seconds. 75 second cooldown  
   * Stop and Pop: Additional Functionality: When at least 2 enemy Heroes take bonus damage because of Stop and Pop, the duration of Bunny Hop is increased by 0.5 seconds. This can only occur once per damage instance, and the bonus damage now features crit kickers  
   * No bug fixes this week.
+  
+Week 4:
+
+  * Torpedo Dash is now available for level 0, and the cooldown has been increased from 12 seconds to 18 seconds.
+  * New Level 1 Talent: Nerf This!: Scoring a Takedown on an enemy Hero will now reset the cooldown of all Pilot Abilities(Torpedo Dash, Concussive Pulse, Call Mech, Big Shot)
+  * Level 4 and Level 7 talent tiers have swapped placed.
+  * New Level 4 Talent: Reserve Battery: Activate to recast the last used Mech Ability, granting access to all talents that ability has. Any talents that grant cooldown reduction reduce the cooldown of the original ability. Once used, a new ability must be cast. 45 second cooldown
+  * New Level 7 Talent: Charged Blaster: After not using Basic Attacks for 5 seconds, the next Basic Attack deals an additional 150% damage, and splashes around the target
+  * Ablative Armor: Damage prevented with Ablative Armor now grants less Self-Destruct Charge, but when damage is prevented by Ablative Armor, D.Va's Mech gains 25 Spell Armor for 2 seconds
+  * GGWP: No longer resets the cooldown of Call Mech on scoring a Takedown on an Enemy Hero, and now instead causes all damage dealt by D.Va or her Mech to ignore Positive Armor

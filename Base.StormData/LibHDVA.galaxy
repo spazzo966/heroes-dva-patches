@@ -982,10 +982,6 @@ bool libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func (bool testConds, bool runA
         lv_incomingDamageAmount /= 0.25;
     }
 
-    if (((PlayerHasTalent(lv_dVaPlayer, "DVaMechAblativeArmor") == true) && (EventUnitDamageAmount() <= StringToFixed(CatalogFieldValueGet(c_gameCatalogBehavior, "DVaMechAblativeArmorDamageResponseCarry", "DamageResponse.Maximum", lv_dVaPlayer))))) {
-        lv_incomingDamageAmount /= 0.5;
-    }
-
     if ((PlayerHasTalent(lv_dVaPlayer, "DVaMechExpensivePlating") == true)) {
         lv_maxMechHealth = (lv_maxMechHealth / libHDVA_gv_dVaCallMechExpensivePlatingHealthModifier);
     }
@@ -1612,7 +1608,7 @@ bool libHDVA_gt_DVaGGWPHeroTakedown_Func (bool testConds, bool runActions) {
 
     // Conditions
     if (testConds) {
-        if (!((PlayerHasTalent(lv_killingPlayer, "DVaPilotGGWP") == true))) {
+        if (!((PlayerHasTalent(lv_killingPlayer, "DVaPilotNerfThis") == true))) {
             return false;
         }
 
@@ -1626,7 +1622,7 @@ bool libHDVA_gt_DVaGGWPHeroTakedown_Func (bool testConds, bool runActions) {
         return true;
     }
 
-    UnitCreateEffectUnit(lv_dVaUnit, "DVaPilotGGWPResetCallMechCooldown", lv_dVaUnit);
+    UnitCreateEffectUnit(lv_dVaUnit, "DVaPilotNerfThisCooldownReductionSet", lv_dVaUnit);
     UnitBehaviorRemove(lv_dVaUnit, "DVaPilotDisableCallMech", c_unitBehaviorCountAll);
     libHDVA_gf_DVaPilotUpdateEnergy(lv_killingPlayer);
     return true;

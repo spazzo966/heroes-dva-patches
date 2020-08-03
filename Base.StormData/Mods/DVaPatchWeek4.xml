@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1:  -->
+<!-- Torpedo Dash: Now available from level 0, cooldown increased from 12 seconds to 18 seconds -->
+
+<!-- Change 2: -->
+<!-- New Level 1: Nerf This!: Hero Takedowns resets all Pilot Abilities(Torpedo Dash, Call Mech, Big Shot, and Concussive Pulse if available) -->
+
+<!-- Change 3: -->
+<!-- Level 4 and Level 7 have swapped places -->
+
+<!-- Change 4:  -->
+<!-- New Level 4: Reserve Battery(Z while in Mech Mode): D.Va can activate her Z key to reactivate her last used mech ability with all talents. 45 second cooldown  -->
+
+<!-- Change 5: -->
+<!-- New Level 7: Charged Blaster: After not using Basic Attacks for 4 seconds in Pilot Mode, D.Va's next Basic Attack deals 72 Physical Damage to targets near the enemy hit, and deals an additional 24 damage to the primary target  -->
+
+<!-- Change 6: -->
+<!-- Ablative Armor: Now reduces Self-Destruct Charge gained, but when damage is prevented with Ablative Armor D.Va's Mech gains 25 Spell Armor for 2 seconds -->
+<!-- Ablative Armor: Detailed statistic breakdown in trait? -->
+
+<!-- Change 7: -->
+<!-- GGWP: D.Va now ignores all forms of positive armor on enemy Heroes, and Pilot Basic Attack damage increased by 70%, no longer resets the cooldown of Call Mech. -->
+
+<!-- potential replacements: -->
+
+  <CUnit id="HeroDVaPilot">
+    <BehaviorArray Link="DVaPilotTorpedoDashAllowed" />
+  </CUnit>
+  
+  <CAbilEffectTarget id="DVaPilotTorpedoDash">
+    <Cost>
+      <Cooldown TimeUse="18" />
+    </Cost>
+  </CAbilEffectTarget>
+
+  <CHero id="DVa">
+    <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" />
+    <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" />
+    <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" />
+    <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" />
+    <TalentTreeArray index="4" Talent="DVaPilotNerfThis" Tier="1" Column="5" />
+    <TalentTreeArray index="5" Talent="DVaBoostersComingThrough" Tier="2" Column="1" />
+    <TalentTreeArray index="6" Talent="DVaDefenseMatrixDazerZone" Tier="2" Column="2" />
+    <TalentTreeArray index="7" Talent="DVaDefenseMatrixAggressionMatrix" Tier="2" Column="3" />
+    <TalentTreeArray index="8" Talent="DVaSelfDestructNuclearOption" Tier="2" Column="4" />
+    <TalentTreeArray index="9" Talent="DVaMechReserveBattery" Tier="2" Column="5" />
+    <TalentTreeArray index="10" Talent="DVaDefenseMatrixDivertingPower" Tier="3" Column="1" />
+    <TalentTreeArray index="11" Talent="DVaDefenseMatrixGetThroughThis" Tier="3" Column="2" />
+    <TalentTreeArray index="12" Talent="DVaDefenseMatrixFusionGenerator" Tier="3" Column="3" />
+    <TalentTreeArray index="13" Talent="DVaSelfDestructBringItOn" Tier="3" Column="4" />
+    <TalentTreeArray index="14" Talent="DVaPilotChargedBlaster" Tier="3" Column="5" />
+    <TalentTreeArray index="15" Talent="DVaBunnyHop" Tier="4" Column="1" />
+    <TalentTreeArray index="16" Talent="DVaBigShot" Tier="4" Column="2" />
+    <TalentTreeArray index="17" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" />
+    <TalentTreeArray index="18" Talent="DVaMechExpensivePlating" Tier="5" Column="2" />
+    <TalentTreeArray index="19" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" />
+    <TalentTreeArray index="20" Talent="DVaMechAblativeArmor" Tier="5" Column="4" />
+    <TalentTreeArray index="21" Talent="DVaPilotGGWP" Tier="6" Column="1" />
+    <TalentTreeArray index="22" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="2" />
+    <TalentTreeArray index="23" Talent="DVaPilotSuppressingFire" Tier="6" Column="3" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="24" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="25" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <!-- <LevelScalingArray index="1"> -->
+      <!-- <Modifications> -->
+        <!-- <Catalog value="Effect" /> -->
+        <!-- <Entry value="DVaPilotWeaponDamage" /> -->
+        <!-- <Field value="FlatModifierArray[ChargedBlaster].Modifier" /> -->
+        <!-- <Value value="0.040000" /> -->
+        <!-- <AffectedByOverdrive value="1" /> -->
+      <!-- </Modifications> -->
+    <!-- </LevelScalingArray> -->
+    <!-- <TalentTreeArray index="26" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
+    <!-- <TalentTreeArray index="27" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
+    <!-- <TalentTreeArray index="28" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
+  </CHero>
+  
+
+  <CValidatorPlayerTalent id="DVaPiolotNerfThisHasTalent">
+    <Find value="1" />
+    <Value value="DVaPilotNerfThis" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaPilotNerfThis" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_pilotmode.dds" />
+  </CButton>
+  <CTalent id="DVaPilotNerfThis">
+    <Face value="DVaPilotNerfThis" />
+    <Trait value="1" />
+  </CTalent>
+  
+  <CEffectSet id="DVaPilotNerfThisCooldownReductionSet">
+    <EffectArray value="DVaPilotNerfThisCooldownReductionTorpedoDash" />
+    <EffectArray value="DVaPilotNerfThisCooldownReductionBigShot" />
+    <EffectArray value="DVaPilotNerfThisCooldownReductionConcussivePulse" />
+    <EffectArray value="DVaPilotNerfThisCooldownReductionCallMech" />
+  </CEffectSet>
+  <CEffectModifyPlayer id="DVaPilotNerfThisCooldownReductionConcussivePulse">
+    <WhichPlayer Value="Caster" />
+    <Cost>
+      <Cooldown>
+        <Link value="Abil/DVaPilotConcussivePulse" />
+        <Location value="Player" />
+        <Operation value="Add" />
+        <TimeUse value="-7" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  <CEffectModifyPlayer id="DVaPilotNerfThisCooldownReductionTorpedoDash">
+    <WhichPlayer Value="Caster" />
+    <Cost>
+      <Cooldown>
+        <Link value="Abil/DVaPilotTorpedoDash" />
+        <Location value="Player" />
+        <Operation value="Add" />
+        <TimeUse value="-18" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  <CEffectModifyPlayer id="DVaPilotNerfThisCooldownReductionCallMech">
+    <WhichPlayer Value="Caster" />
+    <Cost>
+      <Cooldown>
+        <Link value="Abil/DVaPilotCallMech" />
+        <Location value="Player" />
+        <Operation value="Add" />
+        <TimeUse value="-60" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  <CEffectModifyUnit id="DVaPilotNerfThisCooldownReductionBigShot">
+    <Cost Abil="DVaPilotBigShot,Execute" CooldownOperation="Add">
+      <Fraction Cooldown="-1" />
+    </Cost>
+  </CEffectModifyUnit>
+  
+  <CValidatorPlayerTalent id="DVaReserveBatteryHasTalent">
+    <WhichPlayer Value="Caster" />
+    <Find value="1" />
+    <Value value="DVaReserveBattery" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaReserveBattery" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  <CTalent id="DVaMechReserveBattery">
+    <Face value="DVaReserveBattery" />
+    <Abil value="Mount" />
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaReserveBatteryBoostersApplyLastUsed" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaReserveBatteryDefenseMatrixApplyLastUsed" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+    <RankArray>
+      <BehaviorArray value="DVaPilotReserveBatteryDummy" />
+    </RankArray>
+  </CTalent>
+  <!-- why don't validators work instead of this :dvahacks: -->
+
+  <CBehaviorBuff id="DVaPilotReserveBatteryDummy" parent="CarryBehaviorParent">
+  </CBehaviorBuff>
+  <CEffectSet id="DVaMechPilotLoadSet">
+    <EffectArray value="DVaMechPilotAddTrackedUnit" />
+  </CEffectSet>
+  
+  <CUnit id="HeroDVaMech">
+    <AbilArray Link="DVaReserveBatteryAbility" />
+    <AbilArray Link="DVaReserveBatteryAbilityDefenseMatrix" />
+    <AbilArray Link="DVaReserveBatteryAbilityDummy" />
+    <AbilArray Link="TracerMelee" />
+    <!-- <AbilArray Link="DVaReserveBatteryAbility" /> -->
+    <!-- <AbilArray Link="DVaReserveBatteryAbilityDefenseMatrix" /> -->
+    <CardLayouts index="0">
+      <LayoutButtons index="36" Face="DVaMechBoostersReserveBattery" Type="AbilCmd" AbilCmd="DVaReserveBatteryAbility,Execute" Slot="Mount" />
+      <LayoutButtons Face="DVaMechDefenseMatrixReserveBattery" Type="AbilCmd" AbilCmd="DVaReserveBatteryAbilityDefenseMatrix,Execute" Slot="Mount" />
+      <LayoutButtons Face="DVaMechanizedWalkerCooldown" Type="AbilCmd" AbilCmd="DVaReserveBatteryAbilityDummy,Execute" Slot="Mount" />
+      <LayoutButtons Face="DVaMechanizedWalker" Type="Passive" Slot="Mount" />
+      <!-- <LayoutButtons Face="DVaReserveBatteryAbilityDefenseMatrix" Type="AbilCmd" AbilCmd="DVaReserveBatteryAbilityDefenseMatrix,Execute" Slot="Mount" /> -->
+    </CardLayouts>
+  </CUnit>
+  
+  <CButton id="DVaMechanizedWalkerCooldown" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mount.dds" />
+  </CButton>
+
+  <CAbilEffectInstant id="DVaReserveBatteryAbilityDummy">
+    <Flags index="Transient" value="1" />
+    <Effect value="DVaMechTraitDoesNothing" />
+    <Cost>
+      <Charge Link="Abil/DVaReserveBatteryAbility" />
+      <Cooldown Link="Abil/DVaReserveBatteryAbility" Location="Player" TimeUse="0.0625" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechanizedWalkerCooldown" ShowValidator="DVaMechTrackedPilotHasReserveBatteryDummy" />
+    <PrepEffect value="DVaMechTraitDoesNothing" />
+    <Arc value="360" />
+  </CAbilEffectInstant>
+  
+  <CValidatorCompareTrackedUnitsCount id="DVaMechTrackedPilotHasReserveBatteryDummy">
+    <Compare value="GT" />
+    <BehaviorLink value="DVaMechPilotUnitTracker" />
+    <TrackedUnitValidatorArray value="DVaPilotHasReserveBatteryDummy" />
+  </CValidatorCompareTrackedUnitsCount>
+  <CValidatorUnitCompareBehaviorCount id="DVaPilotHasReserveBatteryDummy">
+    <Compare value="GT" />
+    <Behavior value="DVaPilotReserveBatteryDummy" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+
+  <CButton id="DVaMechBoostersReserveBattery" parent="StormButtonParent">
+    <TooltipAppender Validator="DVaBoostersRushdownHasTalent" Face="DVaBoostersRushdown" />
+    <TooltipAppender Validator="DVaBoostersCrashCourseHasTalent" Face="DVaBoostersCrashCourse" />
+    <TooltipAppender Validator="DVaBoostersHitTheNitrousHasTalent" Face="DVaBoostersHitTheNitrous" />
+    <TooltipAppender Validator="DVaBoostersComingThroughHasTalent" Face="DVaBoostersComingThrough" />
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters.dds" />
+  </CButton>
+  
+  <CAbilEffectInstant id="DVaReserveBatteryAbility">
+    <PrepEffect value="DVaReserveBatteryBoostersPrepSet"/>
+    <Flags index="Transient" value="1" />
+    <Effect value="DVaBoostersInitialSet" />
+    <Cost>
+      <Charge Link="Abil/DVaReserveBatteryAbility" />
+      <Cooldown Link="Abil/DVaReserveBatteryAbility" Location="Player" TimeUse="45" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechBoostersReserveBattery" ShowValidator="DVaReserveBatteryBoostersLastUsedAndDoesNotHaveMarker" UseValidator="DVaReserveBatteryBoostersLastUsedAndDoesNotHaveMarker" />
+  </CAbilEffectInstant>
+  <CValidatorUnitHasBehavior id="DVaReserveBatteryBoostersLastUsed">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryBoostersLastUsed" />
+  </CValidatorUnitHasBehavior>
+  <CBehaviorBuff id="DVaReserveBatteryBoostersLastUsed" parent="CarryBehaviorParent">
+    <InitialEffect value="DVaReserveBatteryRemoveDefenseMatrixLastUsed"/>
+  </CBehaviorBuff>
+
+  <CValidatorCombine id="DVaReserveBatteryBoostersLastUsedAndDoesNotHaveMarker">
+    <CombineArray value="DVaReserveBatteryBoostersLastUsed" />
+    <CombineArray value="DVaReserveBatteryHasTalent" />
+    <Type value="And" />
+  </CValidatorCombine>
+  
+
+  <CEffectSet id="DVaReserveBatteryBoostersPrepSet">
+    <EffectArray value="DecloakCasterSet" />
+    <EffectArray value="DVaReserveBatteryBoostersApplyMarker" />
+    <EffectArray value="DVaReserveBatteryRemoveBoosterLastUsedPersistentDelay" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaReserveBatteryBoostersApplyMarker">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryBoostersMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaReserveBatteryBoostersMarker">
+    <Duration value="2.125"/>
+  </CBehaviorBuff>
+  <CValidatorUnitHasBehavior id="DVaReserveBatteryDoesNotHaveBoostersMarker">
+    <WhichUnit Value="Caster" />
+	<Negate value="1"/>
+    <Behavior value="DVaReserveBatteryBoostersMarker" />
+  </CValidatorUnitHasBehavior>
+  <CEffectCreatePersistent id="DVaReserveBatteryRemoveBoosterLastUsedPersistentDelay">
+    <PeriodCount value="1" />
+    <PeriodicEffectArray value="DVaReserveBatteryRemoveBoostersLastUsed" />
+    <PeriodicPeriodArray value="0.0625" />
+  </CEffectCreatePersistent>
+  <CEffectRemoveBehavior id="DVaReserveBatteryRemoveBoostersLastUsed">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaReserveBatteryBoostersLastUsed" />
+  </CEffectRemoveBehavior>
+  <CEffectModifyUnit id="DVaBoostersApplyCooldown">
+    <ValidatorArray value="DVaReserveBatteryDoesNotHaveBoostersMarker"/>
+  </CEffectModifyUnit>
+  <CEffectSet id="DVaBoostersInitialSet">
+    <EffectArray value="DVaReserveBatteryBoostersApplyLastUsed" />
+    <EffectArray value="DVaReserveBatteryRemoveBoostersMarker" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaReserveBatteryBoostersApplyLastUsed">
+    <Chance value="0" />
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryBoostersLastUsed" />
+  </CEffectApplyBehavior>
+  <CEffectRemoveBehavior id="DVaReserveBatteryRemoveBoostersMarker">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaReserveBatteryBoostersMarker" />
+  </CEffectRemoveBehavior>
+
+
+  <CButton id="DVaMechDefenseMatrixReserveBattery" parent="StormButtonParent">
+    <TooltipAppender Validator="DVaDefenseMatrixFusionGeneratorHasTalent" Face="DVaDefenseMatrixFusionGenerator" />
+    <TooltipAppender Validator="DVaDefenseMatrixDivertingPowerHasTalent" Face="DVaDefenseMatrixDivertingPower" />
+    <TooltipAppender Validator="DVaDefenseMatrixGetThroughThisHasTalent" Face="DVaDefenseMatrixGetThroughThis" />
+    <TooltipAppender Validator="DVaDefenseMatrixDazerZoneHasTalent" Face="DVaDefenseMatrixDazerZone" />
+    <TooltipAppender Validator="DVaDefenseMatrixAggressionMatrixHasTalent" Face="DVaDefenseMatrixAggressionMatrix" />
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  <CAbilEffectTarget id="DVaReserveBatteryAbilityDefenseMatrix">
+    <PrepEffect value="DVaMechDefenseMatrixReserveBatteryPrepareSet" />
+    <Effect value="DVaMechDefenseMatrixInitialSet" />
+    <Flags index="RequireTargetVision" value="0" />
+    <Cost>
+      <Charge Link="Abil/DVaReserveBatteryAbility" />
+      <Cooldown Link="Abil/DVaReserveBatteryAbility" Location="Player" TimeUse="45" />
+    </Cost>
+    <Range value="500" />
+    <Arc value="360" />
+    <UninterruptibleArray index="Cast" value="1" />
+    <UninterruptibleArray index="Channel" value="1" />
+    <UninterruptibleArray index="Finish" value="1" />
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechDefenseMatrixReserveBattery" ShowValidator="DVaReserveBatteryDefenseMatrixLastUsedAndDoesNotHaveMarker" UseValidator="DVaReserveBatteryDefenseMatrixLastUsedAndDoesNotHaveMarker" />
+    <CastIntroTime value="0.125" />
+    <CursorEffect value="DVaMechDefenseMatrixSearch" />
+  </CAbilEffectTarget>
+  <CValidatorUnitHasBehavior id="DVaReserveBatteryDefenseMatrixLastUsed">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryDefenseMatrixLastUsed" />
+  </CValidatorUnitHasBehavior>
+  <CBehaviorBuff id="DVaReserveBatteryDefenseMatrixLastUsed" parent="CarryBehaviorParent">
+    <InitialEffect value="DVaReserveBatteryRemoveBoostersLastUsed"/>
+  </CBehaviorBuff>
+  
+  <CActorTriangle id="DVaMechDefenseMatrixReserveBatteryGuide" parent="StormGuideVisualTriangleAttachAtBase" abil="DVaReserveBatteryAbilityDefenseMatrix">
+    <Remove Terms="ActorCreation" Send="Create StormGuideRegionTriangleAttachAtBase" />
+    <On index="0" Terms="Abil.DVaReserveBatteryAbilityDefenseMatrix.Guide; !ValidatePlayer DVaDefenseMatrixDivertingPowerHasTalent" Send="Create" />
+    <On Terms="ActorCreation" Send="Create DVaMechDefenseMatrixPolygonRegion" />
+    <On Terms="ActorCreation; ValidatePlayer" Send="ArcSetAngle 30.000000" />
+    <HostSiteOps Ops="SOpDVaMechDefenseMatrixForward SOpMoveForwardByDot1 SOp2DRotation" />
+    <Model value="DVaMechDefenseMatrixTriangleGuide" />
+  </CActorTriangle>
+  <CActorTriangle id="DVaMechDefenseMatrixReserveBatteryDivertingPowerGuide" parent="StormGuideVisualTriangleAttachAtBase" abil="DVaReserveBatteryAbilityDefenseMatrix">
+    <Remove Terms="ActorCreation" Send="Create StormGuideRegionTriangleAttachAtBase" />
+    <On index="0" Terms="Abil.DVaReserveBatteryAbilityDefenseMatrix.Guide; ValidatePlayer DVaDefenseMatrixDivertingPowerHasTalent" Send="Create" />
+    <On Terms="ActorCreation" Send="Create DVaMechDefenseMatrixDivertingPowerPolygonRegion" />
+    <HostSiteOps Ops="SOpDVaMechDefenseMatrixForward SOp2DRotation" />
+    <Model value="DVaMechDefenseMatrixDivertingPowerTriangleGuide" />
+  </CActorTriangle>
+
+  <CValidatorCombine id="DVaReserveBatteryDefenseMatrixLastUsedAndDoesNotHaveMarker">
+    <CombineArray value="DVaReserveBatteryDefenseMatrixLastUsed" />
+    <CombineArray value="DVaReserveBatteryDoesNotHaveDefenseMatrixMarker" />
+    <CombineArray value="DVaReserveBatteryHasTalent" />
+    <Type value="And" />
+  </CValidatorCombine>
+  <CValidatorUnitHasBehavior id="DVaReserveBatteryDoesNotHaveDefenseMatrixMarker">
+    <WhichUnit Value="Caster" />
+	<Negate value="1"/>
+    <Behavior value="DVaReserveBatteryDefenseMatrixMarker" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectApplyBehavior id="DVaReserveBatteryBoostersApplyMarker">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryDefenseMatrixMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaReserveBatteryDefenseMatrixMarker">
+    <Duration value="3.3125"/>
+    <DurationOverride Duration="6.3125">
+      <ValidatorArray value="DVaDefenseMatrixGetThroughThisHasTalent" />
+    </DurationOverride>
+  </CBehaviorBuff>
+  <CEffectRemoveBehavior id="DVaReserveBatteryRemoveDefenseMatrixLastUsed">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaReserveBatteryDefenseMatrixLastUsed" />
+  </CEffectRemoveBehavior>
+  
+  <CEffectSet id="DVaMechDefenseMatrixReserveBatteryPrepareSet">
+    <EffectArray value="DismountDecloakCasterSet" />
+    <EffectArray value="DVaReserveBatteryBoostersApplyMarker" />
+    <EffectArray value="DVaMechDefenseMatrixApplyPrecastReserveBattery" />
+    <EffectArray value="DVaMechDefenseMatrixApplyTargetDebuff" />
+    <EffectArray value="DVaReserveBatteryRemoveDefenseMatrixLastUsedPersistentDelay" />
+  </CEffectSet>
+  <CEffectCreatePersistent id="DVaReserveBatteryRemoveDefenseMatrixLastUsedPersistentDelay">
+    <PeriodCount value="1" />
+    <PeriodicEffectArray value="DVaReserveBatteryRemoveDefenseMatrixLastUsed" />
+    <PeriodicPeriodArray value="0.1875" />
+  </CEffectCreatePersistent>
+
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyPrecastReserveBattery">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaMechDefenseMatrixReserveBatteryPreChannel" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMechDefenseMatrixReserveBatteryPreChannel">
+    <Duration value="0.125" />
+    <Modification>
+      <TurnRateMultiplier value="10" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+    </Modification>
+    <RemoveValidatorArray value="DVaMechDefenseMatrixHasReserveBatteryOrder" />
+  </CBehaviorBuff>
+  <CValidatorUnitOrderQueue id="DVaMechDefenseMatrixHasReserveBatteryOrder">
+    <AbilLink value="DVaReserveBatteryAbilityDefenseMatrix" />
+  </CValidatorUnitOrderQueue>
+  <CValidatorCombine id="DVaMechDefenseMatrixTargetCombine">
+    <CombineArray value="DVaMechDefenseMatrixHasReserveBatteryOrder" />
+  </CValidatorCombine>
+  
+  <CEffectApplyBehavior id="DVaReserveBatteryDefenseMatrixApplyLastUsed">
+    <Chance value="0" />
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaReserveBatteryDefenseMatrixLastUsed" />
+  </CEffectApplyBehavior>
+  
+  <CEffectSet id="DVaMechDefenseMatrixPrepareSet">
+    <EffectArray value="DVaReserveBatteryDefenseMatrixApplyLastUsed" />
+    <EffectArray value="DVaReserveBatteryRemoveDefenseMatrixMarker" />
+  </CEffectSet>
+  <CEffectRemoveBehavior id="DVaReserveBatteryRemoveDefenseMatrixMarker">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaReserveBatteryDefenseMatrixMarker" />
+  </CEffectRemoveBehavior>
+  <CEffectModifyUnit id="DVaMechDefenseMatrixApplyCooldown">
+    <ValidatorArray value="DVaReserveBatteryDoesNotHaveDefenseMatrixMarker"/>
+  </CEffectModifyUnit>
+
+  <CTalent id="DVaPilotGGWP">
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotConcussivePulseDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotConcussivePulseDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotCallMechMEKAfallImpactDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotCallMechMEKAfallImpactDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotBigShotPewPewPewDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotBigShotPewPewPewDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotBigShotDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotBigShotDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechSelfDestructDetonationSearchDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechSelfDestructDetonationSearchDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechBunnyHopImpactDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechBunnyHopImpactDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersHitTheNitrousImpactDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersHitTheNitrousImpactDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersImpactDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaBoostersImpactDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotWeaponDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotWeaponDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechWeaponBounceDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechWeaponBounceDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+      <Modifications>
+        <Type value="StringReplacement" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechWeaponDamage" />
+        <Field value="ArmorMitigationRule" />
+        <StringReplacement value="IgnorePositive" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechWeaponDamage" />
+        <Field value="ResponseExclusionFlags[Proc]" />
+        <FieldIsInteger value="1" />
+        <Value value="1.000000" />
+        <StringReplacement value="None" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+  
+
+  <CEffectDamage id="DVaMechWeaponDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechWeaponBounceDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotWeaponDamage">
+    <MultiplicativeModifierArray index="ChargedBlaster" Validator="DVaPilotChargedBlasterSourceHasMarkerBehavior" Modifier="1.5" Crit="1" />
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaBoostersImpactDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaBoostersHitTheNitrousImpactDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechBunnyHopImpactDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechSelfDestructDetonationSearchDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotBigShotDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotBigShotPewPewPewDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotCallMechMEKAfallImpactDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotConcussivePulseDamage">
+    <ArmorMitigationRule value="All" />
+  </CEffectDamage>
+  
+
+  <CBehaviorBuff id="DVaMechAblativeArmorDamageResponseCarry">
+    <DamageResponse>
+	  <Handled value="DVaMechAblativeArmorApplySpellArmor"/>
+    </DamageResponse>
+  </CBehaviorBuff>
+
+  <CEffectApplyBehavior id="DVaMechAblativeArmorApplySpellArmor">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaMechAblativeArmorSpellShield" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaMechAblativeArmorSpellShield" parent="StormArmor">
+    <Alignment value="Positive" />
+    <BehaviorCategories index="BuffResistant" value="1" />
+    <Duration value="2" />
+    <ArmorModification>
+      <ArmorSet index="Hero">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+      <ArmorSet index="Merc">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+      <ArmorSet index="Monster">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+      <ArmorSet index="Summon">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+      <ArmorSet index="Structure">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+      <ArmorSet index="Minion">
+        <ArmorMitigationTable index="Ability" value="25" />
+      </ArmorSet>
+    </ArmorModification>
+  </CBehaviorBuff>
+  
+
+  <CValidatorPlayerTalent id="DVaPilotHasChargedBlaster">
+    <Find value="1" />
+    <Value value="DVaPilotChargedBlaster" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaPilotChargedBlaster" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_pilotmode.dds" />
+  </CButton>
+  <CTalent id="DVaPilotChargedBlaster">
+    <Face value="DVaPilotChargedBlaster" />
+    <Trait value="1" />
+    <RankArray>
+      <BehaviorArray value="DVaPilotChargedBlasterBehaviorCarry" />
+    </RankArray>
+  </CTalent>
+  
+
+  <CValidatorUnitHasBehavior id="DVaPilotChargedBlastCasterHasChargedBlasterBehaviorNotDisabled">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotChargedBlasterBehaviorCarry" />
+    <IncludeDisabled value="0" />
+  </CValidatorUnitHasBehavior>
+  <CBehaviorBuff id="DVaPilotChargedBlasterBehaviorCarry" parent="CarryBehaviorParent">
+    <DisableValidatorArray value="DVaPilotChargedBlasterDoesNotHaveCooldownBehavior" />
+	<EnableEffect value="DVaPilotChargedBlastVisualDummy"/>
+    <Face value="DVaPilotChargedBlaster" />
+  </CBehaviorBuff>
+  
+  <CEffectModifyUnit id="DVaPilotChargedBlastVisualDummy">
+    <ImpactUnit Value="Caster" />
+  </CEffectModifyUnit>
+
+  <CActorModel id="DVaPilotChargedBlastVisual" parent="StormModelAnimationStyleOneShotUnit">
+    <On Terms="Effect.DVaPilotChargedBlastVisualDummy.Start" Send="Create" />
+    <HostSiteOps Ops="SOpAttachWeapon" />
+	<Model value="DVaBigShotCast"/>
+  </CActorModel>
+  
+  <CValidatorUnitHasBehavior id="DVaPilotChargedBlasterDoesNotHaveCooldownBehavior">
+    <Behavior value="DVaPilotChargedBlastCooldownBehavior" />
+    <Negate value="1" />
+  </CValidatorUnitHasBehavior>
+  
+  <CValidatorUnitHasBehavior id="DVaPilotChargedBlasterSourceHasMarkerBehavior">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaPilotChargedBlastMissileMarker" />
+  </CValidatorUnitHasBehavior>
+  
+  <CValidatorUnitHasBehavior id="DVaPilotChargedBlasterHasMarkerBehavior">
+    <Behavior value="DVaPilotChargedBlastMissileMarker" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectLaunchMissile id="DVaPilotWeaponLaunchMissile">
+    <LaunchEffect value="DVaPilotChargedBlastLaunchSet"/>
+  </CEffectLaunchMissile>
+  
+  <CEffectSet id="DVaPilotChargedBlastLaunchSet">
+    <ValidatorArray value="DVaPilotHasChargedBlaster" />
+    <EffectArray value="DVaPilotChargedBlastApplySourceBehavior" />
+    <EffectArray value="DVaPilotChargedBlastApplyCooldownBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaPilotChargedBlastApplySourceBehavior">
+    <ValidatorArray value="DVaPilotChargedBlasterDoesNotHaveCooldownBehavior"/>
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaPilotChargedBlastMissileMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotChargedBlastMissileMarker" />
+  
+  <CEffectApplyBehavior id="DVaPilotChargedBlastApplyCooldownBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotChargedBlastCooldownBehavior" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotChargedBlastCooldownBehavior">
+    <Alignment value="Positive" />
+    <InfoFlags index="Hidden" value="0" />
+    <InfoIcon value="Assets\Textures\storm_ui_icon_dva_pilotmode.dds" />
+    <SortIndex value="100" />
+    <Duration value="5" />
+    <Face value="DVaPilotChargedBlaster" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaPilotWeaponImpactSet">
+    <EffectArray value="DVaPilotChargedBlastSearch" />
+  </CEffectSet>
+  
+  <CEffectEnumArea id="DVaPilotChargedBlastSearch">
+    <ValidatorArray value="TargetNotEvading" />
+    <ValidatorArray value="DVaPilotChargedBlasterSourceHasMarkerBehavior" />
+    <ExcludeArray Effect="DVaPilotWeaponImpactSet" Value="Target" />
+    <SearchFilters value="-;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Dead,Hidden,Invulnerable" />
+    <AreaArray Effect="DVaPilotChargedBlastImpactSet">
+      <Radius value="2.5" />
+    </AreaArray>
+  </CEffectEnumArea>
+  
+  <CEffectSet id="DVaPilotChargedBlastImpactSet">
+    <EffectArray value="DVaPilotSuppressingFireApplySlow" />
+    <EffectArray value="DVaPilotWeaponDamage" />
+    <ValidatorArray value="noMarkers" />
+  </CEffectSet>
+  
+  <CActorModel id="DVaChargedBlastSearch" parent="StormModelAnimationStyleOneShotUnit">
+    <On Terms="Effect.DVaPilotChargedBlastSearch.Start; At Target" Send="Create" />
+	<On Terms="ActorCreation" Send="SetScale 3.5"/>
+	<On Terms="ActorCreation" Send="SetOpacity 0.75"/>
+    <HostSiteOps Ops="SOpAttachCenter" />
+	<Model value="DVaBigShotImpactModel"/>
+  </CActorModel>
+  
+  <CActorMissile id="DVaPilotWeaponAttackMissile">
+    <On Terms="Effect.DVaPilotChargedBlastApplySourceBehavior.Start" Send="ModelSwap DVaBigShotCast" />
+    <On Terms="Effect.DVaPilotChargedBlastApplySourceBehavior.Start" Send="SetScale 2" />
+  </CActorMissile>
+  
+</Catalog>

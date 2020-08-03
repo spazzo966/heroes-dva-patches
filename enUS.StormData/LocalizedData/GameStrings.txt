@@ -37,3 +37,22 @@ Button/SimpleDisplayText/DVaMechEmergencyShielding=Mech becomes Unkillable inste
 Button/Tooltip/DVaMechEmergencyShielding=When D.Va's Mech would be destroyed, it instead becomes Unkillable for <c val="#TooltipNumbers"><d ref="Behavior,DVaMechEmergencyShieldingShield,Duration"/></c> seconds, and the cooldown of Boosters is instantly reset.<n/></n>This effect has a <c val="#TooltipNumbers"><d ref="Abil,DVaMechTraitEmergencyShieldingCooldownAbility,Cost.Charge.TimeUse"/></c> second cooldown.
 Behavior/Name/DVaMechEmergencyShieldingShield=Emergency Protocols
 Button/Tooltip/DVaBunnyHopStopAndPop=Bunny Hop deals <c val="#TooltipNumbers"><d ref="Effect,DVaMechBunnyHopImpactDamage,MultiplicativeModifierArray[0].Modifier*100"/>%</c> more damage if D.Va isn't moving at the moment of impact.</n></n>If <c val="#TooltipNumbers"><d ref="Effect,DVaMechBunnyHopStopAndPopExtendSearch,MinCount"/></c> or more enemy Heroes are hit with Bunny Hop while the Mech is stationary, the duration of Bunny Hop is extended by <c val="#TooltipNumbers"><d ref="Effect,DVaMechBunnyHopStopAndPopExtendBehaviorDuration,Value" precision="1"/></c> seconds.<n/><n/><c val="FFFF00">If chosen with Big Shot, instead gain Bunny Hop while in Mech Mode.</c>
+
+Button/Name/DVaPilotNerfThis=Nerf This!
+Button/SimpleDisplayText/DVaPilotNerfThis=Takedowns reset Pilot Abilities
+Button/Tooltip/DVaPilotNerfThis=Upon scoring a Takedown, the cooldown of all Pilot Abilities are reset.</n></n>Can only occur while in Pilot Mode
+Button/Name/DVaReserveBattery=Reserve Battery
+Button/SimpleDisplayText/DVaReserveBattery=Recast last used Mech Ability
+Button/Tooltip/DVaReserveBattery=Recast the last used Mech Ability with all talents. Using this ability resets the last used ability</n></n>Talents that grant cooldown reduction apply to the original ability.
+Button/Name/DVaPilotChargedBlaster=Charged Blaster
+Button/SimpleDisplayText/DVaPilotChargedBlaster=Periodically increase Basic Attack Damage
+Button/Tooltip/DVaPilotChargedBlaster=After not attacking for <c val="#TooltipNumbers"><d ref="Behavior,DVaPilotChargedBlastCooldownBehavior,Duration"/></c> seconds, increase Basic Attack damage by <c val="#TooltipNumbers"><d ref="Effect,DVaPilotWeaponDamage,MultiplicativeModifierArray[ChargedBlaster].Modifier*100"/>%</c> and cause it to splash in an area around the target.
+Button/Name/DVaMechBoostersReserveBattery=<d StringRef="Button,DVaMechBoosters,Name" />(Reserve Battery)
+Button/SimpleDisplayText/DVaMechBoostersReserveBattery=<d StringRef="Button,DVaMechBoosters,SimpleDisplayTest" />
+Button/Tooltip/DVaMechBoostersReserveBattery=<d StringRef="Button,DVaMechBoosters,Tooltip" />
+Button/Name/DVaMechDefenseMatrixReserveBattery=<d StringRef="Button,DVaMechDefenseMatrix,Name" />(Reserve Battery)
+Button/SimpleDisplayText/DVaMechDefenseMatrixReserveBattery=<d StringRef="Button,DVaMechDefenseMatrix,SimpleDisplayTest" />
+Button/Tooltip/DVaMechDefenseMatrixReserveBattery=<d StringRef="Button,DVaMechDefenseMatrix,Tooltip" />
+Button/Name/DVaMechanizedWalkerCooldown=Reserve Battery
+Button/SimpleDisplayText/DVaMechanizedWalkerCooldown=Recast last used Mech Ability
+Button/Tooltip/DVaMechanizedWalkerCooldown=Recast the last used Mech Ability with all talents. Using this ability resets the last used ability</n></n>Talents that grant cooldown reduction apply to the original ability.<n/><n/><s val="StandardTooltipHeader"><d StringRef="Button,DVaMechanizedWalker,Name" /></s></n></n><d StringRef="Button,DVaMechanizedWalker,Tooltip" />

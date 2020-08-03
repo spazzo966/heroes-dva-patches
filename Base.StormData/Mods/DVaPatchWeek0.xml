@@ -72,10 +72,13 @@
     <!-- <TalentTreeArray index="23" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
     <!-- <TalentTreeArray index="24" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
     <!-- <TalentTreeArray index="25" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
-    <TalentTreeArray index="24" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" />
-    <TalentTreeArray index="25" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" />
-    <TalentTreeArray index="26" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" />
-    <LevelScalingArray>
+    <!-- <TalentTreeArray index="24" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
+    <!-- <TalentTreeArray index="25" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
+    <!-- <TalentTreeArray index="26" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
+    <TalentTreeArray index="26" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" />
+    <TalentTreeArray index="27" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" />
+    <TalentTreeArray index="28" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" />
+    <LevelScalingArray index="1">
       <Modifications>
         <Catalog value="Effect" />
         <Entry value="DVaMechWeaponBounceDamage" />
