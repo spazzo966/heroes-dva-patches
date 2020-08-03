@@ -148,7 +148,7 @@
   </CValidatorPlayerTalent>
 
   <CButton id="DVaReserveBattery" parent="StormButtonParent">
-    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode_b.dds" />
   </CButton>
   <CTalent id="DVaMechReserveBattery">
     <Face value="DVaReserveBattery" />
