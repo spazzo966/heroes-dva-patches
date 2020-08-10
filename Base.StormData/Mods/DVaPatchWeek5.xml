@@ -209,6 +209,14 @@
 	</CardLayouts>
   </CUnit>
 
+  <CUnit id="HeroDVaPilot">
+    <CardLayouts index="0">
+      <LayoutButtons index="0" Face="DVaPilotBigShot" Type="AbilCmd" AbilCmd="DVaPilotBigShot,Execute" Requirements="" Slot="Heroic" />
+      <LayoutButtons index="25" Face="DVaBunnyHopOn" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,On" Slot="Heroic" />
+      <LayoutButtons index="26" Face="LockedHeroicAbilityDVa" Type="Passive" Requirements="" Slot="Heroic" />
+	</CardLayouts>
+  </CUnit>
+  
   <CValidatorCombine id="DVaBunnyHopAbilityValidatorCombine">
     <CombineArray value="DVaBunnyHopAbilityValidatorHasGetThroughThisAndHasStopAndPop" />
   </CValidatorCombine>
