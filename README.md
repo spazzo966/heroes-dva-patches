@@ -57,3 +57,16 @@ Week 4:
   * New Level 7 Talent: Charged Blaster: After not using Basic Attacks for 5 seconds, the next Basic Attack deals an additional 150% damage, and splashes around the target
   * Ablative Armor: Damage prevented with Ablative Armor now grants less Self-Destruct Charge, but when damage is prevented by Ablative Armor, D.Va's Mech gains 25 Spell Armor for 2 seconds
   * GGWP: No longer resets the cooldown of Call Mech on scoring a Takedown on an Enemy Hero, and now instead causes all damage dealt by D.Va or her Mech to ignore Positive Armor
+
+Week 5:
+
+  * Self-Destruct now displays a breakdown of the Charge gained throughout the game(amount from taking damage, amount from basics, bonus charge from defense matrix, bring it on, amount from fusion generator)
+  * Defense Matrix now displays a breakdown of damage prevented throughout the game(damage prevented to self, damage prevented to allied heroes, damage prevented to non-heroes)
+  * Takedown credit for killing the mech is now awarded when D.Va is ejected, rather than the instant the mech takes enough damage to kill it, and while the mech is disabled D.Va can activate Self-Destruct to cause it to not reward kill credit & experience to the enemy team
+  * Self-Destruct now charges 25% from taking 100% mech health as damage, minimum damage increased from 400 to 500, and now scales at -65 damage(rather than what would be -70) damage to more accurately represent the search area
+  * Self-Destruct now always deals maximum damage to targets inside the Mech's radius
+  * Bring It On bonus charge from taking damage increased from 30% to 40%
+  * Get Through This moved from Level 7 to Level 10, now also causes Defense Matrix to prevent 100% of all damage. Stop and Pop and Big Shot may still be chosen at level 20 to gain access to those Heroics(but not gain access to the benefits of those talents)
+  * New Level 16: Fusion Cannons: Increase Mech Basic Attack damage by 0.5% for each point of Self-Destruct charge, up to 50%
+  * Fixed a bug MEKAfall would not spawn the Mech with the appropriate amount of energy
+  * Fixed a bug where Defense Matrix would grant bonus Self-Destruct charge when an enemy affected by it would deal percentage damage to the Mech

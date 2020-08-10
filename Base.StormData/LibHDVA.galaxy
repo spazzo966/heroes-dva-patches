@@ -60,6 +60,7 @@ void libHDVA_gf_HeroDVaIncrementHeroCountFunction () {
         TriggerEnable(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, true);
         TriggerEnable(libHDVA_gt_DVaMoonwellRedistribution, true);
         TriggerEnable(libHDVA_gt_DVaDamageTakenSelfDestructCharge, true);
+        TriggerEnable(libHDVA_gt_DVaDefenseMatrixAbsorbed, true);
         TriggerEnable(libHDVA_gt_HeroDVaMechDiesviaFatalDamage, true);
         TriggerEnable(libHDVA_gt_DVaAbathurCreatesaDVaClone, true);
         TriggerEnable(libHDVA_gt_DVaAbathurClonedMechEnds, true);
@@ -98,6 +99,7 @@ void libHDVA_gf_HeroDVaDecrementHeroCountFunction () {
         TriggerEnable(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, false);
         TriggerEnable(libHDVA_gt_DVaMoonwellRedistribution, false);
         TriggerEnable(libHDVA_gt_DVaDamageTakenSelfDestructCharge, false);
+        TriggerEnable(libHDVA_gt_DVaDefenseMatrixAbsorbed, false);
         TriggerEnable(libHDVA_gt_HeroDVaMechDiesviaFatalDamage, false);
         TriggerEnable(libHDVA_gt_DVaAbathurCreatesaDVaClone, false);
         TriggerEnable(libHDVA_gt_DVaAbathurClonedMechEnds, false);
@@ -388,6 +390,62 @@ void libHDVA_gf_DVaPilotUpdateEnergy (int lp_dVaPlayer) {
         }
     }
     UnitSetPropertyFixed(lv_dVaPilotUnit, c_unitPropEnergy, lv_calculatedEnergyAmount);
+}
+
+void libHDVA_gf_DVaGrantSDCharge (unit lp_dVaMechUnit, fixed lp_damageAmount) {
+    // Variable Declarations
+    int lv_dVaPlayer;
+	fixed lv_dVaMechMaxHealth;
+    fixed lv_damageTakenPercent;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_dVaPlayer = UnitGetOwner(lp_dVaMechUnit);
+	lv_dVaMechMaxHealth = UnitGetPropertyFixed(lp_dVaMechUnit, c_unitPropLifeMax, c_unitPropCurrent);
+
+    // Implementation
+	
+    if ((PlayerHasTalent(lv_dVaPlayer, "DVaMechExpensivePlating") == true)) {
+        lv_dVaMechMaxHealth = (lv_dVaMechMaxHealth / libHDVA_gv_dVaCallMechExpensivePlatingHealthModifier);
+    }
+	
+    lv_damageTakenPercent = ((lp_damageAmount / lv_dVaMechMaxHealth) * 100.0);
+    if ((PlayerHasTalent(lv_dVaPlayer, "DVaSelfDestructBringItOn") == true)) {
+		libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] += ((lv_damageTakenPercent * ((libHDVA_gv_dVaBringItOnChargeRateModifier + 1.0))) - lv_damageTakenPercent);
+        lv_damageTakenPercent *= (libHDVA_gv_dVaBringItOnChargeRateModifier + 1.0);
+    }
+	
+	libHDVA_gv_dVaDefensiveChargeRemainderDeMa[lv_dVaPlayer] += lv_damageTakenPercent;
+	libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] += lv_damageTakenPercent;
+    lv_damageTakenPercent += libHDVA_gv_dVaDefensiveChargeRemainder[lv_dVaPlayer];
+    while ((lv_damageTakenPercent > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+		if ((libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+			libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+			if ((PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct") > 0.0)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanHeroHitAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanHeroHitAnnihilation") + 1.0));
+				// UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, StringToText("Gained 1 Charge from Taking Damage(as part of defense matrix)"));
+			}
+		}
+		if ((libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+			libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+			if ((PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct") > 0.0)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanWrathTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanWrathTalentAnnihilation") + 1.0));
+				// UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, StringToText("Gained 1 Charge from bring it on(as part of defense matrix)"));
+			}
+		}
+		if ((libHDVA_gv_dVaDefensiveChargeRemainderDeMa[lv_dVaPlayer] > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+			libHDVA_gv_dVaDefensiveChargeRemainderDeMa[lv_dVaPlayer] -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+			if ((PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct") > 0.0)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanBombardmentTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanBombardmentTalentAnnihilation") + 1.0));
+				// UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, StringToText("Gained 1 Charge from defense matrix(as part of defense matrix)"));
+			}
+		}
+        PlayerAddChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct", -1.0);
+        lv_damageTakenPercent -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+    }
+    UnitSetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+    libHDVA_gv_dVaDefensiveChargeRemainder[lv_dVaPlayer] = lv_damageTakenPercent;
+	
 }
 
 void libHDVA_gf_DVaUpdatethePartyFrametoActiveUnit (int lp_dVaPlayer) {
@@ -827,19 +885,27 @@ bool libHDVA_gt_HeroDVaMechDiesviaFatalDamage_Func (bool testConds, bool runActi
 
     lv_enemyPlayerGroup = libGame_gf_EnemyPlayerGroupOfPlayer(lv_targetPlayer);
     lv_killingGroup = libGame_gf_HeroDeathGetKillingGroupFromKillingTeamGroupAndDeadUnit(lv_enemyPlayerGroup, lv_killingPlayer, lv_unit);
-    libGame_gf_HeroDeathAwardXP(lv_killingPlayer, lv_unit, lv_enemyPlayerGroup, lv_killingGroup, true);
-    if ((UnitGroupCount(UnitGroupAlliance(lv_targetPlayer, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(lv_unit), libCore_gv_bALHeroKillXPRadius), libCore_gv_filtersHeroic, libCore_gv_bALMaxPlayersOnATeam), c_unitCountAlive) >= 1)) {
-        autoE02018F0_g = lv_killingGroup;
-        lv_itPlayer = -1;
-        while (true) {
-            	lv_itPlayer = PlayerGroupNextPlayer(autoE02018F0_g, lv_itPlayer);
-            	if (lv_itPlayer<0) { break; }
-            	libGame_gf_ScoreValuesRecordXPContributionForPlayer(lv_itPlayer, (libCore_gf_DataXPXPForHero(lv_itPlayer, lv_unit) / PlayerGroupCount(lv_killingGroup)), false);
-            libGame_gf_SendEventHeroParticipatedInTakedown(lv_killingPlayer, lv_itPlayer, lv_targetPlayer, lv_unit, UnitGetPosition(lv_unit));
-        }
-    }
-
-    libUIUI_gf_KillLogAnnounceKill(lv_killingPlayer, lv_unit);
+	while ((UnitHasBehavior2(lv_unit, "DVaMechFatalDamageDisabledTimeout") == true)) {
+		Wait(0.0625, c_timeGame);
+	}
+	if ((UnitHasBehavior2(lv_unit, "DVaMechSelfDestructMechDetonationCountdown") == false)) {
+		// UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, (StringToText("Self Destruct not present, granting kill credit")));
+		libGame_gf_HeroDeathAwardXP(lv_killingPlayer, lv_unit, lv_enemyPlayerGroup, lv_killingGroup, true);
+		if ((UnitGroupCount(UnitGroupAlliance(lv_targetPlayer, c_unitAllianceEnemy, RegionCircle(UnitGetPosition(lv_unit), libCore_gv_bALHeroKillXPRadius), libCore_gv_filtersHeroic, libCore_gv_bALMaxPlayersOnATeam), c_unitCountAlive) >= 1)) {
+			autoE02018F0_g = lv_killingGroup;
+			lv_itPlayer = -1;
+			while (true) {
+					lv_itPlayer = PlayerGroupNextPlayer(autoE02018F0_g, lv_itPlayer);
+					if (lv_itPlayer<0) { break; }
+					libGame_gf_ScoreValuesRecordXPContributionForPlayer(lv_itPlayer, (libCore_gf_DataXPXPForHero(lv_itPlayer, lv_unit) / PlayerGroupCount(lv_killingGroup)), false);
+				libGame_gf_SendEventHeroParticipatedInTakedown(lv_killingPlayer, lv_itPlayer, lv_targetPlayer, lv_unit, UnitGetPosition(lv_unit));
+			}
+		}
+		libUIUI_gf_KillLogAnnounceKill(lv_killingPlayer, lv_unit);
+	}
+	else {
+		// UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, (StringToText("Self Destruct present, not granting kill credit")));
+	}
     libGame_gf_DeathRecapPopulateDeathRecapDataForPlayer(lv_unit, lv_targetPlayer);
     return true;
 }
@@ -978,9 +1044,6 @@ bool libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func (bool testConds, bool runA
     }
 
     lv_incomingDamageAmount = (EventUnitDamageAmount() + EventUnitDamageBehaviorShield());
-    if ((UnitHasBehavior2(EventUnitDamageSourceUnit(), "DVaMechDefenseMatrixDebuff") == true)) {
-        lv_incomingDamageAmount /= 0.25;
-    }
 
     if ((PlayerHasTalent(lv_dVaPlayer, "DVaMechExpensivePlating") == true)) {
         lv_maxMechHealth = (lv_maxMechHealth / libHDVA_gv_dVaCallMechExpensivePlatingHealthModifier);
@@ -988,11 +1051,25 @@ bool libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func (bool testConds, bool runA
 
     lv_damageTakenPercent = ((lv_incomingDamageAmount / lv_maxMechHealth) * 100.0);
     if ((PlayerHasTalent(lv_dVaPlayer, "DVaSelfDestructBringItOn") == true)) {
+		libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] += ((lv_damageTakenPercent * ((libHDVA_gv_dVaBringItOnChargeRateModifier + 1.0))) - lv_damageTakenPercent);
         lv_damageTakenPercent *= (libHDVA_gv_dVaBringItOnChargeRateModifier + 1.0);
     }
+	libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] += lv_damageTakenPercent;
 	
     lv_damageTakenPercent += libHDVA_gv_dVaDefensiveChargeRemainder[lv_dVaPlayer];
     while ((lv_damageTakenPercent > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+		if ((libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+			libHDVA_gv_dVaDefensiveChargeRemainderDMG[lv_dVaPlayer] -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+			if ((PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct") > 0.0)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanHeroHitAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanHeroHitAnnihilation") + 1.0));
+			}
+		}
+		if ((libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] > libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge)) {
+			libHDVA_gv_dVaDefensiveChargeRemainderBrIO[lv_dVaPlayer] -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
+			if ((PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct") > 0.0)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanWrathTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanWrathTalentAnnihilation") + 1.0));
+			}
+		}
         PlayerAddChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct", -1.0);
         lv_damageTakenPercent -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
     }
@@ -1006,6 +1083,69 @@ void libHDVA_gt_DVaDamageTakenSelfDestructCharge_Init () {
     libHDVA_gt_DVaDamageTakenSelfDestructCharge = TriggerCreate("libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func");
     TriggerEnable(libHDVA_gt_DVaDamageTakenSelfDestructCharge, false);
     TriggerAddDamageEvent(libHDVA_gt_DVaDamageTakenSelfDestructCharge, null, "HeroDVaMech", c_unitDamageTypeAny, c_unitDamageEither, null);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Hero - D.Va - Defense Matrix Absorbed
+//--------------------------------------------------------------------------------------------------
+bool libHDVA_gt_DVaDefenseMatrixAbsorbed_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_dVaUnit;
+	unit lv_damagedUnit;
+    int lv_dVaPlayer;
+    fixed lv_damageAbsorbed;
+
+    // Automatic Variable Declarations
+    // Variable Initialization
+    lv_dVaUnit = EventUnitBehaviorCasterUnit();
+    lv_dVaPlayer = UnitGetOwner(lv_dVaUnit);
+	lv_damagedUnit = EventUnitDamageSourceUnit();
+    lv_damageAbsorbed = EventUnitDamageAbsorbed();
+
+    // Conditions
+    if (testConds) {
+        if (!((lv_dVaPlayer <= libCore_gv_bALMaxPlayers))) {
+            return false;
+        }
+
+        if (!((lv_dVaPlayer != 0))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+	
+	if ((EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroes") || (EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis")) {
+		PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanArtOfChaosTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanArtOfChaosTalentAnnihilation") + lv_damageAbsorbed));
+	}
+	else {
+		if ((lv_damagedUnit == lv_dVaUnit)) {
+			if ((UnitIsAlive(lv_damagedUnit) == true) && (UnitHasBehavior2(lv_damagedUnit, "DVaMechSelfDestructAbandoned") == false)) {
+				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanMasterOfDestructionTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanMasterOfDestructionTalentAnnihilation") + lv_damageAbsorbed));
+				if ((PlayerGetChargeUsed(UnitGetOwner(lv_damagedUnit), "Abil/DVaMechSelfDestruct") > 0.0)) {
+					libHDVA_gf_DVaGrantSDCharge(lv_damagedUnit, lv_damageAbsorbed);
+				}
+			}
+		}
+		else {
+			PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanMinionKillAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanMinionKillAnnihilation") + lv_damageAbsorbed));
+		}
+	}
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void libHDVA_gt_DVaDefenseMatrixAbsorbed_Init () {
+    libHDVA_gt_DVaDefenseMatrixAbsorbed = TriggerCreate("libHDVA_gt_DVaDefenseMatrixAbsorbed_Func");
+    TriggerEnable(libHDVA_gt_DVaDefenseMatrixAbsorbed, false);
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuff");
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroes");
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffGetThroughThis");
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1157,7 +1297,8 @@ bool libHDVA_gt_DVaCallMechMEKAfallCompleted_Func (bool testConds, bool runActio
     lv_dVaPilotUnit = EventUnit();
     lv_dVaPlayer = UnitGetOwner(lv_dVaPilotUnit);
     UnitPutInTransport(lv_dVaPilotUnit, libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer]);
-    if ((PlayerHasTalent(lv_dVaPlayer, "DVaPilotCallMechMEKAfall") == true)) {
+	// UnitCreateEffectUnit(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], "DVaMechPilotLoadSet", lv_dVaPilotUnit);
+    if ((PlayerHasTalent(lv_dVaPlayer, "DVaPilotCallMechMEKAfall") == true)) { 
     }
     else {
         UnitCreateEffectUnit(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], "DVaTransferMapMechanicStacksLoadSet", lv_dVaPilotUnit);
@@ -1221,6 +1362,8 @@ bool libHDVA_gt_DVaCallMechMEKAfallCompletedMapMechanicTransfer_Func (bool testC
     }
 
     UnitCreateEffectUnit(lv_dVaMechUnit, "DVaTransferMapMechanicStacksLoadSet", lv_dVaPilotUnit);
+	UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+
     return true;
 }
 
@@ -1443,6 +1586,7 @@ bool libHDVA_gt_HeroDVaTargetAcquired_Func (bool testConds, bool runActions) {
     UnitCreateEffectUnit(lv_dVa, "DVaMechWeaponApplyTargetingBehavior", lv_targetUnit);
     libHDVA_gv_heroDVaCurrentAttackTarget[lv_dVaPlayer] = lv_targetUnit;
     UnitBehaviorAdd(lv_dVa, "DVaMechWeaponDisableWeaponScan", lv_dVa, 1);
+    // UIDisplayMessage(PlayerGroupAll(), c_messageAreaDebug, (StringToText("Primary Target(dVa): ") + StringToText(UnitGetType(lv_targetUnit))));
     return true;
 }
 
@@ -1836,6 +1980,7 @@ void libHDVA_InitTriggers () {
     libHDVA_gt_DVaBoostersEnemyHallofStorms_Init();
     libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Init();
     libHDVA_gt_DVaDamageTakenSelfDestructCharge_Init();
+	libHDVA_gt_DVaDefenseMatrixAbsorbed_Init();
     libHDVA_gt_DVaCallMech_Init();
     libHDVA_gt_DVaCallMechMEKAfall_Init();
     libHDVA_gt_DVaCallMechInterrupted_Init();

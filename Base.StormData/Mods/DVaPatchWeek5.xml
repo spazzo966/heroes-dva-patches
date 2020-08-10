@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1: -->
+<!-- Self-Destruct now displays a breakdown of Charge earned throughout the game -->
+<!-- AzmodanHeroHitAnnihilation = from taking damage -->
+<!-- AzmodanWrathTalentAnnihilation = from bring it on -->
+<!-- AzmodanBombardmentTalentAnnihilation = from defense matrix -->
+<!-- DVaChargeFromBasics = from basics -->
+
+<!-- Change 2: -->
+<!-- Defense Matrix displays a breakdown of damage prevented throughout the game(damage prevented to self, damage prevented to allies(broken down?), damage prevented to not-heroes) -->
+<!-- Defense Matrix no longer increases the Self-Destruct charge given by damage it didn't prevent -->
+<!-- Defense Matrix no longer increases the Self-Destruct charge given to targets other than the caster -->
+<!-- AzmodanArtOfChaosTalentAnnihilation = prevented to nonheroes -->
+<!-- AzmodanMasterOfDestructionTalentAnnihilation = prevented to self -->
+<!-- AzmodanMinionKillAnnihilation = prevented to allied heroes -->
+
+<!-- Change 4: -->
+<!-- Takedown credit from the Mech dying is now granted when D.Va is ejected, rather than when the Mech is first disabled. D.Va can now activate Self-Destruct to eject during this timer, and if doing so, Takedown credit is not awarded -->
+
+<!-- Change 3: -->
+<!-- Self-Destruct charge gained from taking damage reduced from 30% per 100% of mech life to 25% per 100% of mech life, minimum damage is increased from 400 to 500 -->
+<!-- Enemies who have their center inside the radius of the exploding mech now always take maximum damage -->
+<!-- Scaler now increments at -65(was -80, -70 with change to maximum damage) to help ensure a more even scale of damage -->
+
+<!-- Change 5: -->
+<!-- Bring It On charge bonus percent increased from 30% to 40%(from 30% to 39% to 25% to 35%) -->
+
+<!-- Change 6: -->
+<!-- Get Through This moved from Level 7 to Level 10, now also causes Defense Matrix to reduce all damage by 100%(is this enough?) -->
+
+<!-- Change 7: -->
+<!-- New Level 16 Talent: Fusion Cannons: Increase Mech Basic Attack damage by 0.5% for each charge of Self-Destruct -->
+
+
+<!-- secret week 6 changes sneak peek if blizzard doesn't patch: -->
+<!-- big shot dmg reduced, now stuns 1st target hit -->
+<!-- pew pew pew stuns the 2nd and 3rd targets hit if(if they exist) for 2nd and 3rd shots, but not the 1st or 2nd -->
+<!-- some new level 7 for probably boosters -->
+<!-- a pilot 13 -->
+<!-- a mixed 16 -->
+<!-- nfi for the other 2, maybe nerf def matrix? blizzard already said they're nerfing the reduction value, and I don't want to steal their idea -->
+<!-- maybe it's time to come up with talents that break the rule of 5 max per tier, dunno if the game even properly supports it. One way to find out! -->
+
+
+  <CScoreValueCustom id="DVaChargeFromBasics" parent="BaseScoreValue"/>
+
+  <CEffectModifyUnit id="DVaMechDefenseMatrixFusionGeneratorAddChargetoCaster">
+    <VitalArray index="Energy">
+      <ScoreArray Value="AzmodanWrathTalentAnnihilation"/>
+    </VitalArray>
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMechSelfDestructAddCharge">
+    <VitalArray index="Energy">
+      <ScoreArray Value="DVaChargeFromBasics"/>
+    </VitalArray>
+  </CEffectModifyUnit>
+  
+  <CButton id="DVaMechDefenseMatrixFace">
+    <TooltipAppender Text="Abil/DVaMatrixPreventedToSelf" />
+    <TooltipAppender Text="Abil/DVaMatrixPreventedToOthers" />
+    <TooltipAppender Text="Abil/DVaMatrixPreventedToNonHero" />
+  </CButton>
+
+  <CButton id="DVaMechSelfDestruct">
+    <TooltipAppender Text="Abil/DVaDestructFromTaken" />
+    <TooltipAppender Text="Abil/DVaDestructFromMatrix" />
+    <TooltipAppender Text="Abil/DVaDestructFromBasics" />
+    <TooltipAppender Validator="DVaSelfDestructComeMeAtHasTalent" Text="Abil/DVaDestructFromBiO" />
+    <TooltipAppender Validator="DVaDefenseMatrixFusionGeneratorHasTalent" Text="Abil/DVaDestructFromFuGe" />
+  </CButton>
+  
+  <CAccumulatorDistance id="DVaSelfDestructDistanceAccumulator">
+    <MinAccumulation value="-700" />
+    <Scale value="-65" />
+  </CAccumulatorDistance>
+
+  <CEffectDamage id="DVaMechSelfDestructDetonationSearchDamage" >
+    <FlatModifierArray index="DistanceScaler" Validator="DVaSelfDestructTargetNotInsideDVa" />
+  </CEffectDamage>
+  
+  <CValidatorLocationCompareRange id="DVaSelfDestructTargetNotInsideDVa">
+    <WhichLocation Effect="DVaMechSelfDestructDetonationSet" />
+    <Compare value="GT" />
+    <Range value="1.1875" />
+    <Value Value="TargetPoint" />
+  </CValidatorLocationCompareRange>
+  
+  <CEffectSet id="DVaMechFatalDamageSuicideSet">
+    <ValidatorArray value="DVaMechMechNotSelfDestructing" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechSelfDestructInitialAbilityCancelSet">
+    <EffectArray value="DVaMechSelfDestructRemoveDisabledTimeoutBehavior" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaMechSelfDestructRemoveDisabledTimeoutBehavior">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaMechFatalDamageDisabledTimeout" />
+  </CEffectRemoveBehavior>
+  
+  <CBehaviorBuff id="DVaMechFatalDamageDisabledTimeout">
+    <Modification>
+      <AbilLinkEnableArray value="DVaMechSelfDestruct" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CHero id="DVa">
+    <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" />
+    <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" />
+    <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" />
+    <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" />
+    <TalentTreeArray index="4" Talent="DVaPilotNerfThis" Tier="1" Column="5" />
+    <TalentTreeArray index="5" Talent="DVaBoostersComingThrough" Tier="2" Column="1" />
+    <TalentTreeArray index="6" Talent="DVaDefenseMatrixDazerZone" Tier="2" Column="2" />
+    <TalentTreeArray index="7" Talent="DVaDefenseMatrixAggressionMatrix" Tier="2" Column="3" />
+    <TalentTreeArray index="8" Talent="DVaSelfDestructNuclearOption" Tier="2" Column="4" />
+    <TalentTreeArray index="9" Talent="DVaMechReserveBattery" Tier="2" Column="5" />
+    <TalentTreeArray index="10" Talent="DVaDefenseMatrixDivertingPower" Tier="3" Column="1" />
+    <TalentTreeArray index="11" Talent="DVaDefenseMatrixFusionGenerator" Tier="3" Column="2" />
+    <TalentTreeArray index="12" Talent="DVaSelfDestructBringItOn" Tier="3" Column="3" />
+    <TalentTreeArray index="13" Talent="DVaPilotChargedBlaster" Tier="3" Column="4" />
+    <TalentTreeArray index="14" Talent="DVaBunnyHop" Tier="4" Column="1" />
+    <TalentTreeArray index="15" Talent="DVaBigShot" Tier="4" Column="2" />
+    <TalentTreeArray index="16" Talent="DVaDefenseMatrixGetThroughThis" Tier="4" Column="3" />
+    <TalentTreeArray index="17" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" />
+    <TalentTreeArray index="18" Talent="DVaMechExpensivePlating" Tier="5" Column="2" />
+    <TalentTreeArray index="19" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" />
+    <TalentTreeArray index="20" Talent="DVaMechAblativeArmor" Tier="5" Column="4" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="21" Talent="DVaPilotGGWP" Tier="6" Column="1" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="22" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="2" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="23" Talent="DVaPilotSuppressingFire" Tier="6" Column="3" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="24" Talent="DVaMechFusionCannons" Tier="6" Column="4" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="25" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+    <TalentTreeArray index="26" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2">
+      <PrerequisiteTalentArray index="0" removed="1"/>
+    </TalentTreeArray>
+  </CHero>
+  
+  <CButton id="DVaMechMechMode">
+    <TooltipAppender Validator="DVaFusionCannonsHasTalent" Face="DVaMechFusionCannons" />
+  </CButton>
+  
+  <CButton id="DVaMechFusionCannons" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode_a.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechFusionCannons">
+    <Face value="DVaMechFusionCannons" />
+    <Trait value="1" />
+  </CTalent>
+  <CValidatorPlayerTalent id="DVaFusionCannonsHasTalent">
+    <Find value="1" />
+    <Value value="DVaMechFusionCannons" />
+  </CValidatorPlayerTalent>
+  
+  <CAccumulatorVitals id="DVaFusionCannonsEnergyAccumulator" parent="BaseVitalAccumulator">
+    <MaxAccumulation value="0.5" />
+    <Ratio value="0.005" />
+    <ModificationType value="PerUnit" />
+    <ApplicationRule value="Add"/>
+  </CAccumulatorVitals>
+
+  <CEffectDamage id="DVaMechWeaponDamage">
+    <MultiplicativeModifierArray index="FusionCannons" Validator="DVaFusionCannonsHasTalent" Accumulator="DVaFusionCannonsEnergyAccumulator"/>
+    <MultiplicativeModifierArray index="FusionCannonsCrit" Validator="DVaFusionCannonsHasTalentAndHas100Energy" Crit="1"/>
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechWeaponBounceDamage">
+    <MultiplicativeModifierArray index="FusionCannons" Validator="DVaFusionCannonsHasTalent" Accumulator="DVaFusionCannonsEnergyAccumulator"/>
+    <MultiplicativeModifierArray index="FusionCannonsCrit" Validator="DVaFusionCannonsHasTalentAndHas100Energy" Crit="1"/>
+  </CEffectDamage>
+  
+  <CValidatorCombine id="DVaFusionCannonsHasTalentAndHas100Energy">
+    <CombineArray value="DVaFusionCannonsHasTalent" />
+    <CombineArray value="DVaFusionCannonsDVaHas100Energy" />
+    <Type value="And" />
+  </CValidatorCombine>
+  <CValidatorUnitCompareVital id="DVaFusionCannonsDVaHas100Energy">
+    <WhichUnit Value="Caster" />
+    <Value value="100" />
+    <Vital value="Energy" />
+  </CValidatorUnitCompareVital>
+  
+
+  <CButton id="LockedHeroicAbilityDVa" parent="LockedHeroicAbility">
+    <Tooltip value="Button/Tooltip/LockedHeroicAbilityDVa" />
+    <AlertTooltip value="Button/Tooltip/LockedHeroicAbilityDVa" />
+  </CButton>
+  
+  <CUnit id="HeroDVaMech" >
+    <CardLayouts index="0">
+      <LayoutButtons index="0" Face="DVaPilotBigShot" Type="AbilCmd" AbilCmd="DVaPilotBigShot,Execute" Requirements="" Slot="Heroic" />
+      <LayoutButtons index="23" Face="DVaBunnyHopOff" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,Off" Slot="Heroic" />
+      <LayoutButtons index="24" Face="DVaBunnyHopOn" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,On" Slot="Heroic" />
+      <LayoutButtons index="25" Face="LockedHeroicAbilityDVa" Type="Passive" Requirements="" Slot="Heroic" />
+	</CardLayouts>
+  </CUnit>
+
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorCombine">
+    <CombineArray value="DVaBunnyHopAbilityValidatorHasGetThroughThisAndHasStopAndPop" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBunnyHopAbilityValidatorHasGetThroughThisAndHasStopAndPop">
+    <Type value="And" />
+    <CombineArray value="DVaDefenseMatrixGetThroughThisHasTalent" />
+    <CombineArray value="DVaBunnyHopStopAndPopHasTalent" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="DVaBigShotAbilityValidatorCombine">
+    <CombineArray value="DVaBigShotAbilityValidatorHasGetThroughThisAndHasPewPewPew" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaBigShotAbilityValidatorHasGetThroughThisAndHasPewPewPew">
+    <Type value="And" />
+    <CombineArray value="DVaDefenseMatrixGetThroughThisHasTalent" />
+    <CombineArray value="DVaBigShotPewPewPewHasReplacedTalent" />
+  </CValidatorCombine>
+  
+  <CBehaviorUnitTracker id="DVaDefenseMatrixUnitTracker">
+    <TrackingValidatorArray index="0" value="DVaMechDefenseMatrixHasDebuffCombine" />
+  </CBehaviorUnitTracker>
+
+  <CBehaviorBuff id="DVaDefenseMatrixFusionGeneratorDebuff">
+    <RemoveValidatorArray index="0" value="DVaMechDefenseMatrixHasDebuffCombine" />
+  </CBehaviorBuff>
+  
+  <CValidatorCombine id="DVaMechDefenseMatrixHasDebuffCombine">
+    <CombineArray value="DVaMechDefenseMatrixHasDebuff" />
+    <CombineArray value="DVaMechDefenseMatrixHasDebuffGetThroughThis" />
+  </CValidatorCombine>
+  <CValidatorUnitCompareBehaviorCount id="DVaMechDefenseMatrixHasDebuffGetThroughThis">
+    <Compare value="GT" />
+    <Behavior value="DVaMechDefenseMatrixDebuffGetThroughThis" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CValidatorCombine id="DVaDefenseMatrixGetThroughThisApplicationValidator">
+    <Type value="And" />
+    <CombineArray value="DVaDefenseMatrixGetThroughThisHasTalent" />
+    <CombineArray value="DVaMechDefenseMatrixTargetChannellingRemoteSourceDoesNotHave" />
+  </CValidatorCombine>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechDefenseMatrixTargetChannellingRemoteSourceDoesNotHave">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaMechDefenseMatrixChannellingRemote" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectSet id="DVaMechDefenseMatrixImpactSet">
+    <EffectArray index="0" value="DVaMechDefenseMatrixApplicationSwitchDebuff" />
+    <EffectArray index="1" value="DVaMechDefenseMatrixApplicationSwitchNonHeroesDebuff" />
+  </CEffectSet>
+  
+  <CEffectSwitch id="DVaMechDefenseMatrixApplicationSwitchDebuff">
+    <CaseArray Validator="DVaDefenseMatrixGetThroughThisApplicationValidator" Effect="DVaMechDefenseMatrixApplyDebuffGetThroughThis" />
+    <CaseDefault value="DVaMechDefenseMatrixApplyDebuff" />
+  </CEffectSwitch>
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyDebuffGetThroughThis">
+    <Behavior value="DVaMechDefenseMatrixDebuffGetThroughThis" />
+  </CEffectApplyBehavior>
+  
+  <CEffectSwitch id="DVaMechDefenseMatrixApplicationSwitchNonHeroesDebuff">
+    <CaseArray Validator="DVaDefenseMatrixGetThroughThisApplicationValidator" Effect="DVaMechDefenseMatrixApplyDebuffNonHeroesGetThroughThis" />
+    <CaseDefault value="DVaMechDefenseMatrixApplyNonHeroesDebuff" />
+  </CEffectSwitch>
+  <CEffectApplyBehavior id="DVaMechDefenseMatrixApplyDebuffNonHeroesGetThroughThis">
+    <Behavior value="DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaMechDefenseMatrixDebuffGetThroughThis" parent="DVaMechDefenseMatrixDebuff">
+    <DamageResponse>
+      <ModifyFraction value="0" />
+    </DamageResponse>
+  </CBehaviorBuff>
+  <CBehaviorBuff id="DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis" parent="DVaMechDefenseMatrixDebuffNonHeroes">
+    <DamageResponse>
+      <ModifyFraction value="0" />
+    </DamageResponse>
+  </CBehaviorBuff>
+  
+
+  <CActorModel id="DVaMechDefenseMatrixOverhead" >
+    <On Terms="Behavior.DVaMechDefenseMatrixDebuffGetThroughThis.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+  <CActorModel id="DVaMechDefenseMatrixImpact">
+    <On Terms="Behavior.DVaMechDefenseMatrixDebuffGetThroughThis.On" Send="Create" />
+    <On Terms="Behavior.DVaMechDefenseMatrixDebuffGetThroughThis.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+
+</Catalog>

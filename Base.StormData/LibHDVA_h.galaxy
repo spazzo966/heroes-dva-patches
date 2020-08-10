@@ -4,8 +4,8 @@ include "TriggerLibs/HeroesLib"
 // Library: DVa
 //--------------------------------------------------------------------------------------------------
 // Constants
-const fixed libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge = 3.33;
-const fixed libHDVA_gv_dVaBringItOnChargeRateModifier = 0.3;
+const fixed libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge = 4;
+const fixed libHDVA_gv_dVaBringItOnChargeRateModifier = 0.4;
 const fixed libHDVA_gv_dVaCallMechDefaultMaxCooldown = 45.0;
 const fixed libHDVA_gv_dVaCallMechExpensivePlatingCooldownChange = 15.0;
 
@@ -22,6 +22,9 @@ int libHDVA_gv_heroDVaTriggerRegistrationCount;
 libHDVA_gs_DVaUI libHDVA_gv_dVaUI;
 fixed[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaDefenseMatrixTrackedValue;
 fixed[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaDefensiveChargeRemainder;
+fixed[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaDefensiveChargeRemainderDMG;
+fixed[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaDefensiveChargeRemainderBrIO;
+fixed[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaDefensiveChargeRemainderDeMa;
 fixed libHDVA_gv_dVaCallMechExpensivePlatingHealthModifier;
 unit[libCore_gv_bALMaxPlayers + 1] libHDVA_gv_dVaCallMechMechBeingSummoned;
 fixed libHDVA_gv_dVaCallMechSummonedMechTargetPointOffset_C;
@@ -35,6 +38,7 @@ void libHDVA_gf_HeroDVaUIInitialize ();
 void libHDVA_gf_SpawnDVa (int lp_player, int lp_heroIndex, point lp_spawnLocation);
 void libHDVA_gf_RespawnHeroDVa (unit lp_pilotUnit, int lp_player, point lp_spawnLocation, int lp_respawnedMechHealthPercentage);
 void libHDVA_gf_DVaPilotUpdateEnergy (int lp_dVaPlayer);
+void libHDVA_gf_DVaGrantSDCharge (unit lp_dVaMechUnit, fixed lp_damageAmount);
 void libHDVA_gf_DVaUpdatethePartyFrametoActiveUnit (int lp_dVaPlayer);
 unit libHDVA_gf_HeroDVaActiveDVaUnit (int lp_playerID);
 
@@ -52,6 +56,7 @@ trigger libHDVA_gt_HeroDVaMechDiesviaFatalDamage;
 trigger libHDVA_gt_DVaBoostersEnemyHallofStorms;
 trigger libHDVA_gt_DVaDefenseMatrixTrackerReportandReset;
 trigger libHDVA_gt_DVaDamageTakenSelfDestructCharge;
+trigger libHDVA_gt_DVaDefenseMatrixAbsorbed;
 trigger libHDVA_gt_DVaCallMech;
 trigger libHDVA_gt_DVaCallMechMEKAfall;
 trigger libHDVA_gt_DVaCallMechInterrupted;
