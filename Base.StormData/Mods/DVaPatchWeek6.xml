@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- secret week 6 changes sneak peek if blizzard doesn't patch: -->
+<!-- Big Shot: Damage reduced, the first enemy hit is Stunned for 0.5 seconds -->
+<!-- Pew Pew Pew: Damage reduction is now additive, each successive hit stuns the next target along, without stunning the previous targets, and damage reduction only applies to targets that aren't 1st, 2nd or 3rd(the target that gets stunned) -->
+<!-- New Level 7 Talent: Pit Stop: Every 2nd enemy Hero damaged in a single cast of Boosters causes D.Va's Mech heals for 15% of its health over the next 4 seconds. If stationary while this is heal is active, the heal amount is doubled. Stacks up to 3 times -->
+<!-- a pilot 13: Reduce Mech HP by 20%, reduce Torpedo Dash coolown by 10 seconds, increase Pilot HP by 25% -->
+<!-- Mech Basic Attacks now more properly match the visuals  -->
+<!-- Replaced Diverting Power: Raise My APM: Defense Matrix now grants 50 armor to Allies in the affected area -->
+<!-- MEKAfall moved to level 16, damage reduced from XXX to YYY -->
+
+<!-- New Level 16 Talent: While Defense Matrix or Boosters are active, D.Va's Basic Attacks fire in the direction she is facing -->
+
+<!-- Diverting Power: Moved to Level 16 -->
+
+<!-- Replaced D.Nied:  -->
+<!-- a mech 10: When Self-Destruct is activated, rather than eject as soon as it is pressed, eject when it explodes, allowing D.Va to pilot the mech while it is exploding -->
+<!-- nfi for the other 2, maybe nerf def matrix? blizzard already said they're nerfing the reduction value, and I don't want to steal their idea -->
+<!-- maybe it's time to come up with talents that break the rule of 5 max per tier, dunno if the game even properly supports it. One way to find out! -->
+
+<!-- Hey, we fixed a bug we did! -->
+
+
+  <CEffectDamage id="DVaPilotCallMechMEKAfallImpactDamage">
+    <Amount value="120" />
+  </CEffectDamage>
+
+  <CWeaponLegacy id="DVaMechWeapon">
+    <MinScanRange value="4.5" />
+    <Range value="4.5" />
+    <!-- <StandRange value="2" /> -->
+  </CWeaponLegacy>
+  <CBehaviorBuff id="DVaMechArtWeaponCasterSoundDummyLoop">
+    <RemoveValidatorArray index="0" value="DVaAttackTargetIsInRangeNew" />
+	<!-- <FinalEffect value="DVaDummyArtFinal"/> -->
+  </CBehaviorBuff>
+  <!-- <CEffectModifyUnit id="DVaDummyArtFinal"/> -->
+  <CValidatorLocationEnumArea id="DVaAttackTargetIsInRangeNew">
+    <WhichLocation Value="CasterUnit" />
+    <AreaArray Count="1" Validator="DVaTargetHasWeaponTargetBehavior">
+      <Radius value="5.6875" />
+    </AreaArray>
+    <SearchFlags index="OffsetAreaByAngle" value="0" />
+    <LaunchLocation Value="SourceUnit" />
+    <SearchFilters value="Visible;Player,Ally,Neutral,Stasis,Invulnerable" />
+  </CValidatorLocationEnumArea>
+  
+  <CEffectCreatePersistent id="DVaReserveBatteryRemoveBoosterLastUsedPersistentDelay">
+	<ExpireEffect value="DVaReserveBatteryBoostersApplyMarker"/>
+  </CEffectCreatePersistent>
+  
+  <CEffectDamage id="DVaPilotBigShotDamage">
+    <Amount value="180" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaPilotBigShotPewPewPewDamage">
+    <Amount value="180" />
+	<MultiplicativeModifierArray index="PewPewBaseMod" Modifier="-0.4" />
+	<MultiplicativeModifierArray index="PewPewTargetStunMod" Validator="TargetHasBigShotStunMarker" Modifier="0.4" Crit="1" />
+  </CEffectDamage>
+  
+  <CEffectApplyBehavior id="DVaPilotBigShotApplyPewPewPewStunMarker">
+    <ValidatorArray value="DVaBigShotPewPewPewCombine"/>
+	<ValidatorArray value="TargetNotUnstoppable"/>
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaPilotBigShotStunMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotBigShotStunMarker">
+    <Duration value="0.0625" />
+  </CBehaviorBuff>
+  
+  <CValidatorUnitHasBehavior id="TargetHasBigShotStunMarker">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaPilotBigShotStunMarker" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectCreatePersistent id="DVaBigShotInitialOffset">
+    <InitialEffect value="DVaBigShotFirstShotSet" />
+  </CEffectCreatePersistent>
+
+  <CEffectCreatePersistent id="DVaBigShotPewPewPewOffsetPeriodic">
+    <PeriodicEffectArray index="0" value="DVaBigShotFirstShotSet" />
+    <PeriodicEffectArray index="1" value="DVaBigShotSecondShotSet" />
+    <PeriodicEffectArray index="2" value="DVaBigShotThirdShotSet" />
+  </CEffectCreatePersistent>
+  
+  <CEffectSet id="DVaBigShotFirstShotSet">
+    <EffectArray value="DVaBigShotMissileScanStunFirst" />
+    <EffectArray value="DVaBigShotMissileScan" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaBigShotSecondShotSet">
+    <EffectArray value="DVaBigShotMissileScanStunSecond" />
+    <EffectArray value="DVaBigShotMissileScan" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaBigShotThirdShotSet">
+    <EffectArray value="DVaBigShotMissileScanStunThird" />
+    <EffectArray value="DVaBigShotMissileScan" />
+  </CEffectSet>
+  
+  <CEffectEnumArea id="DVaBigShotMissileScanStunFirst">
+    <SearchFilters value="-;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Stasis,Dead,Hidden" />
+    <AreaArray MaxCount="1" Effect="DVaBigShotImpactStunImpactSet">
+      <RectangleWidth value="1.25" />
+      <RectangleHeight value="15" />
+    </AreaArray>
+    <TargetSorts>
+      <SortArray value="TSDistance" />
+    </TargetSorts>
+    <RevealerParams Duration="0.75" ShapeExpansion="1">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+  </CEffectEnumArea>
+  
+  <CEffectEnumArea id="DVaBigShotMissileScanStunSecond">
+    <SearchFilters value="-;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Stasis,Dead,Hidden" />
+    <AreaArray MaxCount="2" Effect="DVaPilotBigShotStunSwitchSecond">
+      <RectangleWidth value="1.25" />
+      <RectangleHeight value="15" />
+    </AreaArray>
+    <TargetSorts>
+      <SortArray value="TSDistance" />
+    </TargetSorts>
+    <RevealerParams Duration="0.75" ShapeExpansion="1">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+    <MinCount value="2" />
+  </CEffectEnumArea>
+  
+  <CEffectEnumArea id="DVaBigShotMissileScanStunThird">
+    <SearchFilters value="-;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Stasis,Dead,Hidden" />
+    <AreaArray MaxCount="3" Effect="DVaPilotBigShotStunSwitchThird">
+      <RectangleWidth value="1.25" />
+      <RectangleHeight value="15" />
+    </AreaArray>
+    <TargetSorts>
+      <SortArray value="TSDistance" />
+    </TargetSorts>
+    <RevealerParams Duration="0.75" ShapeExpansion="1">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+    <MinCount value="3" />
+  </CEffectEnumArea>
+  
+  <CEffectSwitch id="DVaPilotBigShotStunSwitchSecond">
+    <CaseArray Validator="DVaPilotBigShotHasFirstTargetHitBehavior" Effect="DVaBigShotImpactStunImpactSet" />
+    <CaseDefault value="DVaPilotBigShotApplyFirstTargetHitBehavior" />
+  </CEffectSwitch>
+  
+  <CEffectApplyBehavior id="DVaPilotBigShotApplyFirstTargetHitBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotBigShotFirstTargetHit" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotBigShotFirstTargetHit">
+    <Duration value="0.0625" />
+  </CBehaviorBuff>
+  <CValidatorUnitHasBehavior id="DVaPilotBigShotHasFirstTargetHitBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotBigShotFirstTargetHit" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectSwitch id="DVaPilotBigShotStunSwitchThird">
+    <CaseArray Validator="DVaPilotBigShotHasSecondTargetHitBehavior" Effect="DVaBigShotImpactStunImpactSet" />
+    <CaseArray Validator="DVaPilotBigShotHasFirstTargetHitBehavior" Effect="DVaPilotBigShotApplySecondTargetHitBehavior" />
+    <CaseDefault value="DVaPilotBigShotApplyFirstTargetHitBehavior" />
+  </CEffectSwitch>
+
+  <CEffectApplyBehavior id="DVaPilotBigShotApplySecondTargetHitBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotBigShotSecondTargetHit" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaPilotBigShotSecondTargetHit">
+    <Duration value="0.0625" />
+  </CBehaviorBuff>
+  <CValidatorUnitHasBehavior id="DVaPilotBigShotHasSecondTargetHitBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaPilotBigShotSecondTargetHit" />
+  </CValidatorUnitHasBehavior>
+  
+  <CEffectSet id="DVaBigShotImpactStunImpactSet">
+    <EffectArray value="DVaPilotBigShotStunApply" />
+    <EffectArray value="DVaPilotBigShotApplyPewPewPewStunMarker" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaPilotBigShotStunApply">
+    <Behavior value="DVaPilotBigShotMicrostun" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaPilotBigShotMicrostun" parent="StormStun">
+    <Duration value="0.25" />
+  </CBehaviorBuff>
+  
+  <!-- <CHero id="DVa"> -->
+    <!-- <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" /> -->
+    <!-- <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" /> -->
+    <!-- <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" /> -->
+    <!-- <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" /> -->
+    <!-- <TalentTreeArray index="4" Talent="DVaPilotNerfThis" Tier="1" Column="5" /> -->
+    <!-- <TalentTreeArray index="5" Talent="DVaBoostersComingThrough" Tier="2" Column="1" /> -->
+    <!-- <TalentTreeArray index="6" Talent="DVaDefenseMatrixDazerZone" Tier="2" Column="2" /> -->
+    <!-- <TalentTreeArray index="7" Talent="DVaDefenseMatrixAggressionMatrix" Tier="2" Column="3" /> -->
+    <!-- <TalentTreeArray index="8" Talent="DVaSelfDestructNuclearOption" Tier="2" Column="4" /> -->
+    <!-- <TalentTreeArray index="9" Talent="DVaMechReserveBattery" Tier="2" Column="5" /> -->
+    <!-- <TalentTreeArray index="10" Talent="DVaDefenseMatrixDivertingPower" Tier="3" Column="1" /> -->
+    <!-- <TalentTreeArray index="11" Talent="DVaDefenseMatrixFusionGenerator" Tier="3" Column="2" /> -->
+    <!-- <TalentTreeArray index="12" Talent="DVaSelfDestructBringItOn" Tier="3" Column="3" /> -->
+    <!-- <TalentTreeArray index="13" Talent="DVaPilotChargedBlaster" Tier="3" Column="4" /> -->
+    <!-- <TalentTreeArray index="14" Talent="DVaBunnyHop" Tier="4" Column="1" /> -->
+    <!-- <TalentTreeArray index="15" Talent="DVaBigShot" Tier="4" Column="2" /> -->
+    <!-- <TalentTreeArray index="16" Talent="DVaDefenseMatrixGetThroughThis" Tier="4" Column="3" /> -->
+    <!-- <TalentTreeArray index="17" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" /> -->
+    <!-- <TalentTreeArray index="18" Talent="DVaMechExpensivePlating" Tier="5" Column="2" /> -->
+    <!-- <TalentTreeArray index="19" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" /> -->
+    <!-- <TalentTreeArray index="20" Talent="DVaMechAblativeArmor" Tier="5" Column="4" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="21" Talent="DVaPilotResourceAllocation" Tier="5" Column="5" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="22" Talent="DVaPilotGGWP" Tier="6" Column="1" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="23" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="2" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="24" Talent="DVaPilotSuppressingFire" Tier="6" Column="3" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="25" Talent="DVaMechFusionCannons" Tier="6" Column="4" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="26" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1"> -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="27" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2"> -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+  <!-- </CHero> -->
+
+
+  <CUnit id="HeroDVaMech">
+    <BehaviorArray Link="DVaMechBargainPlatingCarry" />
+  </CUnit>
+  
+  <CValidatorPlayerTalent id="DVaMechBargainPlatingHasTalent">
+    <Find value="1" />
+    <Value value="DVaPilotResourceAllocation" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaPilotResourceAllocation" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_jetpackattack.dds" />
+  </CButton>
+  
+  <CTalent id="DVaPilotResourceAllocation">
+    <Abil value="DVaPilotTorpedoDash" />
+    <Face value="DVaPilotResourceAllocation" />
+    <RankArray>
+      <BehaviorArray value="DVaMechBargainPlatingCarry" />
+      <BehaviorArray value="DVaPilotBargainPlatingCarry" />
+    </RankArray>
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Entry value="DVaPilotTorpedoDash" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="-9.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+
+  <CBehaviorBuff id="DVaMechBargainPlatingCarry" parent="CarryBehaviorParent">
+    <RemoveValidatorArray value="TargetDoesNotHaveAbathurUltimateEvolutionControl" />
+    <RemoveValidatorArray value="DVaMechBargainPlatingHasTalent" />
+    <RemoveValidatorArray value="DVaTargetIsMech" />
+    <Modification>
+      <VitalMaxFractionArray index="Life" value="-0.2" />
+    </Modification>
+  </CBehaviorBuff>
+
+  <CBehaviorBuff id="DVaPilotBargainPlatingCarry" parent="CarryBehaviorParent">
+    <Modification>
+      <VitalMaxFractionArray index="Life" value="0.25" />
+    </Modification>
+  </CBehaviorBuff>
+
+  <CValidatorPlayerTalent id="DVaMechHasPitStopTalent">
+    <Find value="1" />
+    <Value value="DVaMechBoostersPitStop" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechBoostersPitStop" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters_b.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechBoostersPitStop">
+    <Abil value="DVaBoostersOn" />
+    <Face value="DVaMechBoostersPitStop" />
+  </CTalent>
+  
+  <CEffectSet id="DVaBoostersImpactSet">
+    <EffectArray value="DVaBoostersPitStopApplyBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaBoostersPitStopApplyBehavior">
+    <ValidatorArray value="TargetIsHero"/>
+	<ValidatorArray value="DVaMechHasPitStopTalent"/>
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBoostersPitStopMarker" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaBoostersPitStopMarker">
+    <RemoveValidatorArray value="DVaMechSourceHasBoostersBehavior"/>
+    <BuffFlags index="RefreshStack" value="1" />
+    <RefreshEffect value="DVaBoostersPitStopProcSet" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaBoostersPitStopProcSet">
+	<ValidatorArray value="DVaMechHasPitStopTalent"/>
+    <EffectArray value="DVaBoostersPitStopRemoveMarkerBehavior" />
+    <EffectArray value="DVaBoostersPitStopApplyPeriodicHeal" />
+  </CEffectSet>
+
+  <CEffectRemoveBehavior id="DVaBoostersPitStopRemoveMarkerBehavior">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersPitStopMarker" />
+  </CEffectRemoveBehavior>
+  <CEffectApplyBehavior id="DVaBoostersPitStopApplyPeriodicHeal">
+    <WhichUnit value="Caster"/>
+    <Behavior value="DVaBoostersPitStopHoT" />
+  </CEffectApplyBehavior>
+  
+  <!-- While we could do the stack count as an accumulator with tokens, I like this cause of the simplicity of it. -->
+  <CBehaviorBuff id="DVaBoostersPitStopHoT">
+    <RemoveValidatorArray value="DVaMechHasPitStopTalent"/>
+    <MaxStackCount value="3" />
+    <Alignment value="Positive" />
+    <Duration value="3" />
+    <Period value="1" />
+    <PeriodCount value="3" />
+    <PeriodicEffect value="DVaBoostersPitStopPeriodicHealer" />
+    <PeriodicDisplayEffect value="DVaBoostersPitStopPeriodicHealer" />
+  </CBehaviorBuff>
+  
+  <CEffectCreateHealer id="DVaBoostersPitStopPeriodicHealer" parent="StormSelfOnlyHealingSpellPercent">
+    <RechargeVitalFraction value="0.03" />
+	<MultiplicativeModifierArray index="Stationary" Validator="SourceNotMoving" Modifier="0.5" />
+    <SourceButtonFace value="DVaMechBoostersPitStop" />
+  </CEffectCreateHealer>
+  
+  
+  <CValidatorPlayerTalent id="DVaMechDefenseMarixRaiseMyAPMHasTalent">
+    <Find value="1" />
+    <Value value="DVaMechDefenseMarixRaiseMyAPM" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechDefenseMarixRaiseMyAPM" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechDefenseMarixRaiseMyAPM">
+    <Abil value="DVaMechDefenseMatrixOn" />
+    <Face value="DVaMechDefenseMarixRaiseMyAPM" />
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMechDefenseMatrixRaiseMyAPMSearch" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Behavior" />
+        <Entry value="DVaMechDefenseMatrixChannelling" />
+        <Field value="Duration" />
+        <Value value="-1.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+  
+  <CBehaviorBuff id="DVaMechDefenseMatrixPeriodicSearch">
+    <PeriodicEffect value="DVaMechDefenseMatrixSearchSet" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaMechDefenseMatrixSearchSet">
+    <EffectArray value="DVaMechDefenseMatrixSearch" />
+    <EffectArray value="DVaMechDefenseMatrixRaiseMyAPMSearch" />
+  </CEffectSet>
+  
+  <CEffectEnumArea id="DVaMechDefenseMatrixRaiseMyAPMSearch">
+    <Chance value="0"/>
+    <ImpactLocation Value="SourceUnit" />
+    <LaunchFacingTurret value="DVaMechWeaponTurret" />
+    <SearchFilters value="Heroic;Player,Enemy,Neutral,ImmuneToAOE,Missile,Item,Dead,Hidden,Invulnerable" />
+    <AreaArray Effect="DVaDefenseMatrixRaiseMyAPMImpactSet">
+      <VertexArray X="1" Y="-0.5" />
+      <VertexArray X="3" Y="-7" />
+      <VertexArray X="-3" Y="-7" />
+      <VertexArray X="-1" Y="-0.5" />
+      <IndexArray X="3" Y="2" />
+      <IndexArray X="2" Y="1" />
+    </AreaArray>
+    <RevealerParams Duration="0.75">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+  </CEffectEnumArea>
+  
+  <CEffectSet id="DVaDefenseMatrixRaiseMyAPMImpactSet">
+    <EffectArray value="DVaDefenseMatrixRaiseMyAPMApplyBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaDefenseMatrixRaiseMyAPMApplyBehavior">
+    <Behavior value="DVaDefenseMatrixRaiseMyAPMArmor" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaDefenseMatrixRaiseMyAPMArmor" parent="StormArmor">
+    <BuffFlags index="RefreshStack" value="1" />
+    <Duration value="0.3125" />
+    <ArmorModification>
+      <AllArmorBonus value="50" />
+    </ArmorModification>
+    <BehaviorCategories index="BuffResistant" value="1" />
+  </CBehaviorBuff>
+  
+</Catalog>

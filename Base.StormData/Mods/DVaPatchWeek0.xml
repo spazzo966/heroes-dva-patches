@@ -68,26 +68,29 @@
   <CEffectDamage id="DVaMechWeaponBounceDamage" parent="DVaMechWeaponDamage">
     <MultiplicativeModifierArray index="DVaBounce" Modifier="0.0" />
   </CEffectDamage>
-  <CHero id="DVa">
+  <!-- <CHero id="DVa"> -->
     <!-- <TalentTreeArray index="23" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
     <!-- <TalentTreeArray index="24" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
     <!-- <TalentTreeArray index="25" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
     <!-- <TalentTreeArray index="24" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
     <!-- <TalentTreeArray index="25" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
     <!-- <TalentTreeArray index="26" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
-    <TalentTreeArray index="27" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" />
-    <TalentTreeArray index="28" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" />
-    <TalentTreeArray index="29" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" />
-    <LevelScalingArray index="1">
-      <Modifications>
-        <Catalog value="Effect" />
-        <Entry value="DVaMechWeaponBounceDamage" />
-        <Field value="Amount" />
-        <Value value="0.040000" />
-        <AffectedByOverdrive value="1" />
-      </Modifications>
-    </LevelScalingArray>
-  </CHero>
+    <!-- <TalentTreeArray index="27" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
+    <!-- <TalentTreeArray index="28" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
+    <!-- <TalentTreeArray index="29" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
+    <!-- <TalentTreeArray index="28" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
+    <!-- <TalentTreeArray index="29" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
+    <!-- <TalentTreeArray index="30" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
+    <!-- <LevelScalingArray index="1"> -->
+      <!-- <Modifications> -->
+        <!-- <Catalog value="Effect" /> -->
+        <!-- <Entry value="DVaMechWeaponBounceDamage" /> -->
+        <!-- <Field value="Amount" /> -->
+        <!-- <Value value="0.040000" /> -->
+        <!-- <AffectedByOverdrive value="1" /> -->
+      <!-- </Modifications> -->
+    <!-- </LevelScalingArray> -->
+  <!-- </CHero> -->
   
   <CEffectSet id="DVaMechDefenseMatrixImpactSet">
     <EffectArray index="0" value="DVaMechDefenseMatrixApplyDebuff" />

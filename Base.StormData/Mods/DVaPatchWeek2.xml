@@ -319,41 +319,41 @@
     <Abil value="DVaPilotBigShot" />
   </CTalent>
   
-  <CHero id="DVa">
-    <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" />
-    <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" />
-    <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" />
-    <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" />
-    <TalentTreeArray index="4" Talent="DVaDefenseMatrixDivertingPower" Tier="2" Column="1" />
-    <TalentTreeArray index="5" Talent="DVaDefenseMatrixGetThroughThis" Tier="2" Column="2" />
-    <TalentTreeArray index="6" Talent="DVaDefenseMatrixFusionGenerator" Tier="2" Column="3" />
-    <TalentTreeArray index="7" Talent="DVaSelfDestructBringItOn" Tier="2" Column="4" />
-    <TalentTreeArray index="8" Talent="DVaBoostersComingThrough" Tier="3" Column="1" />
-    <TalentTreeArray index="9" Talent="DVaDefenseMatrixDazerZone" Tier="3" Column="2" />
-    <TalentTreeArray index="10" Talent="DVaDefenseMatrixAggressionMatrix" Tier="3" Column="3" />
-    <TalentTreeArray index="11" Talent="DVaSelfDestructNuclearOption" Tier="3" Column="4" />
-    <TalentTreeArray index="12" Talent="DVaBunnyHop" Tier="4" Column="1" />
-    <TalentTreeArray index="13" Talent="DVaBigShot" Tier="4" Column="2" />
-    <TalentTreeArray index="14" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" />
-    <TalentTreeArray index="15" Talent="DVaMechExpensivePlating" Tier="5" Column="2" />
-    <TalentTreeArray index="16" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" />
-    <TalentTreeArray index="17" Talent="DVaMechAblativeArmor" Tier="5" Column="4" />
-    <TalentTreeArray index="18" Talent="DVaPilotTorpedoDash" Tier="6" Column="1" />
-    <TalentTreeArray index="19" Talent="DVaPilotGGWP" Tier="6" Column="2" />
-    <TalentTreeArray index="20" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="3" />
-    <TalentTreeArray index="21" Talent="DVaPilotSuppressingFire" Tier="6" Column="4" >
-      <PrerequisiteTalentArray index="0" removed="1"/>
-    </TalentTreeArray>
-    <TalentTreeArray index="22" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1">
-      <PrerequisiteTalentArray index="0" removed="1"/>
-    </TalentTreeArray>
-    <TalentTreeArray index="23" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2">
-      <PrerequisiteTalentArray index="0" removed="1"/>
-    </TalentTreeArray>
+  <!-- <CHero id="DVa"> -->
+    <!-- <TalentTreeArray index="0" Talent="DVaBoostersRushdown" Tier="1" Column="1" /> -->
+    <!-- <TalentTreeArray index="1" Talent="DVaBoostersHitTheNitrous" Tier="1" Column="2" /> -->
+    <!-- <TalentTreeArray index="2" Talent="DVaBoostersCrashCourse" Tier="1" Column="3" /> -->
+    <!-- <TalentTreeArray index="3" Talent="DVaMechProMoves" Tier="1" Column="4" /> -->
+    <!-- <TalentTreeArray index="4" Talent="DVaDefenseMatrixDivertingPower" Tier="2" Column="1" /> -->
+    <!-- <TalentTreeArray index="5" Talent="DVaDefenseMatrixGetThroughThis" Tier="2" Column="2" /> -->
+    <!-- <TalentTreeArray index="6" Talent="DVaDefenseMatrixFusionGenerator" Tier="2" Column="3" /> -->
+    <!-- <TalentTreeArray index="7" Talent="DVaSelfDestructBringItOn" Tier="2" Column="4" /> -->
+    <!-- <TalentTreeArray index="8" Talent="DVaBoostersComingThrough" Tier="3" Column="1" /> -->
+    <!-- <TalentTreeArray index="9" Talent="DVaDefenseMatrixDazerZone" Tier="3" Column="2" /> -->
+    <!-- <TalentTreeArray index="10" Talent="DVaDefenseMatrixAggressionMatrix" Tier="3" Column="3" /> -->
+    <!-- <TalentTreeArray index="11" Talent="DVaSelfDestructNuclearOption" Tier="3" Column="4" /> -->
+    <!-- <TalentTreeArray index="12" Talent="DVaBunnyHop" Tier="4" Column="1" /> -->
+    <!-- <TalentTreeArray index="13" Talent="DVaBigShot" Tier="4" Column="2" /> -->
+    <!-- <TalentTreeArray index="14" Talent="DVaDefenseMatrixPersistentMatrix" Tier="5" Column="1" /> -->
+    <!-- <TalentTreeArray index="15" Talent="DVaMechExpensivePlating" Tier="5" Column="2" /> -->
+    <!-- <TalentTreeArray index="16" Talent="DVaMechEmergencyShielding" Tier="5" Column="3" /> -->
+    <!-- <TalentTreeArray index="17" Talent="DVaMechAblativeArmor" Tier="5" Column="4" /> -->
+    <!-- <TalentTreeArray index="18" Talent="DVaPilotTorpedoDash" Tier="6" Column="1" /> -->
+    <!-- <TalentTreeArray index="19" Talent="DVaPilotGGWP" Tier="6" Column="2" /> -->
+    <!-- <TalentTreeArray index="20" Talent="DVaPilotNanoweaveSuit" Tier="6" Column="3" /> -->
+    <!-- <TalentTreeArray index="21" Talent="DVaPilotSuppressingFire" Tier="6" Column="4" > -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="22" Talent="DVaBunnyHopStopAndPop" Tier="7" Column="1"> -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
+    <!-- <TalentTreeArray index="23" Talent="DVaBigShotPewPewPewReplaced" Tier="7" Column="2"> -->
+      <!-- <PrerequisiteTalentArray index="0" removed="1"/> -->
+    <!-- </TalentTreeArray> -->
     <!-- <TalentTreeArray index="25" Talent="DVaDefenseMatrixDNied" Tier="7" Column="3" /> -->
     <!-- <TalentTreeArray index="26" Talent="DVaPilotConcussivePulse" Tier="7" Column="4" /> -->
     <!-- <TalentTreeArray index="27" Talent="DVaPilotCallMechMEKAfall" Tier="7" Column="5" /> -->
-  </CHero>
+  <!-- </CHero> -->
   
   <CEffectSwitch id="DVaPilotBigShotDamageSwitch">
     <CaseArray index="0" Validator="DVaBigShotPewPewPewCombine" />

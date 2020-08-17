@@ -1821,6 +1821,7 @@ void libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding_Init () {
     TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechEmergencyShieldingFatalResponseCarry", c_unitBehaviorChangeCreate);
     TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechAblativeArmorDamageResponseCarry", c_unitBehaviorChangeCreate);
     TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechExpensivePlatingCarry", c_unitBehaviorChangeCreate);
+    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechBargainPlatingCarry", c_unitBehaviorChangeCreate);
 }
 
 //--------------------------------------------------------------------------------------------------
