@@ -76,7 +76,7 @@ Week 6:
   * Big Shot damage reduced from 250 to 180, now stuns the first enemy hit.
   * Pew Pew Pew now stuns the 2nd and 3rd target hit for the 2nd and 3rd shot, and deals 40% less damage(additive) to targets not stunned by that shot
   * New Level 7 Talent: Pit Stop: Every 2nd enemy hero damaged with Boosters causes D.Va's mech to heal for 9% of its max health over the next 3 seconds, healing is increased by 50% if it occurs while stationary
-  * Diverting Power Replaced with Raise My APM: Allied Heroes in the Defense Matrix area are granted 50 Armor, but the duration of Defense Matrix is reduced from 3 seconds to 2 seconds
+  * Diverting Power Replaced with Raise My APM: Allied Heroes in the Defense Matrix area are granted 50 Armor, but the duration of Defense Matrix is reduced from 3 seconds to 2 seconds **(rollback of 1 change in week 0)**
   * New Level 13 Talent: Resource Management: Reduce Mech Maximum Health by 20%, but increase Pilot Maximum Health by 25%, and reduce the cooldown of Torpedo Dash by 9 seconds.
   * MEKAfall moved from Level 20 to Level 16, damage reduced from 202 to 120
   * D.Va's Mech Basic Attacks now more closely match the visuals for finding a target to attack
