@@ -83,10 +83,10 @@ Week 6:
 
 Week 7:
 
-  * Crash Course Replaced with Bumper to Bumper: Enemy Heroes can be hit repeatedly with Boosters, Boosters damage reduced significantly*(rollback of 1 change in week 2)*
-  * Pro Moves Replaced with Geared Up: Mech can no longer be slowed below 50%, and when slowed by an enemy, boosters recharges 67% faster*(rollback of 1 change in week 3)*
-  * Nuclear Option Replaced with Arsenal Override: Channel on an exploding Mech to cause it to briefly activate Boosters, interrupted by damage*(rollback of 1 change in week 1)*
-  * Bring It On: Instead causes Basic Attacks to charge Self-Destruct 100% faster for each enemy hero hit by the cleave*(rollback of 1 change in week 5)*
-  * Nanoweave Suit Replaced with Nuclear Fusion: Self-Destruct damage increased by 15%, Pilot Basic Attacks increase this again by 15%. Updated Exploding Mech countdown timer on healthbar to display the bonus damage from this accruing*(rollback of 1 change in week 2)*
-  * Suppressing Fire and Concussive Pulse Merged, Concussive now slows*(rollback of 2 changes in week 1)*
+  * Crash Course Replaced with Bumper to Bumper: Enemy Heroes can be hit repeatedly with Boosters, Boosters damage reduced significantly **(rollback of 1 change in week 2)**
+  * Pro Moves Replaced with Geared Up: Mech can no longer be slowed below 50%, and when slowed by an enemy, boosters recharges 67% faster **(rollback of 1 change in week 3)**
+  * Nuclear Option Replaced with Arsenal Override: Channel on an exploding Mech to cause it to briefly activate Boosters, interrupted by damage **(rollback of 1 change in week 1)**
+  * Bring It On: Instead causes Basic Attacks to charge Self-Destruct 100% faster for each enemy hero hit by the cleave **(rollback of 1 change in week 5)**
+  * Nanoweave Suit Replaced with Nuclear Fusion: Self-Destruct damage increased by 15%, Pilot Basic Attacks increase this again by 15%. Updated Exploding Mech countdown timer on healthbar to display the bonus damage from this accruing **(rollback of 1 change in week 2)**
+  * Suppressing Fire and Concussive Pulse Merged, Concussive now slows **(rollback of 2 changes in week 1)**
   * New Level 20 Talent: More Juice: Enemy Heroes hit increases Boosters duration, damage, caps out at +3 seconds, +100% damage
