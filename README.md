@@ -70,3 +70,23 @@ Week 5:
   * New Level 16: Fusion Cannons: Increase Mech Basic Attack damage by 0.5% for each point of Self-Destruct charge, up to 50%
   * Fixed a bug MEKAfall would not spawn the Mech with the appropriate amount of energy
   * Fixed a bug where Defense Matrix would grant bonus Self-Destruct charge when an enemy affected by it would deal percentage damage to the Mech
+
+Week 6:
+
+  * Big Shot damage reduced from 250 to 180, now stuns the first enemy hit.
+  * Pew Pew Pew now stuns the 2nd and 3rd target hit for the 2nd and 3rd shot, and deals 40% less damage(additive) to targets not stunned by that shot
+  * New Level 7 Talent: Pit Stop: Every 2nd enemy hero damaged with Boosters causes D.Va's mech to heal for 9% of its max health over the next 3 seconds, healing is increased by 50% if it occurs while stationary
+  * Diverting Power Replaced with Raise My APM: Allied Heroes in the Defense Matrix area are granted 50 Armor, but the duration of Defense Matrix is reduced from 3 seconds to 2 seconds
+  * New Level 13 Talent: Resource Management: Reduce Mech Maximum Health by 20%, but increase Pilot Maximum Health by 25%, and reduce the cooldown of Torpedo Dash by 9 seconds.
+  * MEKAfall moved from Level 20 to Level 16, damage reduced from 202 to 120
+  * D.Va's Mech Basic Attacks now more closely match the visuals for finding a target to attack
+
+Week 7:
+
+  * Crash Course Replaced with Bumper to Bumper: Enemy Heroes can be hit repeatedly with Boosters, Boosters damage reduced significantly*(rollback of 1 change in week 2)*
+  * Pro Moves Replaced with Geared Up: Mech can no longer be slowed below 50%, and when slowed by an enemy, boosters recharges 67% faster*(rollback of 1 change in week 3)*
+  * Nuclear Option Replaced with Arsenal Override: Channel on an exploding Mech to cause it to briefly activate Boosters, interrupted by damage*(rollback of 1 change in week 1)*
+  * Bring It On: Instead causes Basic Attacks to charge Self-Destruct 100% faster for each enemy hero hit by the cleave*(rollback of 1 change in week 5)*
+  * Nanoweave Suit Replaced with Nuclear Fusion: Self-Destruct damage increased by 15%, Pilot Basic Attacks increase this again by 15%. Updated Exploding Mech countdown timer on healthbar to display the bonus damage from this accruing*(rollback of 1 change in week 2)*
+  * Suppressing Fire and Concussive Pulse Merged, Concussive now slows*(rollback of 2 changes in week 1)*
+  * New Level 20 Talent: More Juice: Enemy Heroes hit increases Boosters duration, damage, caps out at +3 seconds, +100% damage

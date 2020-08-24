@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+
+<!-- Change 1: Replaced Level 1(Pro Moves): The mech can no longer be slowed below 50%, and while the mech slowed, Boosters recharges 66% faster -->
+<!-- Change 2: Replaced Level 1(Crash Course): Each time an enemy Hero is damaged by Boosters, the duration of Boosters is increased by 0.3125s -->
+<!-- Change 3: Replaced Level 4(Nuclear Option): D.Va can now right click on the exploding mech to shunt it away from her. This can be done once per Self-Destruct -->
+<!-- Change 4: Replaced Level 7(Bring It On): Enemy Heroes hit by Basic Attacks Cleave now count towards Self-Destruct charge rate from Basic Attacks -->
+<!-- Change 5: Replaced Level 16(Nanoweave Suit): Nuclear Fusion: Increase Self-Destruct damage by 15%, each Pilot Basic Attack that occurs against an enemy in range of the exploding Mech increases this damage by a further 15% -->
+<!-- Change 6: Suppressing Fire merged with Concussive Pulse, slow applies to Basic Attacks and Concussive Pulse -->
+<!-- Change 7: New Level 20 Boosters Talent: Enemy Heroes can be hit any number of additional times 0.125s after being hit. Any talents that grant rewards for hitting Heroes require unique Heroes to be hit -->
+
+
+  <CEffectSet id="DVaMechWeaponBounceTargetImpactSet">
+    <EffectArray value="DVaMechWeaponBringItOnChargeIncrement" />
+  </CEffectSet>
+  
+  <CEffectModifyTokenCount id="DVaMechWeaponBringItOnChargeIncrement">
+    <ValidatorArray value="DVaMechBringItOnHasNewTalent"/>
+    <ValidatorArray value="TargetIsHero"/>
+    <ValidatorArray value="CasterNotBlindedAndTargetNotEvading" />
+    <TokenId value="DVaMechWeaponChargeEnabler" />
+    <Value value="0.5" />
+  </CEffectModifyTokenCount>
+
+
+  <CValidatorPlayerTalent id="DVaMechBringItOnHasNewTalent">
+    <Find value="1" />
+    <Value value="DVaMechBringItOnNew" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechBringItOnNew" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechBringItOnNew">
+    <Abil value="DVaMechSelfDestruct" />
+    <Face value="DVaMechBringItOnNew" />
+  </CTalent>
+
+  <CUnit id="HeroDVaMech">
+    <BehaviorArray Link="DVaMechGearedUpCarry" />
+  </CUnit>
+  
+  <CBehaviorBuff id="DVaMechGearedUpCarry" parent="CarryBehaviorParent">
+    <RemoveValidatorArray value="TargetDoesNotHaveAbathurUltimateEvolutionControl" />
+    <RemoveValidatorArray value="DVaMechGearedUpHasTalent" />
+    <RemoveValidatorArray value="DVaTargetIsMech" />
+    <Modification>
+      <MoveSpeedMinimum value="2.4199" />
+    </Modification>
+	<PeriodicEffect value="DVaMechGearedUpReduceBoostersCooldown"/>
+	<Period value="0.1875"/>
+  </CBehaviorBuff>
+  
+  <CEffectModifyUnit id="DVaMechGearedUpReduceBoostersCooldown">
+    <ValidatorArray value="TargetIsSlowed"/>
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaBoostersOn,Execute" CooldownOperation="Add" CooldownTimeUse="-0.125" />
+  </CEffectModifyUnit>
+
+  <CValidatorPlayerTalent id="DVaMechGearedUpHasTalent">
+    <Find value="1" />
+    <Value value="DVaMechGearedUp" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechGearedUp" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechGearedUp">
+    <Trait value="1" />
+    <Face value="DVaMechGearedUp" />
+    <RankArray>
+      <BehaviorArray value="DVaMechGearedUpCarry" />
+    </RankArray>
+  </CTalent>
+  
+
+  <CValidatorPlayerTalent id="DVaMechCrashCourseHasNewTalent">
+    <Find value="1" />
+    <Value value="DVaMechCrashCourseNew" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechCrashCourseNew" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters_b.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechCrashCourseNew">
+    <Abil value="DVaBoostersOn" />
+    <Face value="DVaMechCrashCourseNew" />
+  </CTalent>
+
+  <CEffectDamage id="DVaBoostersHitTheNitrousImpactDamage" >
+    <MultiplicativeModifierArray index="CrashCourseMod" Validator="DVaMechCrashCourseHasNewTalent" Modifier="-0.6" />
+    <MultiplicativeModifierArray index="MoreJuice" Validator="DVaMechBoostersMoreJuiceHasTalent" Accumulator="DVaMoreJuiceAccumulator"/>
+    <MultiplicativeModifierArray index="MoreJuiceCrit" Validator="DVaMechBoostersMoreJuiceHasMaxTokens" Crit="1"/>
+  </CEffectDamage>
+  <CEffectDamage id="DVaBoostersImpactDamage">
+    <MultiplicativeModifierArray index="CrashCourseMod" Validator="DVaMechCrashCourseHasNewTalent" Modifier="-0.6" />
+    <MultiplicativeModifierArray index="MoreJuice" Validator="DVaMechBoostersMoreJuiceHasTalent" Accumulator="DVaMoreJuiceAccumulator"/>
+    <MultiplicativeModifierArray index="MoreJuiceCrit" Validator="DVaMechBoostersMoreJuiceHasMaxTokens" Crit="1"/>
+  </CEffectDamage>
+  
+  <CValidatorUnitCompareTokenCount id="DVaMechBoostersMoreJuiceHasMaxTokens">
+    <WhichUnit Value="Caster" />
+    <Compare value="GE" />
+    <Value value="8" />
+    <TokenId value="DVaBoostersJuiceTokenCounter" />
+  </CValidatorUnitCompareTokenCount>
+
+  <CEffectSet id="DVaBoostersImpactSet">
+    <ValidatorArray index="0" value="noMarkersOrHasCrashCourseAndNoHitMarker" />
+    <EffectArray index="3" value="DVaBoostersCrashCourseApplyHitMarker" />
+    <EffectArray value="DVaBoostersJuiceModifyTokenCount" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaBoostersCrashCourseApplyHitMarker">
+    <ValidatorArray value="DVaMechCrashCourseHasNewTalent" />
+    <ValidatorArray value="TargetIsHero" />
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaBoostersCrashCourseHitMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaBoostersCrashCourseHitMarker">
+    <Duration value="0.25"/>
+  </CBehaviorBuff>
+  
+  <CValidatorCombine id="noMarkersOrHasCrashCourseAndNoHitMarker">
+    <CombineArray value="noMarkers" />
+    <CombineArray value="NoHitMarkerAndHasCrashCourse" />
+  </CValidatorCombine>
+  <CValidatorCombine id="NoHitMarkerAndHasCrashCourse">
+    <Type value="And" />
+    <CombineArray value="DVaMechCrashCourseHasNewTalent" />
+    <CombineArray value="DVaCrashCourseHitMarkerNotPresent" />
+    <CombineArray value="TargetIsHero" />
+  </CValidatorCombine>
+  <CValidatorUnitCompareBehaviorCount id="DVaCrashCourseHitMarkerNotPresent">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaBoostersCrashCourseHitMarker" />
+  </CValidatorUnitCompareBehaviorCount>
+
+
+  <CValidatorPlayerTalent id="DVaMechBoostersMoreJuiceHasTalent">
+    <Find value="1" />
+    <Value value="DVaMechBoostersMoreJuice" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechBoostersMoreJuice" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechBoostersMoreJuice">
+    <Abil value="DVaBoostersOn" />
+    <Face value="DVaMechBoostersMoreJuice" />
+  </CTalent>
+
+  <!-- <CEffectSet id="DVaBoostersImpactSet"> -->
+    <!-- <EffectArray value="DVaMechMoreJuiceExtendBoostersDuration" /> -->
+  <!-- </CEffectSet> -->
+  
+
+  <CBehaviorBuff id="DVaBoostersMoveSpeedActive">
+    <FinalEffect value="DVaBoostersMovespeedActiveFinalSet" />
+  </CBehaviorBuff>
+  
+
+  <CEffectSet id="DVaBoostersMovespeedActiveFinalSet">
+    <EffectArray value="DVaBoostersHitTheNitrousRemoveToken" />
+    <EffectArray value="DVaBoostersMoreJuiceRemoveToken" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaBoostersMoreJuiceRemoveToken">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersJuiceTokenCounter" />
+  </CEffectRemoveBehavior>
+
+  <CEffectSet id="DVaBoostersOnInitialSet">
+    <EffectArray value="DVaBoostersJuiceTokenApply" />
+    <EffectArray value="DVaBoostersJuiceResetTokenCount" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaBoostersJuiceTokenApply">
+    <ValidatorArray value="DVaMechBoostersMoreJuiceHasTalent"/>
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBoostersJuiceTokenCounter" />
+  </CEffectApplyBehavior>
+  
+  <CEffectModifyTokenCount id="DVaBoostersJuiceResetTokenCount">
+    <ValidatorArray value="DVaMechBoostersMoreJuiceHasTalent"/>
+    <TokenId value="DVaBoostersJuiceTokenCounter" />
+	<Operation value="Set"/>
+    <Value value="0" />
+  </CEffectModifyTokenCount>
+  <CBehaviorTokenCounter id="DVaBoostersJuiceTokenCounter" parent="StormGenericToken">
+    <Max value="8" />
+    <Init value="0" />
+    <IncreaseEvents Effect="DVaMechMoreJuiceExtendBoostersDuration" />
+  </CBehaviorTokenCounter>
+  
+
+  <CAccumulatorToken id="DVaMoreJuiceAccumulator" parent="BaseAccumulator">
+    <ApplicationRule value="Add" />
+    <TokenId value="DVaBoostersJuiceTokenCounter" />
+    <Scale value="0.125" />
+	<MaxAccumulation value="1"/>
+  </CAccumulatorToken>
+  
+  <CEffectModifyTokenCount id="DVaBoostersJuiceModifyTokenCount">
+    <ValidatorArray value="DVaMechBoostersMoreJuiceHasTalent"/>
+	<ValidatorArray value="TargetIsHero"/>
+    <TokenId value="DVaBoostersJuiceTokenCounter" />
+    <Value value="1" />
+  </CEffectModifyTokenCount>
+  
+  <CEffectModifyBehaviorBuffDuration id="DVaMechMoreJuiceExtendBoostersDuration">
+    <ImpactUnit Value="Caster" />
+    <Behavior value="DVaBoostersActive" />
+    <Value value="0.375" />
+  </CEffectModifyBehaviorBuffDuration>
+
+
+  <CValidatorPlayerTalent id="DVaMechNuclearOptionHasNewTalent">
+    <Find value="1" />
+    <Value value="DVaMechNuclearOptionNew" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechNuclearOptionNew" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechNuclearOptionNew">
+    <Abil value="DVaMechSelfDestruct" />
+    <Face value="DVaMechNuclearOptionNew" />
+  </CTalent>
+
+   <CUnit id="HeroDVaPilot" >
+    <AbilArray Link="DVaPilotExplodingBoosters" />
+    <CardLayouts index="0">
+      <LayoutButtons Face="DVaPilotExplodingBoosters" Type="AbilCmd" AbilCmd="DVaPilotExplodingBoosters,On" Slot="Interact" />
+    </CardLayouts>
+  </CUnit>
+  
+  <CButton id="DVaPilotExplodingBoosters" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+
+  <CAbilEffectTarget id="DVaPilotExplodingBoosters">
+    <Activity value="Abil/Activity/DVaExplodingBoosters"/>
+    <Effect value="DVaPilotExplodingBoostersInitialSet" />
+    <Flags index="ClearLastAttackTarget" value="1" />
+    <Flags index="ClearLastMoveTarget" value="1" />
+    <Flags index="Smart" value="1" />
+    <Range value="1" />
+    <RangeSlop value="1.5" />
+    <CastIntroTime value="0.5" />
+    <ShowProgressArray index="Cast" value="1" />
+    <PreemptableArray index="Approach" value="0" />
+    <PreemptableArray index="Prep" value="0" />
+    <PreemptableArray index="Cast" value="0" />
+    <PreemptableArray index="Channel" value="0" />
+    <PreemptableArray index="Finish" value="0" />
+    <CmdButtonArray index="Execute">
+      <DefaultButtonFace value="DVaPilotExplodingBoosters" />
+      <PreemptLevel value="-1" />
+    </CmdButtonArray>
+    <ValidatedArray index="Approach" value="0" />
+    <ValidatedArray index="Channel" value="0" />
+    <PrepEffect value="DismountDecloakCasterSet" />
+    <SharedFlags index="AllowQuickCastCustomization" value="0" />
+    <AbilityCategories index="RequiresCastTime" value="1" />
+    <AbilityCategories index="InterruptedByDamage" value="1" />
+    <TargetFilters value="Player;Self,Neutral,Ally,Enemy,Structure,ImmuneToFriendlyAbilities,Stasis,Summoned" />
+  </CAbilEffectTarget>
+  
+
+  <CEffectSet id="DVaPilotExplodingBoostersInitialSet">
+    <EffectArray value="DVaPilotExplodingBoostersSet" />
+    <ValidatorArray value="UserCategoryCasterNotPushPull" />
+    <ValidatorArray value="CasterNotHallucination" />
+    <ValidatorArray value="DVaMechMechTargetSelfDestructing" />
+    <ValidatorArray value="DVaMechTargetDoesNotHaveExplosiveBoostersMarker" />
+	<ValidatorArray value="DVaMechNuclearOptionHasNewTalent"/>
+    <ValidatorArray value="CasterNotInCombat2Loops" />
+    <!-- <ValidatorArray value="TargetNotHallucination" /> -->
+    <!-- <ValidatorArray value="DVaTargetIsMech" /> -->
+  </CEffectSet>
+
+  <CEffectSet id="DVaPilotExplodingBoostersSet">
+    <EffectArray value="DVaPilotExplodingBoostersModifyMechFacing" />
+    <EffectArray value="DVaBoostersApplyBoosterBehaviorExploding" />
+    <EffectArray value="DVaExplodingBoostersApplyMarker" />
+  </CEffectSet>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechTargetDoesNotHaveExplosiveBoostersMarker">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaExplodingBoostersMarker" />
+  </CValidatorUnitCompareBehaviorCount>
+  <CEffectApplyBehavior id="DVaExplodingBoostersApplyMarker">
+    <WhichUnit Value="Target" />
+    <Behavior value="DVaExplodingBoostersMarker" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaExplodingBoostersMarker"/>
+  
+  <CEffectModifyUnit id="DVaPilotExplodingBoostersModifyMechFacing">
+    <ImpactUnit Value="TargetUnit" />
+    <FacingLocation Value="FocusPoint" />
+    <FacingType value="LookAt" />
+  </CEffectModifyUnit>
+  
+  <CEffectApplyBehavior id="DVaBoostersApplyBoosterBehaviorExploding">
+    <WhichUnit Value="Target" />
+    <Flags index="UseDuration" value="1" />
+    <Duration value="0.75" />
+    <Behavior value="DVaExplodingBoostersActive" />
+  </CEffectApplyBehavior>
+  
+
+  <CBehaviorBuff id="DVaExplodingBoostersActive">
+    <InfoFlags index="Hidden" value="0" />
+    <BehaviorCategories index="Restorable" value="1" />
+    <RemoveValidatorArray value="TargetNotDeadOrRootedOrSilencedOrStasisOrStunnedExceptTimeStop" />
+    <RemoveValidatorArray value="TargetNotPolymorphed" />
+    <Duration value="0.75" />
+    <Period value="0.0625" />
+    <InitialEffect value="DVaExplodingBoostersOnInitialSet" />
+    <PeriodicEffect value="DVaExplodingBoostersForwardMoveOrderOffset" />
+    <FinalEffect value="DVaBoostersFinalSet" />
+    <Modification>
+      <ModifyFlags index="DisableWeapons" value="1" />
+      <ModifyFlags index="EnableMove" value="1" />
+      <StateFlags index="SuppressCollision" value="1" />
+      <AbilLinkEnableArray value="DVaBoostersOff" />
+      <AbilLinkEnableArray value="DVaMechSelfDestruct" />
+      <AbilLinkEnableArray value="DVaMechTransport" />
+      <AbilLinkEnableArray value="FountainDrink" />
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="HoldFire" />
+      <AbilLinkDisableArray value="Taunt" />
+    </Modification>
+  </CBehaviorBuff>
+
+  <CActorModel id="DVaBoostersCaster">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="Create DVaBoostersEndSound" />
+  </CActorModel>
+  <CActorModel id="DVaBoostersCasterJets01">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+  <CActorModel id="DVaBoostersCasterJets02">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+  <CActorModel id="DVaBoostersCasterJets03">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+  <CActorModel id="DVaBoostersCasterJets04">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="AnimBracketStop BSD" />
+  </CActorModel>
+  <CActorUnit id="HeroDVaMech">
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="AnimBracketStart Boost Spell,A,Start Spell,A Spell,A,End" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create DVaMech_Boosters_Launch" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.On" Send="Create DVaMech_Boosters_Missile" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Target="DVaMech_Boosters_Launch" Send="Destroy" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Target="DVaMech_Boosters_Missile" Send="Destroy" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Target="DVaMech_Boosters_Launch_HitTheNitrous" Send="Destroy" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off; !ValidateUnit DVaMechMechSelfDestructing" Send="AnimBracketStop Boost" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off" Send="Signal ApplyReady" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off; ValidateUnit DVaMechMechSelfDestructing" Send="AnimPlay HeroicEnd Spell,E,End PlayForever,NonLooping -1.000000 -1.000000 -1.000000 AsAutomatic 0.000000 10" />
+    <On Terms="Behavior.DVaExplodingBoostersActive.Off; ValidateUnit DVaMechMechSelfDestructing" Send="AnimClear Heroic" />
+  </CActorUnit>
+
+  <CValidatorCombine id="TargetNotDeadOrRootedOrSilencedOrStasisOrStunnedExceptTimeStop">
+    <CombineArray value="TargetNotDeadOrRootedOrSilencedOrStasisOrStunned" />
+    <CombineArray value="TargetIsTimeStopped" />
+  </CValidatorCombine>
+  <CValidatorCombine id="TargetNotDeadOrRootedOrSilencedOrStasisOrStunned">
+    <Type value="And" />
+    <CombineArray value="TargetNotDead" />
+    <CombineArray value="TargetNotRooted" />
+    <CombineArray value="TargetNotSilenced" />
+    <CombineArray value="TargetNotStasis" />
+    <CombineArray value="TargetNotStunned" />
+  </CValidatorCombine>
+  
+
+  <CEffectSet id="DVaExplodingBoostersOnInitialSet">
+    <EffectArray value="DVaExplodingBoostersSearchPersistent" />
+    <EffectArray value="DVaExplodingBoostersMoveSpeedApply" />
+  </CEffectSet>
+  
+
+  <CEffectCreatePersistent id="DVaExplodingBoostersSearchPersistent">
+    <Marker>
+      <MatchFlags index="Id" value="1" />
+    </Marker>
+    <WhichLocation Value="SourceUnit" />
+    <PeriodCount value="500" />
+    <PeriodicValidator value="DVaMechSourceHasExplodingBoostersBehavior" />
+    <PeriodicEffectArray value="DVaBoostersImpactSearch" />
+    <PeriodicPeriodArray value="0.0625" />
+    <TimeScaleSource Value="Caster" />
+    <AINotifySettings AreaEffect="DVaBoostersImpactSearch">
+      <Flags index="Disabled" value="1" />
+    </AINotifySettings>
+  </CEffectCreatePersistent>
+  
+
+  <CEffectApplyBehavior id="DVaExplodingBoostersMoveSpeedApply">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaExplodingBoostersMoveSpeedActive" />
+  </CEffectApplyBehavior>
+  
+
+  <CBehaviorBuff id="DVaExplodingBoostersMoveSpeedActive">
+    <RemoveValidatorArray value="DVaMechSourceHasExplodingBoostersBehavior" />
+    <Modification>
+      <MoveSpeedMaximum value="10.8867" />
+      <MoveSpeedMinimum value="10.8867" />
+      <DecelerationMultiplier value="0.01" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechSourceHasExplodingBoostersBehavior">
+    <WhichUnit Value="Source" />
+    <Compare value="GE" />
+    <Value value="1" />
+    <Behavior value="DVaExplodingBoostersActive" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectCreatePersistent id="DVaExplodingBoostersForwardMoveOrderOffset">
+    <InitialEffect value="DVaExplodingBoostersIssueMoveOrderSet" />
+    <InitialOffset Y="-2.5" />
+  </CEffectCreatePersistent>
+  <CEffectSet id="DVaExplodingBoostersIssueMoveOrderSet">
+    <EffectArray value="DVaExplodingBoostersAutoMoveClearMoveOrders" />
+    <EffectArray value="DVaExplodingBoostersIssueMoveOrderForward" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaExplodingBoostersAutoMoveClearMoveOrders">
+    <ImpactUnit Value="Source" />
+    <ModifyFlags index="ClearLastMoveTarget" value="1" />
+  </CEffectModifyUnit>
+  <CEffectIssueOrder id="DVaExplodingBoostersIssueMoveOrderForward">
+    <Abil value="DVaAutoMoveApproach" />
+    <WhichUnit Value="Source"/>
+    <Player Value="Source" />
+    <Target Value="TargetPoint" />
+  </CEffectIssueOrder>
+  
+
+  <CValidatorPlayerTalent id="DVaMechNuclearFusionHasTalent">
+    <Find value="1" />
+    <Value value="DVaMechNuclearFusion" />
+  </CValidatorPlayerTalent>
+
+  <CButton id="DVaMechNuclearFusion" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechNuclearFusion">
+    <Abil value="DVaMechSelfDestruct" />
+    <Face value="DVaMechNuclearFusion" />
+  </CTalent>
+  
+  <CValidatorCombine id="DVaMechNuclearFusionHasTalentAndTargetIsHero">
+    <CombineArray value="DVaMechNuclearFusionHasTalent" />
+    <CombineArray value="TargetIsHero" />
+    <Type value="And" />
+  </CValidatorCombine>
+  
+  <CEffectSet id="DVaPilotWeaponImpactSet">
+    <EffectArray value="DVaPilotWeaponFindNearbyExplodingMech" />
+  </CEffectSet>
+  
+  <CEffectEnumArea id="DVaPilotWeaponFindNearbyExplodingMech">
+    <ValidatorArray value="CasterNotBlindedAndTargetNotEvading" />
+    <ValidatorArray value="DVaMechNuclearFusionHasTalent"/>
+    <LaunchLocation Value="TargetUnit" />
+    <SearchFlags index="ExtendByUnitRadius" value="1" />
+    <SearchFilters value="Player;Self,Enemy,Ally,ImmuneToAOE,Missile,Item,Stasis,Dead,Hidden,Invulnerable" />
+    <AreaArray MaxCount="1" Effect="DVaPilotWeaponKnockbackTowardsExplodingMechSet">
+      <Radius value="8.75" />
+    </AreaArray>
+    <SearchFlags index="DoActorSearch" value="1" />
+  </CEffectEnumArea>
+  
+
+  <CEffectSet id="DVaPilotWeaponKnockbackTowardsExplodingMechSet">
+    <ValidatorArray value="DVaMechMechTargetSelfDestructing"/>
+    <EffectArray value="DVaMechSelfDestructNuclearTractionAddEnergyToExplodingMech" />
+  </CEffectSet>
+  
+
+  <CEffectSet id="DVaMechSelfDestructBehaviorInitialSet">
+    <EffectArray value="DVaMechSelfDestructReduceEnergyToZero" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaMechSelfDestructReduceEnergyToZero">
+    <VitalArray index="Energy">
+      <Change value="-100" />
+    </VitalArray>
+  </CEffectModifyUnit>
+
+  <CEffectModifyUnit id="DVaMechSelfDestructNuclearTractionAddEnergyToExplodingMech">
+    <VitalArray index="Energy">
+      <Change value="5" />
+    </VitalArray>
+  </CEffectModifyUnit>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechMechTargetSelfDestructing">
+    <WhichUnit Value="Target" />
+    <Compare value="GT" />
+    <Behavior value="DVaMechSelfDestructMechDetonationCountdown" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+
+  <CEffectDamage id="DVaMechSelfDestructDetonationSearchDamage" >
+    <MultiplicativeModifierArray index="DVaNuclearFusionDamageBonus">
+      <Validator value="DVaMechNuclearFusionHasTalentAndTargetIsHero" />
+      <Accumulator value="DVaMechSelfDestructNuclearFusionAccumulator" />
+      <Modifier value="0.15" />
+    </MultiplicativeModifierArray>
+  </CEffectDamage>
+  
+  <CAccumulatorVitals id="DVaMechSelfDestructNuclearFusionAccumulator" parent="BaseVitalAccumulator">
+    <Ratio value="0.03" />
+    <ModificationType value="PerUnit" />
+  </CAccumulatorVitals>
+  
+
+  <CEffectApplyBehavior id="DVaPilotSuppressingFireApplySlow">
+    <ValidatorArray value="TargetIsHero" />
+  </CEffectApplyBehavior>
+  
+  <CButton id="DVaPilotSuppressingFireTalent" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_concussivecharge.dds" />
+  </CButton>
+
+  <CTalent id="DVaPilotSuppressingFire">
+    <Face value="DVaPilotSuppressingFireTalent" />
+    <Abil value="DVaPilotConcussivePulse" />
+    <Active value="1" />
+    <RankArray>
+      <BehaviorArray value="DVaPilotConcussivePulseEnabledCarry" />
+    </RankArray>
+  </CTalent>
+  
+</Catalog>

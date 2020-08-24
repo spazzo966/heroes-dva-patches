@@ -6,4 +6,7 @@
  	<Catalog path="Mods/DVaPatchWeek3.xml" />
  	<Catalog path="Mods/DVaPatchWeek4.xml" />
  	<Catalog path="Mods/DVaPatchWeek5.xml" />
+ 	<Catalog path="Mods/DVaPatchWeek6.xml" />
+ 	<Catalog path="Mods/DVaPatchWeek7.xml" />
+ 	<Catalog path="Mods/DVaPatchHeroCombined.xml" />
 </Includes>

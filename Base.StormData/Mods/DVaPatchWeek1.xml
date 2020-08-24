@@ -260,7 +260,7 @@
   
 
   <CEffectSet id="DVaBigShotImpactSet">
-    <EffectArray value="DVaPilotSuppressingFireApplySlowAbility" />
+    <!-- <EffectArray value="DVaPilotSuppressingFireApplySlowAbility" /> -->
     <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" /> -->
     <!-- <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" /> -->
   </CEffectSet>
@@ -268,7 +268,7 @@
     <EffectArray value="DVaPilotSuppressingFireApplySlowAbility" />
     <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBigShot" />
     <EffectArray value="DVaExpensivePlatingHeroicCooldownReductionBunnyHop" />
-    <EffectArray value="DVaConcussivePulseCooldownReductionHeroHit" />
+    <!-- <EffectArray value="DVaConcussivePulseCooldownReductionHeroHit" /> -->
   </CEffectSet>
 
   <CEffectModifyUnit id="DVaConcussivePulseCooldownReductionHeroHit">
@@ -279,6 +279,7 @@
 
   <CEffectApplyBehavior id="DVaPilotSuppressingFireApplySlowAbility">
     <ValidatorArray value="DVaPilotSuppressingFireHasTalent"/>
+    <ValidatorArray value="TargetIsHero"/>
     <Behavior value="DVaPilotSuppressingFireSlow" />
   </CEffectApplyBehavior>
   

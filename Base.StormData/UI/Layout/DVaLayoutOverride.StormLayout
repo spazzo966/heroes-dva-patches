@@ -181,4 +181,14 @@
       </Frame>
     </Frame>
   </Frame>
+
+  <Frame type="UnitStatusBehaviorIcon" name="DVaUnitStatusFrameTemplate/HeroUnitStatusParentFrame/SelfDestructIcon" file="DVa">
+        <Anchor side="Top" relative="$parent/HealthBlackOverlayIcon" pos="Min" offset="0" />
+        <Anchor side="Bottom" relative="$parent/HealthBlackOverlayIcon" pos="max" offset="0" />
+        <Anchor side="Left" relative="$parent/HealthBlackOverlayIcon" pos="Min" offset="1" />
+        <Anchor side="Right" relative="$parent/HealthBlackOverlayIcon" pos="Max" offset="-1" />
+  </Frame>
+  <Frame type="Image" name="DVaUnitStatusFrameTemplate/HeroUnitStatusParentFrame/EnergyBlackOverlayIcon" file="DVa">
+    <Alpha val="0"/>
+  </Frame>
 </Desc>

@@ -96,3 +96,27 @@ Button/Tooltip/DVaMechBoostersPitStop=Every <c val="#TooltipNumbers">2nd</c> Ene
 Button/Name/DVaMechDefenseMarixRaiseMyAPM=Raise My APM
 Button/SimpleDisplayText/DVaMechDefenseMarixRaiseMyAPM=Defense Matrix grants Allied Heroes Armor
 Button/Tooltip/DVaMechDefenseMarixRaiseMyAPM=Allied Heroes in the area affected by Defense Matrix are granted <c val="#TooltipNumbers"><d ref="Behavior,DVaDefenseMatrixRaiseMyAPMArmor,ArmorModification.AllArmorBonus"/></c> Armor, and the duration of Defense Matrix is reduced by <c val="#TooltipNumbers"><d ref="-Talent,DVaMechDefenseMarixRaiseMyAPM,AbilityModificationArray[0].Modifications[1].Value"/></c> second.
+
+Button/Name/DVaMechBringItOnNew=Bring it On
+Button/SimpleDisplayText/DVaMechBringItOnNew=Increase Self-Destruct Charge Rate from Attacks
+Button/Tooltip/DVaMechBringItOnNew=Each enemy Hero hit by Basic Attack cleave increases the charge rate of Self-Destruct from Basic Attacks by <c val="#TooltipNumbers">100%</c>.
+Button/Name/DVaMechGearedUp=Geared Up
+Button/SimpleDisplayText/DVaMechGearedUp=Increase Minimum Mech Movement Speed
+Button/Tooltip/DVaMechGearedUp=D.Va's Mech can no longer be slowed below <c val="#TooltipNumbers"><d ref="Behavior,DVaMechGearedUpCarry,Modification.MoveSpeedMinimum/Unit,HeroDVaPilot,Speed*100"/>%</c>, and when Slowed by an enemy, Boosters recharges <c val="#TooltipNumbers"><d ref="-Effect,DVaMechGearedUpReduceBoostersCooldown,Cost[0].CooldownTimeUse/Behavior,DVaMechGearedUpCarry,Period*100"/>%</c> faster.
+Button/Name/DVaMechCrashCourseNew=Bumper to Bumper
+Button/SimpleDisplayText/DVaMechCrashCourseNew=Heroes can be hit repeatedly, damage reduced
+Button/Tooltip/DVaMechCrashCourseNew=Enemy Heroes can be hit by Boosters again after <c val="#TooltipNumbers"><d ref="Behavior,DVaBoostersCrashCourseHitMarker,Duration" precision="2"/></c> seconds, but the damage of Boosters is reduced by <c val="#TooltipNumbers"><d ref="-Effect,DVaBoostersImpactDamage,MultiplicativeModifierArray[CrashCourseMod].Modifier*100"/>%</c>.
+Button/Name/DVaMechBoostersMoreJuice=Extra Juice
+Button/SimpleDisplayText/DVaMechBoostersMoreJuice=Hitting Enemy Heroes extends Boosters duration
+Button/Tooltip/DVaMechBoostersMoreJuice=Each enemy Hero hit by Boosters extends its duration by <c val="#TooltipNumbers"><d ref="Effect,DVaMechMoreJuiceExtendBoostersDuration,Value" precision="3"/></c> seconds, and increases the damage dealt by Boosters by <c val="#TooltipNumbers"><d ref="Accumulator,DVaMoreJuiceAccumulator,Scale*100" precision="1"/>%</c>, up to <c val="#TooltipNumbers"><d ref="Accumulator,DVaMoreJuiceAccumulator,Scale*Behavior,DVaBoostersJuiceTokenCounter,Max*100"/>%</c>. This can occur up to <c val="#TooltipNumbers"><d ref="Behavior,DVaBoostersJuiceTokenCounter,Max"/></c> times per cast.
+Abil/Activity/DVaExplodingBoosters=Overriding Arsenal
+Button/Name/DVaMechNuclearOptionNew=Arsenal Override
+Button/SimpleDisplayText/DVaMechNuclearOptionNew=Channel on an exploding Mech to activate Boosters
+Button/Tooltip/DVaMechNuclearOptionNew=D.Va can now channel on her exploding Mech, which after <c val="#TooltipNumbers"><d ref="Abil,DVaPilotExplodingBoosters,CastIntroTime" precision="1"/></c> seconds, will cause it to activate Boosters for <c val="#TooltipNumbers"><d ref="Effect,DVaBoostersApplyBoosterBehaviorExploding,Duration" precision="2"/></c> seconds in the direction away from D.Va.</n></n>Cooldown is not shared with Boosters, can only occur once per Self-Destruct, and taking damage interrupts the channel.
+Button/Name/DVaMechNuclearFusion=Nuclear Fusion
+Button/SimpleDisplayText/DVaMechNuclearFusion=Increase Self-Destruct Damage
+Button/Tooltip/DVaMechNuclearFusion=Increase damage dealt with Self-Destruct by <c val="#TooltipNumbers"><d ref="Effect,DVaMechSelfDestructDetonationSearchDamage,MultiplicativeModifierArray[DVaNuclearFusionDamageBonus].Modifier*100"/>%</c>. Pilot Basic Attacks against Enemy Heroes within the radius of Self-Destruct increase this damage by a further <c val="#TooltipNumbers"><d ref="Accumulator,DVaMechSelfDestructNuclearFusionAccumulator,Ratio*Effect,DVaMechSelfDestructNuclearTractionAddEnergyToExplodingMech,VitalArray[Energy].Change*100"/>%</c>.
+Button/Name/DVaPilotSuppressingFireTalent=Concussive Pulse
+Button/SimpleDisplayText/DVaPilotSuppressingFireTalent=Knockback enemies as Pilot, Slow Heroes
+Button/Tooltip/DVaPilotSuppressingFireTalent=D.Va gains the Concussive Pulse ability, allowing her to deal <c val="#TooltipNumbers"><d ref="Effect,DVaPilotConcussivePulseDamage,Amount"/></c> damage to enemies in a cone and knock them back.<n/><n/>Requires Pilot Mode.</n></n><c val="#AbilityPassive">Passive:</c> Pilot Mode Basic Attacks have <c val="#TooltipNumbers">20%</c> increased range, and when Pilot Mode D.Va hits an enemy Hero with a Basic Attack or Concussive Pulse, Slow their Movement Speed by <c val="#TooltipNumbers"><d ref="Behavior,DVaPilotSuppressingFireSlow,Modification.UnifiedMoveSpeedFactor*(-100)"/>%</c> for <c val="#TooltipNumbers"><d ref="Behavior,DVaPilotSuppressingFireSlow,Duration" precision="2"/></c> seconds.
+Button/Tooltip/DVaPilotConcussivePulseAbility=Deal <c val="#TooltipNumbers"><d ref="Effect,DVaPilotConcussivePulseDamage,Amount"/></c> damage to enemies in a cone and knock them back.
