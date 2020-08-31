@@ -94,7 +94,6 @@ Week 7:
 Week 8:
 
   * **Major Rework!**
-  * The following changes are treated as 1 singular change:
   * Self-Destruct is now a heroic ability(replacing Big Shot) with a 120 second cooldown
   * Bunny Hop now features a 60 second cooldown
   * Micro Missiles is a new basic ability which fires a volley of missiles, targeting works identical to Live Defense Matrix
