@@ -90,3 +90,27 @@ Week 7:
   * Nanoweave Suit Replaced with Nuclear Fusion: Self-Destruct damage increased by 15%, Pilot Basic Attacks increase this again by 15%. Updated Exploding Mech countdown timer on healthbar to display the bonus damage from this accruing **(rollback of 1 change in week 2)**
   * Suppressing Fire and Concussive Pulse Merged, Concussive now slows **(rollback of 2 changes in week 1)**
   * New Level 20 Talent: More Juice: Enemy Heroes hit increases Boosters duration, damage, caps out at +3 seconds, +100% damage
+
+Week 8:
+
+  * **Major Rework!**
+  * The following changes are treated as 1 singular change:
+  * Self-Destruct is now a heroic ability(replacing Big Shot) with a 120 second cooldown
+  * Bunny Hop now features a 60 second cooldown
+  * Micro Missiles is a new basic ability which fires a volley of missiles, targeting works identical to Live Defense Matrix
+  * D.Va's Mech Mode can now see map collision edges to aid in the targeting of Micro Missiles
+  * Defense Matrix can now be held down to actively target the mouse cursor position, and rather than feature a cooldown, it now uses an energy meter that recharges at rate of 10 per second(to a maximum of 100), and is depleted at a rate of 30 while in use. It also starts projecting further than it previously did, making it less reliable for reducing the damage of melee enemies, but more reliable for reducing the damage of ranged enemies, and the damage reduction is reduced to 50%
+  * Mech health is increased to 2330, health regen is increased to match
+  * Call Mech now features a 29 second cooldown that is increased by 1 second for each level D.Va has upon exiting the mech(at level 1, it's got 30 seconds, at level 20, it's got 50 seconds), and basic attaks no longer reduce the cooldown of Call Mech
+
+That's it for the "baseline" changes of week 8, now we've got 7 talents to talk about.
+
+  * New Level 1 Talent: Healing Matrix. Defense Matrix heals the mech for 100% of the damage it prevented to itself with Defense Matrix 0.5 seconds after Defense Matrix stops being channeled
+  * New Level 1 Talent: Medical Barrage. Micro Missiles heals D.Va for  50% of the damage dealt to enemy Heroes
+  * New Level 1 Talent: Recovering Shells. D.Va's Mech heals for 35% of the damage dealt with Basic Attacks after attacking for 2 seconds, lasts 3 seconds once it has started, and is refreshed by basic attacks
+  * New Level 4 Talent: Big Shot. Identical to Live, except the cooldown is increased from 4 seconds to 8 seconds, the cooldown reduction from hitting enemy Heroes reduced from 8 seconds to 2 seconds, and the damage is reduced from 250 to 170
+  * New Level 4 Talent: MEKAfall. Same as on Live
+  * New Level 20 Talent: Bunny Hopper: Remove the passive movespeed reduction from the Mech, Bunny Hop now grants 20% movespeed, Bunny Hop cooldown reduced by 10 seconds.
+  * New Level 20 Talent: Bang for Buck: Each enemy Hero hit with Self-Destruct reduces its cooldown by 15 seconds.
+  
+

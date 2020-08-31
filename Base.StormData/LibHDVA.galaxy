@@ -337,7 +337,7 @@ bool auto_libHDVA_gf_RespawnHeroDVa_TriggerFunc (bool testConds, bool runActions
     libGame_gv_players[lp_player].lv_cameraPlayerUnitGroupToFocusOn = libNtve_gf_ConvertUnitToUnitGroup(lv_dVaMechUnit);
     libGame_gf_CameraUpdateCameraForPlayer(lp_player);
     UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropLifePercent, lp_respawnedMechHealthPercentage);
-    UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lp_player, "Abil/DVaMechSelfDestruct")));
+    // UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lp_player, "Abil/DVaMechSelfDestruct")));
     libUIUI_gf_UIHeroConsoleShowHideUnitStatusFrameForPlayer(true, lp_player);
     libNtve_gf_MakeUnitUncommandable(lv_dVaMechUnit, false);
     CatalogFieldValueSet(c_gameCatalogAbil, "Mount", "CastIntroTime[" + IntToString(0) + "]", lp_player, CatalogFieldValueGet(c_gameCatalogAbil, "Mount", "CastIntroTime[" + IntToString(0) + "]", 0));
@@ -443,7 +443,7 @@ void libHDVA_gf_DVaGrantSDCharge (unit lp_dVaMechUnit, fixed lp_damageAmount) {
         PlayerAddChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct", -1.0);
         lv_damageTakenPercent -= libHDVA_gv_dVASelfDestructHealthpercentageneededtogenerate1charge;
     }
-    UnitSetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+    // UnitSetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(lp_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
     libHDVA_gv_dVaDefensiveChargeRemainder[lv_dVaPlayer] = lv_damageTakenPercent;
 	
 }
@@ -986,7 +986,7 @@ bool libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Func (bool testConds, bool
         return true;
     }
 
-    if ((EventUnitBehaviorChange() == c_unitBehaviorChangeIncrease)) {
+    if ((EventUnitBehaviorChange() == c_unitBehaviorChangeDecrease)) {
 		Wait(0.3125, c_timeGame);
 		// We wait because enemies can still be affected by Defense Matrix for this period. Ignoring the potential for things like Timestopped Orphea's with eternal feast going and stuff like that, not worth worrying about
 		FloatingCombatElementCreateNumberTextAtUnit(PlayerGroupSingle(lv_dVaPlayer), "FloatingCombatElements/FloatingCombatAmountReadable", "", lv_dVaUnit, FixedToInt(PlayerScoreValueGetAsFixed(lv_dVaPlayer, "GenericHeroRealScoreValue1")), StringExternal("Param/Value/lib_DVaPatchWeek2_Var1"), libNtve_gv_FloatingCombatTextAutoRandomSeed);
@@ -1002,8 +1002,8 @@ bool libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Func (bool testConds, bool
 void libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Init () {
     libHDVA_gt_DVaDefenseMatrixTrackerReportandReset = TriggerCreate("libHDVA_gt_DVaDefenseMatrixTrackerReportandReset_Func");
     TriggerEnable(libHDVA_gt_DVaDefenseMatrixTrackerReportandReset, false);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaDefenseMatrixTrackerReportandReset, null, "DVaDefenseMatrixDummyContinuation", c_unitBehaviorChangeIncrease);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaDefenseMatrixTrackerReportandReset, null, "DVaDefenseMatrixDummyContinuation", c_unitBehaviorChangeDecrease);
+    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaDefenseMatrixTrackerReportandReset, null, "DVaDefenseMatrixHoldTargetChanneling", c_unitBehaviorChangeIncrease);
+    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaDefenseMatrixTrackerReportandReset, null, "DVaDefenseMatrixHoldTargetChanneling", c_unitBehaviorChangeDecrease);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1082,7 +1082,7 @@ bool libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func (bool testConds, bool runA
 void libHDVA_gt_DVaDamageTakenSelfDestructCharge_Init () {
     libHDVA_gt_DVaDamageTakenSelfDestructCharge = TriggerCreate("libHDVA_gt_DVaDamageTakenSelfDestructCharge_Func");
     TriggerEnable(libHDVA_gt_DVaDamageTakenSelfDestructCharge, false);
-    TriggerAddDamageEvent(libHDVA_gt_DVaDamageTakenSelfDestructCharge, null, "HeroDVaMech", c_unitDamageTypeAny, c_unitDamageEither, null);
+    // TriggerAddDamageEvent(libHDVA_gt_DVaDamageTakenSelfDestructCharge, null, "HeroDVaMech", c_unitDamageTypeAny, c_unitDamageEither, null);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1118,15 +1118,18 @@ bool libHDVA_gt_DVaDefenseMatrixAbsorbed_Func (bool testConds, bool runActions) 
         return true;
     }
 	
-	if ((EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroes") || (EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis")) {
+	if ((EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroes") || (EventUnitBehavior() == "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis") || (EventUnitBehavior() == "DVaDefenseMatrixHoldTargetDebuffNonHeroes")) {
 		PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanArtOfChaosTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanArtOfChaosTalentAnnihilation") + lv_damageAbsorbed));
 	}
 	else {
 		if ((lv_damagedUnit == lv_dVaUnit)) {
 			if ((UnitIsAlive(lv_damagedUnit) == true) && (UnitHasBehavior2(lv_damagedUnit, "DVaMechSelfDestructAbandoned") == false)) {
 				PlayerScoreValueSetFromFixed(lv_dVaPlayer, "AzmodanMasterOfDestructionTalentAnnihilation", (PlayerScoreValueGetAsFixed(lv_dVaPlayer, "AzmodanMasterOfDestructionTalentAnnihilation") + lv_damageAbsorbed));
-				if ((PlayerGetChargeUsed(UnitGetOwner(lv_damagedUnit), "Abil/DVaMechSelfDestruct") > 0.0)) {
-					libHDVA_gf_DVaGrantSDCharge(lv_damagedUnit, lv_damageAbsorbed);
+				// if ((PlayerGetChargeUsed(UnitGetOwner(lv_damagedUnit), "Abil/DVaMechSelfDestruct") > 0.0)) {
+					// libHDVA_gf_DVaGrantSDCharge(lv_damagedUnit, lv_damageAbsorbed);
+				// }
+				if ((PlayerHasTalent(lv_dVaPlayer, "DVaHealingMatrix") == true) && (UnitHasBehavior2(lv_damagedUnit, "DVaHealingMatrixController") == true)) {	
+					CatalogFieldValueSetFixed(c_gameCatalogEffect, "DVaHealingMatrixCreateHealer", "RechargeVitalRate", lv_dVaPlayer, (lv_damageAbsorbed + CatalogFieldValueGetAsFixed(c_gameCatalogEffect, "DVaHealingMatrixCreateHealer", "RechargeVitalRate", lv_dVaPlayer)));
 				}
 			}
 		}
@@ -1142,10 +1145,12 @@ bool libHDVA_gt_DVaDefenseMatrixAbsorbed_Func (bool testConds, bool runActions) 
 void libHDVA_gt_DVaDefenseMatrixAbsorbed_Init () {
     libHDVA_gt_DVaDefenseMatrixAbsorbed = TriggerCreate("libHDVA_gt_DVaDefenseMatrixAbsorbed_Func");
     TriggerEnable(libHDVA_gt_DVaDefenseMatrixAbsorbed, false);
-    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuff");
-    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroes");
-    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffGetThroughThis");
-    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis");
+    // TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuff");
+    // TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroes");
+    // TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffGetThroughThis");
+    // TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaMechDefenseMatrixDebuffNonHeroesGetThroughThis");
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaDefenseMatrixHoldTargetDebuffHeroes");
+    TriggerAddEventUnitDamageAbsorbed(libHDVA_gt_DVaDefenseMatrixAbsorbed, null, "DVaDefenseMatrixHoldTargetDebuffNonHeroes");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1180,7 +1185,7 @@ bool libHDVA_gt_DVaCallMech_Func (bool testConds, bool runActions) {
         UnitGroupAdd(libGame_gv_players[lv_dVaPlayer].lv_heroUnitGroup, lv_dVaPilotUnit);
         UnitBehaviorRemove(lv_dVaPilotUnit, "Mounted", 1);
         libNtve_gf_MakeUnitUncommandable(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], true);
-        UnitSetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+        // UnitSetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
         UnitCreateEffectUnit(lv_dVaPilotUnit, "DVaMechCallMechApplyStun", libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer]);
         UnitBehaviorAdd(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], "CapturePointAllowed", libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], 1);
         Wait(CatalogFieldValueGetAsFixed(c_gameCatalogBehavior, "DVaMechCallMechStartingUpStun", "Duration", lv_dVaPlayer), c_timeGame);
@@ -1232,7 +1237,7 @@ bool libHDVA_gt_DVaCallMechMEKAfall_Func (bool testConds, bool runActions) {
     UnitGroupAdd(libGame_gv_players[lv_dVaPlayer].lv_heroUnitGroup, libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer]);
     UnitGroupAdd(libGame_gv_players[lv_dVaPlayer].lv_heroUnitGroup, lv_dVaPilotUnit);
     UnitBehaviorRemove(lv_dVaPilotUnit, "Mounted", 1);
-    UnitSetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergy, (UnitGetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+    // UnitSetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergy, (UnitGetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
         if ((UnitHasBehavior2(lv_dVaPilotUnit, "IsHumanPlayer") == true)) {
             UnitBehaviorAdd(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], "IsHumanPlayer", libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], 1);
         }
@@ -1311,7 +1316,7 @@ bool libHDVA_gt_DVaCallMechMEKAfallCompleted_Func (bool testConds, bool runActio
     libGame_gf_CameraUpdateCameraForPlayer(lv_dVaPlayer);
     libUIUI_gf_UIHeroConsoleSetUpForPlayer(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], lv_dVaPlayer);
     libUIUI_gf_HeroConsoleUnitStatusBarsSetUnitForBars(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], lv_dVaPlayer);
-    UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+    // UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
     libGame_gf_SendEventHeroUnitSwappedForPlayer(lv_dVaPilotUnit, libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], lv_dVaPlayer);
     libGame_gf_SendEventCheckUnitForAbilityRedirect(lv_dVaPilotUnit, libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], false, UnitGetPosition(lv_dVaPilotUnit));
     libUIUI_gf_InitPathingLines(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], lv_dVaPlayer);
@@ -1362,7 +1367,7 @@ bool libHDVA_gt_DVaCallMechMEKAfallCompletedMapMechanicTransfer_Func (bool testC
     }
 
     UnitCreateEffectUnit(lv_dVaMechUnit, "DVaTransferMapMechanicStacksLoadSet", lv_dVaPilotUnit);
-	UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
+	// UnitSetPropertyFixed(lv_dVaMechUnit, c_unitPropEnergy, (UnitGetPropertyFixed(libHDVA_gv_dVaCallMechMechBeingSummoned[lv_dVaPlayer], c_unitPropEnergyMax, c_unitPropCurrent) - PlayerGetChargeUsed(lv_dVaPlayer, "Abil/DVaMechSelfDestruct")));
 
     return true;
 }

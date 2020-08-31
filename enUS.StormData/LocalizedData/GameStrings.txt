@@ -120,3 +120,49 @@ Button/Name/DVaPilotSuppressingFireTalent=Concussive Pulse
 Button/SimpleDisplayText/DVaPilotSuppressingFireTalent=Knockback enemies as Pilot, Slow Heroes
 Button/Tooltip/DVaPilotSuppressingFireTalent=D.Va gains the Concussive Pulse ability, allowing her to deal <c val="#TooltipNumbers"><d ref="Effect,DVaPilotConcussivePulseDamage,Amount"/></c> damage to enemies in a cone and knock them back.<n/><n/>Requires Pilot Mode.</n></n><c val="#AbilityPassive">Passive:</c> Pilot Mode Basic Attacks have <c val="#TooltipNumbers">20%</c> increased range, and when Pilot Mode D.Va hits an enemy Hero with a Basic Attack or Concussive Pulse, Slow their Movement Speed by <c val="#TooltipNumbers"><d ref="Behavior,DVaPilotSuppressingFireSlow,Modification.UnifiedMoveSpeedFactor*(-100)"/>%</c> for <c val="#TooltipNumbers"><d ref="Behavior,DVaPilotSuppressingFireSlow,Duration" precision="2"/></c> seconds.
 Button/Tooltip/DVaPilotConcussivePulseAbility=Deal <c val="#TooltipNumbers"><d ref="Effect,DVaPilotConcussivePulseDamage,Amount"/></c> damage to enemies in a cone and knock them back.
+
+Button/OverrideText/DVaCallMechOverride=<d ref="Effect,DVaPilotCallMechSetCooldown,Cost[0].Cooldown.TimeUse"/> Seconds
+Button/Tooltip/DVaMechBoosters=Increase D.Va's Movement Speed by <c val="#TooltipNumbers"><d ref="Behavior,DVaBoostersMoveSpeedActive,Modification.MoveSpeedMaximum/Unit,HeroDVaMech,Speed-1*100"/>%</c> for <c val="#TooltipNumbers"><d ref="Behavior,DVaBoostersActive,Duration" precision="2"/></c> seconds. Enemies that are hit take <c val="#TooltipNumbers"><d ref="Effect,DVaBoostersImpactDamage,Amount"/></c> damage and are knocked away. <n/><n/>D.Va cannot be Slowed while Boosters are active, and each enemy can only be hit once per use.
+Button/Tooltip/DVaPilotCallMech=Call a new Mech after <c val="#TooltipNumbers"><d ref="Abil,DVaPilotCallMech,CastIntroTime" precision="1"/></c> seconds and enter Mech Mode.
+Button/Name/DVaMechSelfDestructHeroic=Self-Destruct
+Button/SimpleDisplayText/DVaMechSelfDestructHeroic=Explode the Mech and reset Call Mech cooldown
+Button/Tooltip/DVaMechSelfDestructHeroic=Eject from the Mech, setting it to self-destruct after <c val="#TooltipNumbers"><d ref="Behavior,DVaMechSelfDestructMechDetonationCountdown,Duration" player="0"/></c> seconds. Deals <c val="#TooltipNumbers"><d ref="Effect,DVaMechSelfDestructDetonationSearchDamage,Amount"/></c> to <c val="#TooltipNumbers"><d ref="Effect,DVaMechSelfDestructDetonationSearchDamage,Amount+Accumulator,DVaSelfDestructDistanceAccumulator,MinAccumulation"/></c> damage in a large area, depending on distance from center. Only deals <c val="#TooltipNumbers"><d ref="Effect,DVaMechSelfDestructDetonationSearchDamage,AttributeFactor[Structure]*(-100)"/>%</c> damage against Structures.</n></n>After the Mech has detonated, Call Mech becomes available for use without a cooldown.
+Button/Name/DVaMechDefenseMatrixHoldTarget=Defense Matrix
+Button/SimpleDisplayText/DVaMechDefenseMatrixHoldTarget=Reduce damage of enemy Heroes in an area
+Button/Tooltip/DVaMechDefenseMatrixHoldTarget=After <c val="#TooltipNumbers"><d ref="Behavior,DVaDefneseMatrixHoldTargetInitialDelay,Duration" precision="3"/></c> seconds, channel a defensive field in the target direction, draining <c val="#TooltipNumbers"><d ref="-Behavior,DVaDefenseMatrixHoldTargetChanneling,Modification.VitalRegenArray[Energy]-Unit,HeroDVaMech,EnergyRegenRate" player="0"/></c> energy per second for as long as it remains active.</n></n>Enemy Heroes in the area have their damage dealt reduced by <c val="#TooltipNumbers"><d ref="100-(Behavior,DVaDefenseMatrixHoldTargetDebuffHeroes,DamageResponse.ModifyFraction*100)"/>%</c>.</n></n>The Mech can move while channeling, and may alter its facing by reactivating or holding down the Defense Matrix button.
+Button/Name/DVaCancelDefenseMatrix=Cancel Defense Matrix
+Button/SimpleDisplayText/DVaCancelDefenseMatrix=Cancel Defense Matrix
+Button/Tooltip/DVaCancelDefenseMatrix=Cancel Defense Matrix
+Button/Name/DVaCancelMicroMissiles=Cancel Micro Missiles
+Button/SimpleDisplayText/DVaCancelMicroMissiles=Cancel Micro Missiles
+Button/Tooltip/DVaCancelMicroMissiles=Cancel Micro Missiles.
+Button/Name/DVaMicroMissilesOn=Micro Missiles
+Button/SimpleDisplayText/DVaMicroMissilesOn=Unleash a barrage of Micro Missiles
+Button/Tooltip/DVaMicroMissilesOn=Unleash a barrage of <c val="#TooltipNumbers"><d ref="1+Effect,DVaMicroMissilesMissileFirePersistent,PeriodCount"/></c> Micro Missiles interchanging between right and left, dealing <c val="#TooltipNumbers"><d ref="Effect,DVaMicroMissilesDamage,Amount"/></c> each.</n></n>Micro Missiles explode on impact with terrain, and explode on impact with Heroes, but may hurt non-Heroes in their explosion, dealing <c val="#TooltipNumbers"><d ref="-Effect,DVaMicroMissilesDamage,MultiplicativeModifierArray[NotHeroic].Modifier*100"/>%</c> damage to them.
+Button/Name/DVaHealingShells=Recovering Shells
+Button/SimpleDisplayText/DVaHealingShells=Mech Basic Attacks leech.
+Button/Tooltip/DVaHealingShells=<c val="#TooltipNumbers">2</c> seconds after starting to Basic Attack, D.Va's Mech heals for <c val="#TooltipNumbers"><d ref="Behavior,DVaHealingShells,Modification.VitalDamageLeechArray[Life].KindArray[Basic]*100"/>%</c> for <c val="#TooltipNumbers"><d ref="Behavior,DVaHealingShells,Duration"/></c> seconds. Basic Attacks refresh the duration of this buff.
+Button/Name/DVaHealingMissiles=Medical Barrage
+Button/SimpleDisplayText/DVaHealingMissiles=Micro Missiles leech
+Button/Tooltip/DVaHealingMissiles=D.Va's Mech heals for <c val="#TooltipNumbers"><d ref="Effect,DVaMicroMissilesDamage,LeechFraction[Life]*100"/>%</c> of the damage dealt to enemy Heroes with Micro Missiles.
+Button/Name/DVaHealingMatrix=Healing Matrix
+Button/SimpleDisplayText/DVaHealingMatrix=Defense Matrix heals D.Va
+Button/Tooltip/DVaHealingMatrix=D.Va's Mech heals for <c val="#TooltipNumbers">100%</c> of the damage prevented with Defense Matrix <c val="#TooltipNumbers"><d ref="Effect,DVaHealingMatrixSetBehaviorDurationToZeroPointFiveRequireChannel,Duration" precision="1"/></c> seconds after it is no longer being cast.
+Button/Name/DVaLockedAbilityQ=Locked Ability
+Button/SimpleDisplayText/DVaLockedAbilityQ=Locked Ability
+Button/Tooltip/DVaLockedAbilityQ=<c val="#TooltipNumbers">Big Shot can be unlocked through a Talent at Level 4.
+Button/Name/DVaLockedAbilityW=Locked Ability
+Button/SimpleDisplayText/DVaLockedAbilityW=Locked Ability
+Button/Tooltip/DVaLockedAbilityW=Unlocked later! Probably Concussive Pulse!
+Button/Name/DVaLockedAbilityE=Locked Ability
+Button/SimpleDisplayText/DVaLockedAbilityE=Locked Ability
+Button/Tooltip/DVaLockedAbilityE=Unlocked later! Probably Torpedo Dash!
+Button/Name/DVaPilotBigShotBasic=Big Shot
+Button/SimpleDisplayText/DVaPilotBigShotBasic=Damage enemies in a line as a Pilot
+Button/Tooltip/DVaPilotBigShotBasic=Deal <c val="#TooltipNumbers"><d ref="Effect,DVaPilotBigShotDamage,Amount"/></c> damage to all enemies in a line. The cooldown of Call Mech is reduced by <c val="#TooltipNumbers"><d ref="Effect,DVaPilotBigShotModifyCallMechCooldown,Cost.Cooldown.TimeUse*(-1)"/></c> seconds for each enemy Hero hit.<n/><n/>Requires Pilot Mode.
+Button/Name/DVaMechBunnyHopStormUpgrade=Bunny Hopper
+Button/SimpleDisplayText/DVaMechBunnyHopStormUpgrade=Increase Mech Movespeed, reduce cooldown
+Button/Tooltip/DVaMechBunnyHopStormUpgrade=The Mech is no longer passively slowed, and while Bunny Hop is active, D.Va gains <c val="#TooltipNumbers"><d ref="Talent,DVaMechBunnyHopStormUpgrade,AbilityModificationArray[0].Modifications[0].Value*100"/>%</c> Movement Speed, and the cooldown of Bunny Hop is reduced by <c val="#TooltipNumbers"><d ref="-Talent,DVaMechBunnyHopStormUpgrade,AbilityModificationArray[0].Modifications[1].Value"/></c> seconds.
+Button/Name/DVaMechSelfDestructStormUpgrade=Bang for Buck
+Button/SimpleDisplayText/DVaMechSelfDestructStormUpgrade=Reduce Self-Destruct cooldown
+Button/Tooltip/DVaMechSelfDestructStormUpgrade=Each Enemy Hero hit with Self-Destruct lowers its cooldown by <c val="#TooltipNumbers"><d ref="-Effect,DVaSelfDestructStormUpgradeModifyCooldown,Cost[0].CooldownTimeUse"/></c> seconds.

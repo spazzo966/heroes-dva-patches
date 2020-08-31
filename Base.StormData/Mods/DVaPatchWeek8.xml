@@ -1,0 +1,1787 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+<!-- Defense Matrix now portrays further out, reduces damage to heroes by 60%, damage to non-heroes by 30% -->
+<!-- Defense Matrix is now a hold-to-target ability, and now also requires Energy to be used, think of it like a mixture between Hanzo's Storm Bow and Arthas' Frozen Tempest -->
+<!-- Self-Destruct is now a heroic ability with a cooldown mechanic -->
+<!-- Micro Missiles is a new basic ability slotting into the E button, functions like old Defense Matrix - target a direction, lock into that direction -->
+
+
+  <CAbilEffectInstant id="DVaBoostersOn">
+    <CmdButtonArray index="Execute" ShowValidator="CasterHasPilotAbilityDisabler" />
+  </CAbilEffectInstant>
+  
+  <CAbilEffectTarget id="DVaMechDefenseMatrixOn">
+    <CmdButtonArray index="Execute" ShowValidator="CasterHasPilotAbilityDisabler" />
+  </CAbilEffectTarget>
+  
+  <CValidatorUnitCompareBehaviorCount id="CasterHasPilotAbilityDisabler">
+    <WhichUnit Value="Caster" />
+    <Compare value="GT" />
+    <Behavior value="DVaPilotAbilityDisablerCarry" />
+  </CValidatorUnitCompareBehaviorCount>
+
+  <CAbilEffectInstant id="DVaPilotCallMech">
+    <Cost>
+      <Cooldown Location="Player" TimeUse="29" />
+    </Cost>
+  </CAbilEffectInstant>
+
+  <CAbilEffectTarget id="DVaPilotCallMechMEKAfall">
+    <Cost>
+      <Cooldown Link="Abil/DVaPilotCallMech" Location="Player" TimeUse="29" />
+    </Cost>
+  </CAbilEffectTarget>
+  
+  <CEffectModifyPlayer id="DVaPilotCallMechSetCooldown">
+    <Cost index="0">
+      <Cooldown>
+        <TimeUse value="29" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  
+  <CButton id="DVaPilotCallMech">
+    <TooltipCooldownOverrideText value="Button/OverrideText/DVaCallMechOverride" />
+  </CButton>
+
+  <CActorUnit id="HeroDVaMech" parent="StormHeroStandard" unitName="HeroDVaMech">
+    <Remove Terms="UnitDeath" Send="Create HeroDeathFX" />
+    <Remove Terms="UnitDeathCustomize" Send="Create HeroDeathFX" />
+    <Remove Terms="ActorCreation" Send="HostSiteOpsSet ::Host {SOpBasicScopeFollow SOpTipability}" />
+    <Remove Terms="WeaponStart.*.AttackStart" Send="AnimPlay Attack Attack 0 0.050000 0.100000" />
+    <On Terms="Effect.DVaMechSpawnSet.Start" Send="AnimPlay Spell Spell,C 0 0.000000" />
+    <On Terms="Behavior.DVaMechArtWeaponCasterSoundDummyLoop.On" Send="AnimPlay ChanneledAttack Attack PlayForever" />
+    <On Terms="Behavior.DVaMechArtWeaponCasterSoundDummyLoop.On" Send="Create DVaMechWeaponLaunchFXRight" />
+    <On Terms="Behavior.DVaMechArtWeaponCasterSoundDummyLoop.On" Send="Create DVaMechWeaponLaunchFXLeft" />
+    <On Terms="Behavior.DVaMechArtWeaponCasterSoundDummyLoop.Off" Send="AnimClear ChanneledAttack" />
+    <On Terms="Behavior.DVaMechArtWeaponCasterSoundDummyLoop.Off" Target="_DVaMechWeaponArt" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.On" Send="SetMinimapVisibility" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.On" Send="Create DVaMechCallMechLandingPad" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.On" Send="ModelMaterialApply DVaMechSpawningGlaze" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.On" Target="Storm_HeroRing" Send="SetVisibility" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.Off" Send="SetMinimapVisibility 1" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.Off; ValidatePlayer DVaPilotCallMechMEKAfallHasTalent" Send="Create DVaMechCallMechMEKAfallLandingImpact" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.Off" Target="DVaMechSpawningGlaze" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.Off" Target="Storm_HeroRing" Send="SetVisibility 1" />
+    <On Terms="Behavior.DVaMechCallMechStartingUpStun.Off" Send="Create DVaCallMechPilotLoaded" />
+    <On Terms="Behavior.DVaBoostersActive.On" Send="AnimBracketStart Boost Spell,A,Start Spell,A Spell,A,End" />
+    <On Terms="Behavior.DVaBoostersActive.On" Send="Create DVaMech_Boosters_Launch" />
+    <On Terms="Behavior.DVaBoostersActive.On" Send="Create DVaMech_Boosters_Missile" />
+    <On Terms="Behavior.DVaBoostersHitTheNitrousToken.Create" Send="Create DVaMech_Boosters_Launch_HitTheNitrous" />
+    <On Terms="Behavior.DVaBoostersActive.Off" Target="DVaMech_Boosters_Launch" Send="Destroy" />
+    <On Terms="Behavior.DVaBoostersActive.Off" Target="DVaMech_Boosters_Missile" Send="Destroy" />
+    <On Terms="Behavior.DVaBoostersActive.Off" Target="DVaMech_Boosters_Launch_HitTheNitrous" Send="Destroy" />
+    <On Terms="Behavior.DVaBoostersActive.Off; !ValidateUnit DVaMechMechSelfDestructing" Send="AnimBracketStop Boost" />
+    <On Terms="Behavior.DVaBoostersActive.Off" Send="Signal ApplyReady" />
+    <On Terms="Behavior.DVaMicroMissilesChannelling.On" Send="AnimPlay MicroMissiles Attack PlayForever" />
+    <On Terms="Behavior.DVaMicroMissilesChannelling.Off" Send="AnimClear MicroMissiles" />
+    <On Terms="Effect.DVaMechDefenseMatrixDamageReducedNotification.Start" Target="_DefenseMatrixArt" Send="Signal DefenseMatrixPulse" />
+    <On Terms="Behavior.DVaDefenseMatrixHoldTargetChanneling.On" Send="Create DVaMechDefenseMatrixCastVO" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create" Send="SetMinimapVisibility" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create; !ValidatePlayer DVaSelfDestructNuclearOptionHasTalent" Send="Create DVaPilotSelfDestructLaunchSound" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create; ValidatePlayer DVaSelfDestructNuclearOptionHasTalent" Send="Create DVaPilotSelfDestructNuclearOptionLaunchSound" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create" Send="Create DVaMechSelfDestructCastVOAllies" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create" Send="Create DVaMechSelfDestructCastVOEnemies" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create" Send="ModelMaterialApply DVaMechSelfDestructGlaze" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create; ValidateUnit DVaMechSelfDestructMechNotBoosting" Send="AnimPlay Heroic Spell,B PlayForever" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create; ValidateUnit DVaMechSelfDestructMechBoosting" Send="AnimPlay Heroic Spell,E PlayForever -1.000000 -1.000000 -1.000000 AsAutomatic 0.000000 13" />
+    <On Terms="Behavior.DVaMechSelfDestructMechDetonationCountdown.Create; ValidateUnit DVaMechSelfDestructMechBoosting" Send="AnimBracketStop Boost" />
+    <On Terms="Behavior.DVaBoostersActive.Off; ValidateUnit DVaMechMechSelfDestructing" Send="AnimPlay HeroicEnd Spell,E,End PlayForever,NonLooping -1.000000 -1.000000 -1.000000 AsAutomatic 0.000000 10" />
+    <On Terms="Behavior.DVaBoostersActive.Off; ValidateUnit DVaMechMechSelfDestructing" Send="AnimClear Heroic" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.On" Send="AnimBaselineStop" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.On" Send="AnimPlay Heroic Spell,D PlayForever" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.On" Send="ModelMaterialApply DVaMechBunnyHopUnstoppableGlaze" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.Create" Send="Create DVaBunnyHopCastVOEnemy" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.Create" Send="Create DVaBunnyHopCastVOFriendly" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.Off" Send="AnimBaselineStart" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.Off" Send="AnimClear Heroic" />
+    <On Terms="Behavior.DvaMechBunnyHopActive.Off" Target="DVaMechBunnyHopUnstoppableGlaze" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.DVaMechFatalDamageDisabledTimeout.Create" Send="SetOpacity" />
+    <On Terms="Behavior.DVaMechFatalDamageDisabledTimeout.Create" Send="Create DVaMechDeathModel" />
+    <On Terms="Behavior.DVaMechNoCargoStatusBarHidden.On" Send="StatusSet StatusBarHide 0" />
+    <On Terms="Behavior.DVaMechNoCargoStatusBarHidden.Off; ValidateUnit DVaMechDoesnothaveHologramInvulnerability" Send="StatusSet StatusBarHide 0" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.On" Send="StatusSet StatusBarHide 1" />
+    <On Terms="Behavior.DVaMechCallMechMechHologramInvulnerable.Off" Send="StatusSet StatusBarHide 0" />
+    <On Terms="UnitStepLeft.*.Start" Send="AnimPlay Step Turn,Left,Ready" />
+    <On Terms="UnitStepRight.*.Start" Send="AnimPlay Step Turn,Right,Ready" />
+    <On Terms="UnitStepLeft.*.Stop" Send="AnimClear Step" />
+    <On Terms="UnitStepRight.*.Stop" Send="AnimClear Step" />
+    <On Terms="UnitStepLeft.*.Cancel" Send="AnimClear Step" />
+    <On Terms="UnitStepRight.*.Cancel" Send="AnimClear Step" />
+    <On Terms="UnitTaunt.*.Start; Taunt Tease" Send="Create DVaMechTauntCast" />
+    <On Terms="UnitTaunt.*.Stop; Taunt Tease" Target="DVaMechTauntCast" Send="AnimBracketStop BSD" />
+    <On Terms="UnitTaunt.*.Cancel; Taunt Tease" Target="DVaMechTauntCast" Send="AnimBracketStop BSD" />
+    <On Terms="UnitTaunt.*.Start; Taunt Tease" Send="AnimBracketClear Boost Instant" />
+    <On Terms="UnitTaunt.*.Start; Taunt Tease" Send="Signal RemoveReadyInstant" />
+    <On Terms="UnitTaunt.*.Start; Taunt Tease" Send="AnimClear ChanneledAttack" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.On" Send="Create DVaMechHearthCastJet1" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.On" Send="Create DVaMechHearthCastJet2" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.On" Send="Create DVaMechHearthCastJet3" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.On" Send="Create DVaMechHearthCastJet4" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.Off" Target="DVaMechHearthCastJet1" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.Off" Target="DVaMechHearthCastJet2" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.Off" Target="DVaMechHearthCastJet3" Send="AnimBracketStop BSD" />
+    <On Terms="Behavior.HearthstoneChannelingBuff.Off" Target="DVaMechHearthCastJet4" Send="AnimBracketStop BSD" />
+    <On Terms="ActorCreation" Send="Create DVaMechShowCollisionEdges" />
+    <On Terms="ActorDestruction" Target="DVaMechShowCollisionEdges" Send="Destroy" />
+    <EventDataFootprint index="0" removed="1" />
+    <DeathArray index="Normal" SoundLink="" />
+    <ImpactSound value="DVaMech_Damage_Impact" />
+    <PortraitActor value="DVaMechPortrait" />
+    <PortraitModel value="DVaMechPortrait" />
+    <AbilSoundArray AbilCmd="DVaMechDefenseMatrixOn,Execute" Sound="StormNoSound" />
+    <AbilSoundArray AbilCmd="DVaMechBunnyHopHeroic,Execute" Sound="StormNoSound" />
+    <AbilSoundArray AbilCmd="DVaPilotBigShotNotHeroic,Execute" Sound="StormNoSound" />
+    <AbilSoundArray AbilCmd="DVaPilotCallMech,Execute" Sound="DVaBase_CallMech" />
+    <AbilSoundArray AbilCmd="DVaPilotCallMechMEKAfall,Execute" Sound="DVaBase_CallMech" />
+    <CustomUnitStatusFrame value="DVa/DVaUnitStatusFrameTemplate" />
+    <HeroIcon value="Assets\Textures\storm_ui_ingame_heroselect_btn_dva.dds" />
+    <HighlightTooltip value="Unit/Name/Bogus" />
+    <MinimapIcon value="Assets\Textures\storm_ui_minimapicon_dva_mech.dds" />
+    <SoundArray index="Yes" value="DVaBase_Yes" />
+    <SoundArray index="Attack" value="DVaBase_Attack" />
+    <SoundArray index="Pissed" value="DVaBase_Pissed" />
+    <UnitIcon value="Assets\Textures\storm_ui_icon_tychus_commandeerodin.dds" />
+    <VitalNames index="Energy" value="UI/HeroEnergyType/DVaMechDefenseMatrixCharge" />
+    <GroupIcon>
+      <Image value="Assets\Textures\storm_ui_ingame_partyframe_dva_mech.dds" />
+    </GroupIcon>
+    <WalkAnimMoveSpeed value="4.1093" />
+  </CActorUnit>
+  
+  <CActorCollisionEdges id="DVaMechShowCollisionEdges">
+    <Filter index="Ally" value="1" />
+    <Filter index="Neutral" value="1" />
+    <Filter index="Enemy" value="1" />
+    <Host Subject="::Creator" />
+    <Texture value="Assets\Textures\Storm_Collision_Edges.dds" />
+    <AnimDuration value="1" />
+    <Width value="0.400000" />
+    <Color value="60,150,150,255" />
+    <HDRMultiplier value="0.175000" />
+    <Radius value="18.000000" />
+    <BlendMode value="Add" />
+    <FadeBegin value="14.000000" />
+    <FadeEnd value="18.000000" />
+  </CActorCollisionEdges>
+
+  <CActorUnit id="HeroDVaPilot" parent="StormHeroStandard" unitName="HeroDVaPilot">
+    <EventDataFootprint index="0" removed="1" />
+    <On Terms="WeaponStart.*.AttackStart" Send="Signal AttackStartSignal" />
+    <On Terms="Signal.*.AttackStartSignal" Send="AnimPlay Attack Attack 0 0.100000 0.100000 -1.000000 AsDuration" />
+    <On Terms="StatusOn.*.Silenced" Send="AnimClear Spell" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Send="AnimPlay Spell Channel,Mount 0 -1.000000 -1.000000 0.500000 AsTimeScale" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Send="Create DVaPilotCallMechLaunchSound" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Send="Create DVaPilotCallMechLaunchActivateSound" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Send="ModelMaterialApply DVaPilotTeleportGlaze" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Send="Create DVaPilotTeleportCaster" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStart" Target="DVaPilotTeleportGlaze" Send="AnimBracketStart BSD Birth Stand Death" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Target="DVaPilotLoadedAfterImage" Send="Destroy Immediate" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Send="Create DVaPilotLoadedAfterImage" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Send="AnimClear Spell" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Target="DVaPilotTeleportCaster" Send="AnimBracketStop BSD" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Target="DVaPilotTeleportCaster" Send="RefClear ::Host" />
+    <On Terms="Abil.DVaPilotCallMech.SourceCastStop" Target="DVaPilotTeleportGlaze" Send="Destroy" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Send="AnimPlay Spell Channel,Mount 0 -1.000000 -1.000000 0.500000 AsTimeScale" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Send="Create DVaPilotCallMechMEKAfallLaunchSound" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Send="Create DVaPilotCallMechLaunchActivateSound" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Send="Create DVaPilotLoadedAfterImage" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Send="Create DVaPilotTeleportCaster" />
+    <On Terms="Abil.DVaPilotCallMechMEKAfall.SourceCastStart" Target="DVaPilotTeleportCaster" Send="RefClear ::Host" />
+    <On Terms="Behavior.DVaPilotInsideMech.On" Send="SetSoundSuffix" />
+    <On Terms="Behavior.DVaPilotInsideMech.Off" Send="SetSoundSuffix _P" />
+    <On Terms="Behavior.DVaPilotInsideMech.On" Target="DVaPilotLoadedAfterImage" Send="Signal ShowAfterImage" />
+    <On Terms="Behavior.DVaPilotEscapingSpeedController.On" Send="AnimPlay Spell Spell,A 0 -1.000000 -1.000000 1.000000 AsTimeScale" />
+    <On Terms="Behavior.DVaPilotEscapingAbilityLockout.Off" Send="TimerSet 0.062500 PilotLanding" />
+    <On Terms="TimerExpired; TimerName PilotLanding; ValidateUnit CasterHasNoOrders" Send="AnimPlay Spell Spell,A,End 0 -1.000000 -1.000000 1.000000 AsTimeScale" />
+    <On Terms="Abil.*.SourceCastStart" Send="AnimBracketClear Roll" />
+    <On Terms="Abil.DVaPilotTorpedoDash.SourceCastStart" Send="AnimBaselineStop" />
+    <On Terms="Abil.DVaPilotTorpedoDash.SourceCastStart" Send="AnimBracketStart Roll {} Spell,B Spell,B,End ContentPlayOnce,Instant" />
+    <On Terms="Abil.DVaPilotTorpedoDash.SourceCastStart" Send="Signal ApplyReady" />
+    <On Terms="UnitMovementUpdate.*.Walk; AnimPlaying Roll Spell,B,End" Send="AnimBracketClear Roll" />
+    <On Terms="Behavior.DVaPilotTorpedoDashActive.Off" Send="AnimBaselineStart" />
+    <On Terms="Behavior.DVaPilotTorpedoDashActive.Off; !ValidateUnit CasterNotDazedOrDeadOrFearedOrPolymorphedOrRootedOrStasisOrStunnedExceptTimeStop" Send="AnimClear Roll" />
+    <On Terms="Behavior.DVaPilotTorpedoDashActive.Off; ValidateUnit CasterIsMoving" Send="AnimClear Roll" />
+    <On Terms="Abil.DVaPilotConcussivePulse.SourceCastStart" Send="AnimPlay Spell Spell,E 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <On Terms="Abil.DVaPilotBigShotNotHeroic.SourceCastStart; !ValidatePlayer DVaBigShotPewPewPewHasTalent" Send="AnimPlay Spell Spell,C 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <On Terms="Abil.DVaPilotBigShotNotHeroic.SourceCastStart; ValidatePlayer DVaBigShotPewPewPewHasTalent" Send="AnimPlay Spell Spell,D 0 -1.000000 -1.000000 -1.000000 AsDuration" />
+    <On Terms="Abil.DVaPilotBigShotNotHeroic.SourceCastStart" Send="Create DVaBigShotCastVOFriendly" />
+    <On Terms="ActorCreation" Send="AnimPlay DefaultFace DefaultFace PlayForever" />
+    <HighlightTooltip value="Unit/Name/Bogus" />
+    <HeroIcon value="Assets\Textures\storm_ui_icon_tracer_reload.dds" />
+    <MinimapIcon value="Assets\Textures\storm_ui_minimapicon_dva.dds" />
+    <UnitIcon value="Assets\Textures\storm_ui_icon_tracer_reload.dds" />
+    <CustomUnitStatusFrame value="UnitStatus/HeroUnitStatusFramePinkEnergy" />
+    <PortraitActor value="DVaPortrait" />
+    <PortraitModel value="DVaPortrait" />
+    <SoundArray index="Yes" value="DVaBase_Yes_P" />
+    <SoundArray index="Attack" value="DVaBase_Attack_P" />
+    <SoundArray index="Pissed" value="DVaBase_Pissed_P" />
+    <DeathArray index="Normal" SoundLink="DVaBase_Death_P" />
+    <AbilSoundArray AbilCmd="DVaPilotBigShotNotHeroic,Execute" Sound="DVaBase_VOX_Bigshot_P" />
+    <AbilSoundArray AbilCmd="DVaPilotCallMech,Execute" Sound="DVaBase_CallMech" />
+    <AbilSoundArray AbilCmd="DVaPilotCallMechMEKAfall,Execute" Sound="DVaBase_CallMech" />
+    <AbilSoundArray AbilCmd="DVaPilotConcussivePulse,Execute" Sound="DVaBase_VOX_Concussive_P" />
+    <AbilSoundArray AbilCmd="DVaPilotTorpedoDash,Execute" Sound="DVaBase_VOX_Jetpack_P" />
+    <AbilSoundArray AbilCmd="DVaMechTraitEmergencyShieldingCooldownAbility,Execute" Sound="DVaBase_Laugh" />
+    <VitalNames index="Energy" value="UI/HeroEnergyType/DVaPilotCharge" />
+    <GroupIcon>
+      <Image value="Assets\Textures\storm_ui_ingame_partyframe_dva.dds" />
+    </GroupIcon>
+  </CActorUnit>
+
+  <CButton id="DVaMechSelfDestructHeroic" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+  
+  <CTalent id="DVaSelfDestructHeroic">
+    <Face value="DVaMechSelfDestructHeroic" />
+    <Abil value="DVaMechSelfDestructHeroic" />
+    <RankArray>
+      <BehaviorArray value="Ultimate2Unlocked" />
+    </RankArray>
+    <Active value="1" />
+  </CTalent>
+
+  <CHero id="DVa">
+    <HeroSpecificUIArray index="1" removed="1"/>
+    <TalentTreeArray index="0" Talent="GenericTalentProtectiveShield" Tier="1" Column="1" />
+    <TalentTreeArray index="1" Talent="DVaHealingMatrix" Tier="1" Column="2" />
+    <TalentTreeArray index="2" Talent="DVaHealingMissiles" Tier="1" Column="3" />
+    <TalentTreeArray index="3" Talent="DVaHealingShells" Tier="1" Column="4" />
+    <TalentTreeArray index="4" Talent="DVaPilotBigShotBasic" Tier="2" Column="1" />
+    <TalentTreeArray index="5" Talent="DVaPilotCallMechMEKAfall" Tier="2" Column="2" />
+    <TalentTreeArray index="6" Talent="GenericTalentProtectiveShield" Tier="2" Column="3" />
+    <TalentTreeArray index="7" Talent="GenericTalentProtectiveShield" Tier="2" Column="4" />
+    <TalentTreeArray index="8" Talent="GenericTalentProtectiveShield" Tier="3" Column="1" />
+    <TalentTreeArray index="9" Talent="GenericTalentProtectiveShield" Tier="3" Column="2" />
+    <TalentTreeArray index="10" Talent="GenericTalentProtectiveShield" Tier="3" Column="3" />
+    <TalentTreeArray index="11" Talent="GenericTalentProtectiveShield" Tier="3" Column="4" />
+    <TalentTreeArray index="12" Talent="DVaBunnyHop" Tier="4" Column="1" />
+    <TalentTreeArray index="13" Talent="DVaSelfDestructHeroic" Tier="4" Column="2" />
+    <TalentTreeArray index="14" Talent="GenericTalentProtectiveShield" Tier="5" Column="1" />
+    <TalentTreeArray index="15" Talent="GenericTalentProtectiveShield" Tier="5" Column="2" />
+    <TalentTreeArray index="16" Talent="GenericTalentProtectiveShield" Tier="5" Column="3" />
+    <TalentTreeArray index="17" Talent="GenericTalentProtectiveShield" Tier="5" Column="4" />
+    <TalentTreeArray index="18" Talent="GenericTalentProtectiveShield" Tier="6" Column="1" />
+    <TalentTreeArray index="19" Talent="GenericTalentProtectiveShield" Tier="6" Column="2" />
+    <TalentTreeArray index="20" Talent="GenericTalentProtectiveShield" Tier="6" Column="3" />
+    <TalentTreeArray index="21" Talent="GenericTalentProtectiveShield" Tier="6" Column="4" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+	</TalentTreeArray>
+    <TalentTreeArray index="22" Talent="DVaMechBunnyHopStormUpgrade" Tier="7" Column="1" >
+      <PrerequisiteTalentArray index="0" removed="1"/>
+      <PrerequisiteTalentArray value="DVaBunnyHop" />
+	</TalentTreeArray>
+    <TalentTreeArray index="23" Talent="DVaMechSelfDestructStormUpgrade" Tier="7" Column="2" >
+      <PrerequisiteTalentArray value="DVaSelfDestructHeroic" />
+	</TalentTreeArray>
+    <TalentTreeArray index="24" Talent="GenericTalentProtectiveShield" Tier="7" Column="3" />
+    <TalentTreeArray index="25" Talent="GenericTalentProtectiveShield" Tier="7" Column="4" />
+    <LevelScalingArray index="2" >
+      <Modifications>
+        <Catalog value="Abil" />
+        <Entry value="DVaPilotCallMech" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Catalog value="Abil" />
+        <Entry value="DVaPilotCallMechMEKAfall" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotCallMechSetCooldown" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Catalog value="Effect" />
+        <Entry value="DVaMicroMissilesDamage" />
+        <Field value="Amount" />
+        <Value value="0.040000" />
+        <AffectedByAbilityPower value="1" />
+        <AffectedByOverdrive value="1" />
+      </Modifications>
+    </LevelScalingArray>
+    <!-- <LevelScalingArray index="1"> -->
+      <!-- <Modifications> -->
+        <!-- <Catalog value="Effect" /> -->
+        <!-- <Entry value="DVaMechWeaponBounceDamage" /> -->
+        <!-- <Field value="Amount" /> -->
+        <!-- <Value value="0.040000" /> -->
+        <!-- <AffectedByOverdrive value="1" /> -->
+      <!-- </Modifications> -->
+    <!-- </LevelScalingArray> -->
+  </CHero>
+
+  <CUnit id="HeroDVaPilot" parent="StormHeroMounted">
+    <LifeStart value="1109" />
+    <LifeMax value="1109" />
+    <LifeRegenRate value="2.5664" />
+    <AbilArray Link="DVaPilotCallMech" />
+    <AbilArray Link="DVaPilotRemoteBoostersOff" />
+    <AbilArray Link="DVaBoostersOn" />
+    <AbilArray Link="DVaMechDefenseMatrixOn" />
+    <AbilArray Link="DVaMechSelfDestructHeroic" />
+    <AbilArray Link="DVaMechBunnyHopHeroic" />
+    <AbilArray Link="DVaPilotTorpedoDash" />
+    <AbilArray Link="DVaPilotCallMechMEKAfall" />
+    <AbilArray Link="DVaPilotConcussivePulse" />
+    <AbilArray Link="DVaPilotBigShotNotHeroic" />
+    <WeaponArray Link="DVaPilotWeapon" />
+    <CardLayouts index="0">
+      <LayoutButtons Face="DVaBunnyHopOn" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,On" Slot="Heroic" />
+      <LayoutButtons Face="DVaMechSelfDestructHeroic" Type="AbilCmd" AbilCmd="DVaMechSelfDestructHeroic,Execute" Slot="Heroic" />
+      <LayoutButtons Face="LootConsumableThrow" Type="AbilCmd" AbilCmd="LootConsumableThrow,255" Slot="Hidden2" />
+      <LayoutButtons Face="DVaPilotCallMech" Type="AbilCmd" AbilCmd="DVaPilotCallMechMEKAfall,Execute" Slot="Trait" />
+      <LayoutButtons Face="DVaPilotCallMech" Type="AbilCmd" AbilCmd="DVaPilotCallMech,Execute" Slot="Trait" />
+      <LayoutButtons Face="DVaMechCancelBoosters" Type="AbilCmd" AbilCmd="DVaPilotRemoteBoostersOff,Execute" Slot="Ability1" />
+      <LayoutButtons Face="DVaPilotTorpedoDashAbility" Type="AbilCmd" AbilCmd="DVaPilotTorpedoDash,Execute" Slot="Ability3" />
+      <LayoutButtons Face="DVaMechBoosters" Type="AbilCmd" AbilCmd="DVaBoostersOn,Execute" Slot="Ability1" />
+      <LayoutButtons Face="DVaPilotConcussivePulseAbility" Type="AbilCmd" AbilCmd="DVaPilotConcussivePulse,Execute" Slot="Ability2" />
+      <LayoutButtons Face="DVaMechDefenseMatrix" Type="AbilCmd" AbilCmd="DVaMechDefenseMatrixOn,Execute" Slot="Ability2" />
+      <LayoutButtons Face="DVaPilotBigShotBasic" Type="AbilCmd" AbilCmd="DVaPilotBigShotNotHeroic,Execute" Slot="Ability1" />
+      <LayoutButtons Face="DVaLockedAbilityQ" Type="Passive" Slot="Ability1" />
+      <LayoutButtons Face="DVaLockedAbilityW" Type="Passive" Slot="Ability2" />
+      <LayoutButtons Face="DVaLockedAbilityE" Type="Passive" Slot="Ability3" />
+      <LayoutButtons Face="DVaPilotPilotMode" Type="Passive" Slot="Trait" />
+      <LayoutButtons Face="DVaMechMechMode" Type="Passive" Slot="Trait" />
+    </CardLayouts>
+    <Radius value="0.625" />
+    <InnerRadius value="0.625" />
+    <BehaviorArray Link="DVaPilotMechAbilityDisablerCarry" />
+    <BehaviorArray Link="DVaPilotSpawningAbilityDisabler" />
+    <BehaviorArray Link="NotManaUserDummy" />
+    <BehaviorArray Link="HalfValueHero" />
+    <InitializerFunction value="libHDVA_gf_HeroDVaIncrementHeroCountFunction" />
+    <DestructionFunction value="libHDVA_gf_HeroDVaDecrementHeroCountFunction" />
+    <HeroPlaystyleFlags index="RoleAutoAttacker" value="1" />
+    <EnergyStart value="0" />
+    <EnergyMax value="100" />
+    <EnergyRegenRate value="2.1992" />
+    <AIThinkTree value="AI\DVaPilot.aitree" />
+  </CUnit>
+
+  <CUnit id="HeroDVaMech" parent="StormHeroMountedCustom">
+    <DeathTime value="1" />
+    <DefaultAcquireLevel value="Passive" />
+    <LifeStart value="2330" />
+    <LifeMax value="2330" />
+    <LifeRegenRate value="4.854" />
+    <EnergyStart value="100" />
+    <EnergyMax value="100" />
+    <EnergyRegenRate value="10" />
+    <StationaryTurningRate value="599.9414" />
+    <TurningRate value="599.9414" />
+    <AbilArray index="1" Link="DVaAttack" />
+    <AbilArray Link="DVaMechTransport" />
+    <AbilArray Link="DVaBoostersOn" />
+    <AbilArray Link="DVaBoostersOff" />
+    <AbilArray Link="DVaMechDefenseMatrixHoldTarget" />
+    <AbilArray Link="DVaMicroMissilesOn" />
+    <AbilArray Link="DVaMicroMissilesOff" />
+    <!-- <AbilArray Link="DVaMechDefenseMatrixOn" /> -->
+    <!-- <AbilArray Link="DVaMechDefenseMatrixOff" /> -->
+    <AbilArray Link="DVaMechSelfDestructHeroic" />
+    <!-- <AbilArray Link="DVaMechSelfDestruct" /> -->
+    <AbilArray Link="DVaMechBunnyHopHeroic" />
+    <!-- <AbilArray Link="DVaPilotBigShot" /> -->
+    <AbilArray Link="DVaMechTraitAbilityDoesNothing" />
+    <AbilArray Link="DVaMechTraitEmergencyShieldingCooldownAbility" />
+    <AbilArray Link="DVaAutoMoveApproach" />
+    <BehaviorArray Link="DVaPilotAbilityDisablerCarry" />
+    <BehaviorArray Link="DVaMechFatalDamageResponse" />
+    <BehaviorArray Link="DVaMechNoCargoStatusBarHidden" />
+    <BehaviorArray Link="HalfValueHero" />
+    <BehaviorArray Link="NotManaUserDummy" />
+    <BehaviorArray Link="DVaMechWeaponChargeEnabler" />
+    <BehaviorArray Link="HeroGenericIsFat" />
+    <BehaviorArray Link="HeroGenericMapMechanicPickupDisallowed" />
+    <BehaviorArray Link="DVaMechPermanentSlow" />
+    <BehaviorArray Link="DVaMechPilotUnitTracker" />
+    <BehaviorArray Link="DVaCancelDefenseMatrixItem" />
+    <WeaponArray Link="DVaMechWeapon" Turret="DVaMechWeaponTurret" />
+    <CardLayouts index="0">
+      <LayoutButtons index="2" Face="Attack" Type="AbilCmd" AbilCmd="DVaAttack,Execute" Slot="Attack" />
+      <LayoutButtons Face="DVaMechSelfDestructHeroic" Type="AbilCmd" AbilCmd="DVaMechSelfDestructHeroic,Execute" Slot="Heroic" />
+      <!-- <LayoutButtons Face="DVaPilotBigShot" Type="AbilCmd" AbilCmd="DVaPilotBigShot,Execute" Slot="Heroic" /> -->
+      <LayoutButtons Face="DVaBunnyHopOff" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,Off" Slot="Heroic" />
+      <LayoutButtons Face="DVaBunnyHopOn" Type="AbilCmd" AbilCmd="DVaMechBunnyHopHeroic,On" Slot="Heroic" />
+      <LayoutButtons Face="DVaAutoMove" Type="AbilCmd" AbilCmd="DVaAutoMoveApproach,Execute" Slot="Cancel" />
+      <LayoutButtons Face="LootConsumableThrow" Type="AbilCmd" AbilCmd="LootConsumableThrow,255" Slot="Hidden2" />
+      <LayoutButtons Face="DVaMechCancelBoosters" Type="AbilCmd" AbilCmd="DVaBoostersOff,Execute" Slot="Ability1" />
+      <LayoutButtons Face="DVaMechBoosters" Type="AbilCmd" AbilCmd="DVaBoostersOn,Execute" Slot="Ability1" />
+      <LayoutButtons Face="DVaMechDefenseMatrixHoldTarget" Type="AbilCmd" AbilCmd="DVaMechDefenseMatrixHoldTarget,Execute" Slot="Ability2" />
+      <!-- <LayoutButtons Face="DVaMechCancelDefenseMatrix" Type="AbilCmd" AbilCmd="DVaMechDefenseMatrixOff,Execute" Slot="Ability2" /> -->
+      <LayoutButtons Face="DVaCancelMicroMissiles" Type="AbilCmd" AbilCmd="DVaMicroMissilesOff,Execute" Slot="Ability3" />
+      <LayoutButtons Face="DVaMicroMissilesOn" Type="AbilCmd" AbilCmd="DVaMicroMissilesOn,Execute" Slot="Ability3" />
+      <!-- <LayoutButtons Face="DVaMechSelfDestruct" Type="AbilCmd" AbilCmd="DVaMechSelfDestruct,Execute" Slot="Ability3" /> -->
+      <LayoutButtons Face="DVaMechLoadPilot" Type="AbilCmd" AbilCmd="DVaMechTransport,Load" Slot="Hidden1" />
+      <LayoutButtons Face="DVaMechUnloadPilot" Type="AbilCmd" AbilCmd="DVaMechTransport,UnloadAll" Slot="Hidden1" />
+      <LayoutButtons Face="DVaMechMechMode" Type="Passive" AbilCmd="DVaMechTraitAbilityDoesNothing,Execute" Slot="Trait" />
+      <LayoutButtons Face="DVaMechanizedWalker" Type="Passive" Slot="Mount" />
+    </CardLayouts>
+    <Radius value="1.1875" />
+    <InnerRadius value="0.9375" />
+    <StationaryStepAngle value="74.9926" />
+    <StationaryStepTime value="0.25" />
+    <HeroPlaystyleFlags index="BodyBlocker" value="1" />
+    <HeroPlaystyleFlags index="Escaper" value="1" />
+    <HeroPlaystyleFlags index="Overconfident" value="1" />
+    <HeroPlaystyleFlags index="RoleTank" value="1" />
+    <AIThinkTree value="AI\DVaMech.aitree" />
+    <UICheckPassengers value="0" />
+  </CUnit>
+  
+  <CButton id="DVaMechDefenseMatrixHoldTarget" parent="StormButtonParent">
+    <!-- <TooltipAppender Validator="DVaDefenseMatrixFusionGeneratorHasTalent" Face="DVaDefenseMatrixFusionGenerator" /> -->
+    <!-- <TooltipCooldownOverrideText value="Button/OverrideText/DVaMechDefenseMatrix" /> -->
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+    <TooltipFlags index="ShowUsage" value="0" />
+    <TooltipFlags index="ShowCooldown" value="0" />
+  </CButton>
+
+
+  <CAbilEffectTarget id="DVaMechDefenseMatrixHoldTarget">
+    <PrepEffect value="DismountDecloakCasterSet" />
+    <SharedFlags index="QuickCastOnReleaseOnly" value="1" />
+    <Effect value="DVaDefenseMatrixButtonReleaseSet" />
+    <Flags index="RequireTargetVision" value="0" />
+    <!-- <CursorEffect value="ZenyattaOrbOfDestructionSearch" /> -->
+    <Range value="500" />
+    <Arc value="360" />
+    <Cost>
+      <Vital index="Energy" value="0.01" />
+      <Cooldown TimeUse="1" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechDefenseMatrixHoldTarget">
+      <Flags index="AllowSelfCast" value="0" />
+      <Flags index="AllowSmartCommandsWhileTargeting" value="1" />
+    </CmdButtonArray>
+    <TargetingEnterEffect value="DVaDefenseMatrixHoldTargetInitialSet" />
+    <TargetingExitEffect value="DVaDefenseMatrixHoldTargetExitSet" />
+    <UnitOwnerCleanupEffect value="DVaDefenseMatrixHoldTargetExitSet" />
+  </CAbilEffectTarget>
+  
+
+  <CEffectSet id="DVaDefenseMatrixButtonReleaseSet">
+    <ValidatorArray value="CasterHasEnergy" />
+    <TargetLocationType value="Point" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetApplyReleasedBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyReleasedBehavior">
+    <ValidatorArray value="CasterHasEnergy" />
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefenseMatrixHoldTargetReleasedBehavior" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaDefenseMatrixHoldTargetReleasedBehavior">
+    <RemoveValidatorArray value="CasterHasEnergy" />
+    <RemoveValidatorArray value="CasterNotDeadOrCataegoryStunnedOrSilencedOrStasisOrDazedExceptTimeStop" />
+    <!-- <RemoveValidatorArray value="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior" /> -->
+    <Modification>
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="CaptureMacGuffin" />
+      <AbilLinkDisableArray value="CaptureMacGuffinTwo" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+    </Modification>
+    <InitialEffect value="DVaDefenseMatrixHoldTargetReleaseInitialBehaviorSet" />
+    <RefreshEffect value="DVaDefenseMatrixHoldTargetReleaseInitialBehaviorSet" />
+    <FinalEffect value="DVaDefenseMatrixHoldTargetReleaseFinalBehaviorSet" />
+    <CancelEffect value="DVaDefenseMatrixHoldTargetReleaseFinalBehaviorSet" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetReleaseInitialBehaviorSet">
+    <EffectArray value="DVaDefenseMatrixHoldTargetFinalSetTurret" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetLockTurretTarget" />
+  </CEffectSet>
+  
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetFinalSetTurret">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Effect="DVaDefenseMatrixButtonReleaseSet" Turret="DVaMechWeaponTurret">
+      <Target Effect="DVaDefenseMatrixButtonReleaseSet" Value="TargetPoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="ClearTargetOnAimComplete" value="1" />
+      <Flags index="IgnoreTurnRate" value="1" />
+    </ModifyTurret>
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetLockTurretTarget">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="DisableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetReleaseFinalBehaviorSet">
+    <!-- <ValidatorArray value="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior"/> -->
+    <EffectArray value="DVaDefenseMatrixHoldTargetEnableTurretRotation" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetClearTurretTarget" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetEnableTurretRotation">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="EnableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetClearTurretTarget">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="ClearTarget" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+
+  <CEffectSet id="DVaDefenseMatrixHoldTargetInitialSet">
+    <TargetLocationType value="Point" />
+    <EffectArray value="DismountDecloakCasterSet" />
+    <EffectArray value="DisableDanceAndTauntApplyBehavior" />
+    <EffectArray value="LockFacingRemoveBehaviors" />
+    <EffectArray value="DVaBoostersRemoveBoosterBehavior" />
+    <EffectArray value="DvaMechBunnyHopRemoveBehavior" />
+    <EffectArray value="DVaMicroMissilesRemoveBehavior" />
+    <!-- <EffectArray value="DVaDefenseMatrixHoldTargetEnableTurretRotation" /> -->
+    <!-- <EffectArray value="DVaDefenseMatrixHoldTargetClearTurretTarget" /> -->
+    <EffectArray value="DVaMechDefenseMatrixHoldTargetInitialSetTurret" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetApplyTargetingBehavior" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetApplyDelayBehavior" />
+  </CEffectSet>
+  
+
+  <CEffectRemoveBehavior id="DVaMicroMissilesRemoveBehavior">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaMicroMissilesChannelling" />
+  </CEffectRemoveBehavior>
+  
+
+  <CEffectSet id="DVaDefenseMatrixClearTurretTarget">
+    <EffectArray value="DVaTurretEnableTurretRotation" />
+    <EffectArray value="DVaTurretClearTurretTarget" />
+  </CEffectSet>
+  
+  <CEffectModifyUnit id="DVaTurretEnableTurretRotation">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="EnableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaTurretClearTurretTarget">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="ClearTarget" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+
+  <CEffectModifyUnit id="DVaMechDefenseMatrixHoldTargetInitialSetTurret">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Effect="DVaDefenseMatrixHoldTargetInitialSet" Turret="DVaMechWeaponTurret">
+      <Target Effect="DVaDefenseMatrixHoldTargetInitialSet" Value="TargetPoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="ClearTargetOnAimComplete" value="1" />
+      <Flags index="IgnoreTurnRate" value="0" />
+    </ModifyTurret>
+  </CEffectModifyUnit>
+
+
+  <CValidatorUnitHasBehavior id="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior">
+    <Behavior value="DVaDefenseMatrixHoldTargetTargeting" />
+    <Negate value="1" />
+  </CValidatorUnitHasBehavior>
+
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyTargetingBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefenseMatrixHoldTargetTargeting" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaDefenseMatrixHoldTargetTargeting">
+    <RemoveValidatorArray value="CasterHasEnergy" />
+    <RemoveValidatorArray value="CasterNotDeadOrCataegoryStunnedOrSilencedOrStasisOrDazedExceptTimeStop" />
+    <Modification>
+      <!-- <ModifyFlags index="DisableWeapons" value="1" /> -->
+      <ModifyFlags index="SuppressTurning" value="1" />
+      <!-- <TurnRateMultiplier value="10" /> -->
+      <WeaponDisableArray value="DVaMechWeapon" />
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="Mount" />
+      <AbilLinkDisableArray value="CaptureMacGuffin" />
+      <AbilLinkDisableArray value="CaptureMacGuffinTwo" />
+      <AbilLinkDisableArray value="UseVehicle" />
+      <AbilLinkDisableArray value="MapMechanicAbilityInstant" />
+      <AbilLinkDisableArray value="MapMechanicAbilityTarget" />
+    </Modification>
+    <InitialEffect value="ApplyMousePointUpdater" />
+	<EnableEffect value="DVaDefenseMatrixClearTurretTarget"/>
+    <Period value="0.0625" />
+    <PeriodicEffect value="DVaDefenseMatrixHoldTargetUpdateTurretPeriodicSet" />
+    <FinalEffect value="RemoveMousePointUpdater" />
+  </CBehaviorBuff>
+  
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetUpdateTurretPeriodicSet">
+    <ValidatorArray value="CasterHasEnergy"/>
+    <EffectArray value="DVaDefenseMatrixHoldTargetUpdateTurret" />
+    <EffectArray value="DVaDefenseMatrixModifyFacingMousePoint" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaDefenseMatrixModifyFacingMousePoint">
+    <ValidatorArray value="DVaDefenseMatrixHoldTargetMousePointNotWithin240"/>
+    <ImpactUnit Value="Caster" />
+    <FacingLocation Value="MousePoint" />
+    <FacingType value="LookAt" />
+    <ModifyFlags index="InterpolateFacing" value="1" />
+  </CEffectModifyUnit>
+  <CValidatorCombine id="DVaDefenseMatrixHoldTargetMousePointNotWithin240">
+    <CombineArray value="DVaDefenseMatrixHoldTargetMousePointWithin240" />
+    <Negate value="1" />
+  </CValidatorCombine>
+  <CValidatorLocationArc id="DVaDefenseMatrixHoldTargetMousePointWithin240">
+    <WhichLocation Value="CasterUnit" />
+    <Arc value="239.9963" />
+    <Value Value="MousePoint" />
+  </CValidatorLocationArc>
+  
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetUpdateTurret">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Turret="DVaMechWeaponTurret">
+      <Target Value="MousePoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="ClearTargetOnAimComplete" value="1" />
+      <Flags index="IgnoreTurnRate" value="0" />
+    </ModifyTurret>
+    <!-- <FacingLocation Value="MousePoint" /> -->
+    <!-- <FacingType value="LookAt" /> -->
+    <!-- <ModifyFlags index="InterpolateFacing" value="1" /> -->
+  </CEffectModifyUnit>
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetExitSet">
+    <EffectArray value="DVaDefenseMatrixHoldTargetRemoveTargetingBehavior" />
+    <EffectArray value="RemoveMousePointUpdater" />
+    <EffectArray value="DisableDanceAndTauntRemoveBehavior" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaDefenseMatrixHoldTargetRemoveTargetingBehavior">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaDefenseMatrixHoldTargetTargeting" />
+  </CEffectRemoveBehavior>
+  
+
+  <CValidatorUnitHasBehavior id="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefenseMatrixHoldTargetChanneling" />
+    <IncludeDisabled value="1" />
+    <!-- <Negate value="1" /> -->
+  </CValidatorUnitHasBehavior>
+
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyDelayBehavior">
+    <!-- <ValidatorArray value="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior"/> -->
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefneseMatrixHoldTargetInitialDelay" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaDefneseMatrixHoldTargetInitialDelay">
+    <RemoveValidatorArray value="CasterHasEnergy" />
+    <RemoveValidatorArray value="CasterNotDeadOrCataegoryStunnedOrSilencedOrStasisOrDazedExceptTimeStop" />
+    <Duration value="0.125" />
+    <Modification>
+      <TurnRateMultiplier value="10" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+    </Modification>
+	<ExpireEffect value="DVaDefenseMatrixHoldTargetApplyChannelingBehavior"/>
+  </CBehaviorBuff>
+
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyChannelingBehavior">
+    <ValidatorArray value="CasterHasEnergy" />
+    <ValidatorArray value="CasterNotDeadOrCataegoryStunnedOrSilencedOrStasisOrDazedExceptTimeStop" />
+    <!-- <ValidatorArray value="DVaCasterDoesNotHaveDefenseMatrixTargetingBehavior" /> -->
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefenseMatrixHoldTargetChanneling" />
+  </CEffectApplyBehavior>
+  
+
+  <CEffectModifyUnit id="DVaDefenseMatrixHoldTargetChannelSetCooldown">
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaMechDefenseMatrixHoldTarget,Execute" CooldownOperation="Add">
+      <Fraction Cooldown="1" />
+    </Cost>
+  </CEffectModifyUnit>
+
+  <CBehaviorBuff id="DVaDefenseMatrixHoldTargetChanneling">
+    <RemoveValidatorArray value="CasterHasEnergy" />
+    <RemoveValidatorArray value="CasterNotDeadOrCataegoryStunnedOrSilencedOrStasisOrDazedExceptTimeStop" />
+    <InitialEffect value="DVaHealingMatrixApplyHealingController" />
+    <FinalEffect value="DVaDefenseMatrixHoldTargetChannelingFinalSet" />
+    <Modification>
+      <BehaviorLinkDisableArray value="DVaMechArtWeaponCasterSoundDummyLoop" />
+      <VitalRegenArray index="Energy" value="-40" />
+      <TurnRateMultiplier value="10" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="Mount" />
+      <AbilLinkDisableArray value="CaptureMacGuffin" />
+      <AbilLinkDisableArray value="CaptureMacGuffinTwo" />
+      <AbilLinkDisableArray value="UseVehicle" />
+      <AbilLinkDisableArray value="MapMechanicAbilityInstant" />
+      <AbilLinkDisableArray value="MapMechanicAbilityTarget" />
+      <!-- <SightMaximum value="0.1" /> -->
+    </Modification>
+    <Period value="0.0625" />
+    <PeriodicEffect value="DVaDefenseMatrixHoldTargetSearch" />
+  </CBehaviorBuff>
+
+  <CEffectSet id="DVaDefenseMatrixHoldTargetChannelingFinalSet">
+    <EffectArray value="DVaDefenseMatrixHoldTargetEnableTurretRotation" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetClearTurretTarget" />
+    <EffectArray value="DVaHealingMatrixSetBehaviorDurationToZeroPointFive" />
+  </CEffectSet>
+  
+  
+  <CEffectEnumArea id="DVaDefenseMatrixHoldTargetSearch">
+    <ImpactLocation Value="SourceUnit" />
+	<!-- <LaunchOffset Y="-20"/> -->
+    <LaunchFacingTurret value="DVaMechWeaponTurret" />
+    <SearchFilters value="Heroic;Player,Ally,Neutral,ImmuneToAOE,Missile,Item,Dead,Hidden,Invulnerable" />
+    <AreaArray Effect="DVaDefenseMatrixHoldTargetImpactSet">
+      <VertexArray X="1" Y="-3.5" />
+      <VertexArray X="3" Y="-9" />
+      <VertexArray X="-3" Y="-9" />
+      <VertexArray X="-1" Y="-3.5" />
+      <IndexArray X="3" Y="2" />
+      <IndexArray X="2" Y="1" />
+    </AreaArray>
+    <RevealerParams Duration="0.3125">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+  </CEffectEnumArea>
+  
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetBackRight">
+    <LocalOffset X="-1.250000" Y="-4.000000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetBackLeft">
+    <LocalOffset X="1.250000" Y="-4.000000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetFrontLeft">
+    <LocalOffset X="3.000000" Y="-9.450000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetFrontRight">
+    <LocalOffset X="-3.000000" Y="-9.450000" />
+  </CActorSiteOpLocalOffset>
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetImpactSet">
+    <EffectArray value="DVaDefenseMatrixHoldTargetApplyDebuffHeroes" />
+    <EffectArray value="DVaDefenseMatrixHoldTargetApplyDebuffNonHeroes" />
+    <EffectArray value="DVaMechDefenseMatrixImpactRevealer" />
+    <EffectArray value="AbilityImpactRevealDummyDamage" />
+  </CEffectSet>
+  
+  <CActorModel id="DVaMechDefenseMatrixHoldTargetOverhead" parent="StormModelAnimationStyleContinuousUnit">
+    <Model value="DVaMechDefenseMatrixOverhead"/>
+    <Remove Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death" />
+    <On Terms="Behavior.DVaDefenseMatrixHoldTargetDebuff.Off" Send="AnimBracketStop BSD" />
+    <On Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death OpeningPlayForever" />
+    <On Terms="ActorCreation" Send="Create StormNoSound" />
+    <HostSiteOps Ops="SOpAttachOverhead" />
+  </CActorModel>
+  
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyDebuffHeroes">
+    <Behavior value="DVaDefenseMatrixHoldTargetDebuffHeroes" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaDefenseMatrixHoldTargetDebuffHeroes" parent="StormDamageReduction">
+    <BuffFlags index="RefreshStack" value="1" />
+    <Duration value="0.3125" />
+    <DamageResponse>
+      <ModifyScoreArray Value="Healing" />
+      <ModifyScoreArray Value="GenericHeroRealScoreValue1" />
+	  <TargetFilters value="Heroic;-"/>
+      <Chance value="1" />
+      <Handled value="DVaMechDefenseMatrixDamageReducedNotification" />
+      <ValidateEffectAliasesOp value="ExcludeHasAny" />
+      <Location value="Attacker" />
+      <ModifyFraction value="0.5" />
+      <ValidateEffectAliases value="PercentDamage" />
+    </DamageResponse>
+    <BehaviorCategories index="DebuffAbilityPower" value="1" />
+    <BehaviorCategories index="DebuffAutoattackDPS" value="1" />
+  </CBehaviorBuff>
+  
+  <CEffectApplyBehavior id="DVaDefenseMatrixHoldTargetApplyDebuffNonHeroes">
+    <Behavior value="DVaDefenseMatrixHoldTargetDebuffNonHeroes" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaDefenseMatrixHoldTargetDebuffNonHeroes" parent="StormDamageReduction">
+    <BuffFlags index="RefreshStack" value="1" />
+    <Duration value="0.3125" />
+    <DamageResponse>
+      <ModifyScoreArray Value="GenericHeroRealScoreValue1" />
+	  <TargetFilters value="-;Heroic"/>
+      <Chance value="1" />
+      <Handled value="DVaMechDefenseMatrixDamageReducedNotification" />
+      <ValidateEffectAliasesOp value="ExcludeHasAny" />
+      <Location value="Attacker" />
+      <ModifyFraction value="0.5" />
+      <ValidateEffectAliases value="PercentDamage" />
+    </DamageResponse>
+    <BehaviorCategories index="DebuffAbilityPower" value="1" />
+    <BehaviorCategories index="DebuffAutoattackDPS" value="1" />
+  </CBehaviorBuff>
+  
+
+  <CActorModel id="DVaDefenseMatrixHoldTargetArea" parent="StormModelAnimationStyleContinuousUnit">
+    <Inherits index="TeamColor" value="1" />
+    <Inherits index="Visibility" value="0" />
+    <On Terms="Behavior.DVaDefenseMatrixHoldTargetChanneling.On; !ValidatePlayer DVaDefenseMatrixDivertingPowerHasTalent" Send="Create" />
+    <On Terms="ActorCreation" Send="Create DVaMech_DefenseMatrix_Launch" />
+    <On Terms="ActorCreation" Send="Create DVaMech_DefenseMatrix_PreLaunch" />
+    <On Terms="ActorCreation" Send="Create DVaMech_DefenseMatrix_Loop" />
+    <On Terms="Behavior.DVaDefenseMatrixHoldTargetChanneling.Off" Send="AnimBracketStop BSD" />
+    <On Terms="Signal.*.DefenseMatrixPulse; !HasStatus noPulse" Send="AnimPlay Spell Spell" />
+    <On Terms="Signal.*.DefenseMatrixPulse; !HasStatus noPulse" Send="TimerSet 0.125000 noPulseTimer" />
+    <On Terms="Signal.*.DefenseMatrixPulse; !HasStatus noPulse" Send="StatusSet noPulse 1" />
+    <On Terms="TimerExpired; TimerName noPulseTimer" Send="StatusSet noPulse 0" />
+    <On Terms="Behavior.DVaDefenseMatrixHoldTargetChanneling.off" Target="DVaMech_DefenseMatrix_Loop" Send="Destroy Immediate" />
+    <Model value="DVaMechDefenseMatrixArea" />
+    <HostSiteOps Ops="SOpAttachHardPoint" />
+    <Host Subject="_Hero" />
+    <Aliases value="_DefenseMatrixArt" />
+    <VisibilityShape Shape="DVaDefenseMatrixVisiblityShape" />
+    <HostedAttaches>
+      <AttachQuery Methods="Hardpoint 1" />
+      <Host Subject="_Hero" />
+      <HostSiteOps Ops="SOpAttachTurretZ SOpDVaMechDefenseMatrixHoldTargetFrontLeft SOpShadow" />
+    </HostedAttaches>
+    <HostedAttaches>
+      <AttachQuery Methods="Hardpoint 2" />
+      <Host Subject="_Hero" />
+      <HostSiteOps Ops="SOpAttachTurretZ SOpDVaMechDefenseMatrixHoldTargetFrontRight SOpShadow" />
+    </HostedAttaches>
+    <HostedAttaches>
+      <AttachQuery Methods="Hardpoint 3" />
+      <Host Subject="_Hero" />
+      <HostSiteOps Ops="SOpAttachTurretZ SOpDVaMechDefenseMatrixHoldTargetBackRight SOpShadow" />
+    </HostedAttaches>
+    <HostedAttaches>
+      <AttachQuery Methods="Hardpoint 4" />
+      <Host Subject="_Hero" />
+      <HostSiteOps Ops="SOpAttachTurretZ SOpDVaMechDefenseMatrixHoldTargetBackLeft SOpShadow" />
+    </HostedAttaches>
+  </CActorModel>
+
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetFrontLeft">
+    <LocalOffset X="3.000000" Y="-9.450000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetFrontRight">
+    <LocalOffset X="-3.000000" Y="-9.450000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetBackRight">
+    <LocalOffset X="-1.250000" Y="-4.000000" />
+  </CActorSiteOpLocalOffset>
+  <CActorSiteOpLocalOffset id="SOpDVaMechDefenseMatrixHoldTargetBackLeft">
+    <LocalOffset X="1.250000" Y="-4.000000" />
+  </CActorSiteOpLocalOffset>
+
+
+  <CWeaponLegacy id="DVaMechWeapon">
+    <MinScanRange value="4.5" />
+    <Range value="4.5" />
+  </CWeaponLegacy>
+  <CBehaviorBuff id="DVaMechArtWeaponCasterSoundDummyLoop">
+    <RemoveValidatorArray index="0" value="DVaAttackTargetIsInRangeNew" />
+  </CBehaviorBuff>
+  <CValidatorLocationEnumArea id="DVaAttackTargetIsInRangeNew">
+    <WhichLocation Value="CasterUnit" />
+    <AreaArray Count="1" Validator="DVaTargetHasWeaponTargetBehavior">
+      <Radius value="5.6875" />
+    </AreaArray>
+    <SearchFlags index="OffsetAreaByAngle" value="0" />
+    <LaunchLocation Value="SourceUnit" />
+    <SearchFilters value="Visible;Player,Ally,Neutral,Stasis,Invulnerable" />
+  </CValidatorLocationEnumArea>
+
+  <CAccumulatorDistance id="DVaSelfDestructDistanceAccumulator">
+    <MinAccumulation value="-700" />
+    <Scale value="-65" />
+  </CAccumulatorDistance>
+
+  <CEffectDamage id="DVaMechSelfDestructDetonationSearchDamage" >
+    <FlatModifierArray index="DistanceScaler" Validator="DVaSelfDestructTargetNotInsideDVa" />
+    <FlatModifierArray index="CritIndicator" Validator="DVaSelfDestructTargetIsInsideDVa" Crit="1" />
+  </CEffectDamage>
+  
+  <CValidatorLocationCompareRange id="DVaSelfDestructTargetNotInsideDVa">
+    <WhichLocation Effect="DVaMechSelfDestructDetonationSet" />
+    <Compare value="GT" />
+    <Range value="1.1875" />
+    <Value Value="TargetPoint" />
+  </CValidatorLocationCompareRange>
+  <CValidatorLocationCompareRange id="DVaSelfDestructTargetIsInsideDVa">
+    <WhichLocation Effect="DVaMechSelfDestructDetonationSet" />
+    <Compare value="LE" />
+    <Range value="1.1875" />
+    <Value Value="TargetPoint" />
+  </CValidatorLocationCompareRange>
+  
+  <CEffectSet id="DVaMechFatalDamageSuicideSet">
+    <ValidatorArray value="DVaMechMechNotSelfDestructing" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechSelfDestructInitialAbilityCancelSet">
+    <EffectArray value="DVaMechSelfDestructRemoveDisabledTimeoutBehavior" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaMechSelfDestructRemoveDisabledTimeoutBehavior">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaMechFatalDamageDisabledTimeout" />
+  </CEffectRemoveBehavior>
+  
+  <CBehaviorBuff id="DVaMechFatalDamageDisabledTimeout">
+    <Modification>
+      <AbilLinkEnableArray value="DVaMechSelfDestruct" />
+    </Modification>
+  </CBehaviorBuff>
+
+  <CAbilEffectInstant id="DVaMechSelfDestructHeroic">
+    <PrepEffect value="DismountDecloakCasterSet" />
+    <Effect value="DVaMechSelfDestructInitialSet" />
+    <Cost>
+      <Cooldown Location="Player" TimeUse="120" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechSelfDestructHeroic" Requirements="DVaMechAbilityUseAndSelfDestructUnlockedRequirement" />
+  </CAbilEffectInstant>
+  
+
+  <CAbilBehavior id="DVaMechBunnyHopHeroic">
+    <OffCost index="0">
+      <Cooldown Location="Player" TimeUse="60" />
+    </OffCost>
+    <ExpireCost index="0">
+      <Cooldown Location="Player" TimeUse="60" />
+    </ExpireCost>
+  </CAbilBehavior>
+  
+
+  <CRequirement id="DVaMechAbilityUseAndSelfDestructUnlockedRequirement">
+    <NodeArray index="Use" Link="EqCountBehaviorDVaPilotAbilityDisablerCarryCompleteOnlyAtUnit1" />
+    <NodeArray index="Show" Link="CountBehaviorUltimate2UnlockedCompleteOnlyAtUnit" />
+  </CRequirement>
+  
+
+  <CButton id="DVaCancelMicroMissiles" parent="StormButtonParent">
+    <Icon value="Assets\Textures\hud_btn_bg_ability_cancel.dds" />
+    <TooltipFlags index="ShowUsage" value="0" />
+    <TooltipFlags index="ShowCooldown" value="0" />
+  </CButton>
+  
+  <CAbilEffectInstant id="DVaMicroMissilesOff">
+    <Effect value="DVaMicroMissilesRemoveBehavior" />
+    <Cost>
+      <Cooldown TimeUse="0.0625" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaCancelMicroMissiles" UseValidator="DVaDoesHaveMicroMissilesBehavior" ShowValidator="DVaDoesHaveMicroMissilesBehavior" />
+  </CAbilEffectInstant>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaDoesHaveMicroMissilesBehavior">
+    <WhichUnit Value="Caster" />
+    <Compare value="GT" />
+    <Behavior value="DVaMicroMissilesChannelling" />
+  </CValidatorUnitCompareBehaviorCount>
+
+  <CAbilEffectTarget id="DVaMicroMissilesOn">
+    <PrepEffect value="DVaMicroMissilesPrepareSet" />
+    <Effect value="DVaMicroMissilesInitialSet" />
+	<CastIntroTime value="0.125"/>
+    <Flags index="RequireTargetVision" value="0" />
+    <Range value="500" />
+    <Arc value="360" />
+    <Cost>
+      <Cooldown TimeUse="9" />
+    </Cost>
+    <UninterruptibleArray index="Cast" value="1" />
+    <UninterruptibleArray index="Channel" value="1" />
+    <UninterruptibleArray index="Finish" value="1" />
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaMechDefenseMatrixHoldTarget">
+      <Flags index="AllowSelfCast" value="0" />
+    </CmdButtonArray>
+  </CAbilEffectTarget>
+  <CEffectSet id="DVaMicroMissilesPrepareSet">
+    <EffectArray value="DismountDecloakCasterSet" />
+    <EffectArray value="DVaMicroMissilesApplyPrecast" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaMicroMissilesApplyPrecast">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaMicroMissilesPreChannel" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMicroMissilesPreChannel">
+    <Duration value="0.125" />
+    <Modification>
+      <BehaviorLinkDisableArray value="DVaMechArtWeaponCasterSoundDummyLoop" />
+      <TurnRateMultiplier value="10" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaMicroMissilesInitialSet">
+    <EffectArray value="DVaDefenseMatrixHoldTargetCancel" />
+    <EffectArray value="DVaBoostersRemoveBoosterBehavior" />
+    <EffectArray value="DvaMechBunnyHopRemoveBehavior" />
+    <EffectArray value="DVaMicroMissilesApplyChannel" />
+    <TargetLocationType value="Point" />
+  </CEffectSet>
+  <CEffectApplyBehavior id="DVaMicroMissilesApplyChannel">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaMicroMissilesChannelling" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMicroMissilesChannelling">
+    <Duration value="2.25" />
+    <InitialEffect value="DVaMicroMissilesOnInitialSet" />
+    <FinalEffect value="DVaMicroMissilesOffFinalSet" />
+    <Modification>
+      <!-- <ModifyFlags index="SuppressTurning" value="1" /> -->
+      <BehaviorLinkDisableArray value="DVaMechArtWeaponCasterSoundDummyLoop" />
+      <WeaponDisableArray value="DVaMechWeapon" />
+      <AbilLinkDisableArray value="Hearthstone" />
+      <AbilLinkDisableArray value="Mount" />
+      <AbilLinkDisableArray value="CaptureMacGuffin" />
+      <AbilLinkDisableArray value="CaptureMacGuffinTwo" />
+      <AbilLinkDisableArray value="UseVehicle" />
+      <AbilLinkDisableArray value="MapMechanicAbilityInstant" />
+      <AbilLinkDisableArray value="MapMechanicAbilityTarget" />
+	</Modification>
+    <RemoveValidatorArray value="CasterNotDeadOrSilencedOrStasisOrStunned" />
+    <RemoveValidatorArray value="DVaMechNotinDeathTimeoutState" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaMicroMissilesOnInitialSet">
+    <EffectArray value="DVaMicroMissilesSetTurretTarget" />
+    <EffectArray value="DVaMicroMissilesDisableTurretRotation" />
+    <EffectArray value="DVaMicroMissilesCreateDummyUnit" />
+    <EffectArray value="DVaMicroMissilesOnApplyDisableCooldown" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaMicroMissilesSetTurretTarget">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Turret="DVaMechWeaponTurret">
+      <Target Effect="DVaMicroMissilesInitialSet" Value="TargetPoint" />
+      <Flags index="Tracking" value="1" />
+      <Flags index="IgnoreTurnRate" value="1" />
+    </ModifyTurret>
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMicroMissilesDisableTurretRotation">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="DisableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMicroMissilesOnApplyDisableCooldown">
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaMicroMissilesOff,Execute" CooldownTimeUse="0.5" />
+  </CEffectModifyUnit>
+  
+  <CEffectSet id="DVaMicroMissilesOffFinalSet">
+    <EffectArray value="DVaMicroMissilesEnableTurretRotation" />
+    <EffectArray value="DVaMicroMissilesClearTurretTarget" />
+    <EffectArray value="DVaMicroMissilesApplyCooldown" />
+  </CEffectSet>
+  <CEffectModifyUnit id="DVaMicroMissilesEnableTurretRotation">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="EnableRotation" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMicroMissilesClearTurretTarget">
+    <ImpactUnit Value="Caster" />
+    <ModifyTurret Action="ClearTarget" Turret="DVaMechWeaponTurret" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMicroMissilesApplyCooldown">
+    <ImpactUnit Value="Caster" />
+    <Cost Abil="DVaMicroMissilesOn,Execute" CooldownTimeUse="9" />
+  </CEffectModifyUnit>
+  
+
+  <CEffectCreateUnit id="DVaMicroMissilesCreateDummyUnit">
+    <!-- <ValidatorArray value="DVaMechMicroMissileChannelCombine"/> -->
+    <!-- <WhichLocation Effect="DVaMechRedirectTurretSwitch" Value="TargetPoint" /> -->
+    <WhichLocation Value="CasterPoint" />
+    <!-- <CreateFlags index="NormalizeSpawnOffset" value="1" /> -->
+    <!-- <CreateFlags index="SetFacing" value="1" /> -->
+    <SpawnEffect value="DVaMicroMissileDummySpawnSet" />
+    <SpawnUnit value="MicroMissileDummy" />
+  </CEffectCreateUnit>
+  
+
+  <CActorUnit id="MicroMissilesDummy" parent="StormMinionStandard" unitName="MicroMissileDummy">
+    <!-- <On Terms="ActorCreation" Send="Create MurkyMarchoftheMurlocsMarchSound" /> -->
+    <Model value="Invisible" />
+    <StatusBarFlags index="Shields" value="0" />
+    <StatusBarFlags index="Life" value="0" />
+    <StatusBarFlags index="Energy" value="0" />
+    <StatusBarFlags index="Cargo" value="0" />
+    <StatusBarFlags index="Progress" value="0" />
+    <StatusBarFlags index="Duration" value="0" />
+    <StatusBarFlags index="Magazine" value="0" />
+    <StatusBarFlags index="Custom" value="0" />
+  </CActorUnit>
+  <CUnit id="MicroMissileDummy" parent="StormSummonFigment">
+    <Collide index="Ground" value="0" />
+    <Collide index="Flying" value="0" />
+    <Collide index="Structure" value="0" />
+    <Collide index="ForceField" value="0" />
+    <Collide index="Pushable" value="0" />
+    <FlagArray index="Unselectable" value="1" />
+    <FlagArray index="Untargetable" value="1" />
+    <PushPriority value="0" />
+    <Mover value="Fly" />
+    <Speed value="8.2265" />
+    <Acceleration value="1000" />
+    <LateralAcceleration value="46" />
+    <StationaryTurningRate value="1007.9296" />
+    <TurningRate value="1007.9296" />
+    <Sight value="0" />
+    <Radius value="0.0" />
+	<Height value="5"/>
+    <SeparationRadius value="0.0" />
+    <OverlapIndex value="Wall" />
+    <AlliedPushPriority value="0" />
+  </CUnit>
+  
+  <CEffectSet id="DVaMicroMissileDummySpawnSet">
+    <EffectArray value="DVaMicroMissileDummyKineticApply" />
+	<EffectArray value="DVaMicroMissileApplyControllerBehavior"/>
+	<EffectArray value="DVaMicroMissilesSetDummyFacing"/>
+	<EffectArray value="DVaMicroMissilesMissileFirePersistent"/>
+  </CEffectSet>
+  <CEffectApplyKinetic id="DVaMicroMissileDummyKineticApply">
+    <Kinetic value="DVaMicroMissileDummyKinetic" />
+  </CEffectApplyKinetic>
+  <CKineticFollow id="DVaMicroMissileDummyKinetic">
+    <Where Effect="DVaMicroMissilesCreateDummyUnit" Value="CasterUnit" />
+    <Duration value="3"/>
+    <Follow value="Position" />
+  </CKineticFollow>
+  
+  <CEffectApplyBehavior id="DVaMicroMissileApplyControllerBehavior">
+    <Behavior value="DVaMicroMissilesDummyController" />
+  </CEffectApplyBehavior>
+  <CBehaviorBuff id="DVaMicroMissilesDummyController">
+    <!-- <RemoveValidatorArray value="DVaMechMicroMissileChannelCombine"/> -->
+    <!-- <RemoveValidatorArray value="DVaMechCasterNotInDeathTimeoutStateORSelfDestructing"/> -->
+    <RemoveValidatorArray value="DVaMicroMissilesCasterHasCastingBehavior"/>
+    <Duration value="2.5" />
+    <KillCredit Value="Caster" />
+    <FinalEffect value="StormSuicide" />
+  </CBehaviorBuff>
+  <CEffectModifyUnit id="DVaMicroMissilesSetDummyFacing">
+    <FacingLocation Effect="DVaMicroMissilesInitialSet" Value="TargetPoint" />
+    <FacingType value="LookAt" />
+  </CEffectModifyUnit>
+  
+
+  <CUnit id="DVaMicroMissilesMissile" parent="MISSILE_INVULNERABLE" />
+  <CActorMissile id="DVaMicroMissilesMissile" parent="StormMissileWithDeathEarly" unitName="DVaMicroMissilesMissile">
+    <On Terms="ActorCreation" Send="SetTintColor 47,205,47 0.725000" />
+  </CActorMissile>
+  <CModel id="DVaMicroMissilesMissile" parent="MissileFX">
+    <Model value="Assets\Effects\Storm_FX_Merc_SCBraxis_Archangel_Rocket\Storm_FX_Merc_SCBraxis_Archangel_Rocket.m3" />
+  </CModel>
+  
+  <CActorAction id="DVaMicroMissilesLeftAction" parent="GenericAttackPointStorm" effectLaunch="DVaMicroMissilesLaunchLeftMissile">
+    <LaunchRequest Subject="DVaMicroMissilesLeftLaunchSite" Actor="Find" />
+    <Missile value="DVaMicroMissilesMissile" />
+    <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow SOpMoveUpBy2" />
+  </CActorAction>
+  <CActorSite id="DVaMicroMissilesLeftLaunchSite">
+    <On Terms="Effect.DVaMicroMissilesPersistentLaunchLeft.Start" Send="Create" />
+    <On Terms="ActorCreation" Send="TimerSet 0.250000 DestroyTimer" />
+    <On Terms="TimerExpired; TimerName DestroyTimer" Send="Destroy" />
+    <HostSiteOps Ops="SOpShadow SOpMoveUpBy2" />
+  </CActorSite>
+  
+  <CActorAction id="DVaMicroMissilesRightAction" parent="GenericAttackPointStorm" effectLaunch="DVaMicroMissilesLaunchRightMissile">
+    <LaunchRequest Subject="DVaMicroMissilesRightLaunchSite" Actor="Find" />
+    <Missile value="DVaMicroMissilesMissile" />
+    <ImpactPointSiteOps Ops="SOpTargetPointStationary SOpShadow SOpMoveUpBy2" />
+  </CActorAction>
+  <CActorSite id="DVaMicroMissilesRightLaunchSite">
+    <On Terms="Effect.DVaMicroMissilesPersistentLaunchRight.Start" Send="Create" />
+    <On Terms="ActorCreation" Send="TimerSet 0.250000 DestroyTimer" />
+    <On Terms="TimerExpired; TimerName DestroyTimer" Send="Destroy" />
+    <HostSiteOps Ops="SOpShadow SOpMoveUpBy2" />
+  </CActorSite>
+  
+
+  <CActorModel id="DVaMechMicroMissilesImpact" parent="StormModelAnimationStyleOneShot">
+    <On Terms="Effect.DVaMicroMissilesExplosionSearch.Start" Send="Create" />
+    <On Terms="ActorCreation" Send="SetTintColor 47,205,47 0.225000" />
+    <HostSiteOps Ops="SOpSourcePointSationary SOpShadow SOpMoveUpBy2" />
+    <VisibilityShape Shape="DVaMechMicroMissileExplosion" />
+  </CActorModel>
+  <CShapeArc id="DVaMechMicroMissileExplosion">
+    <Arc value="360" />
+    <Radius value="2" />
+  </CShapeArc>
+  <CActorForceSphere id="DVaMechMicroMissileForce">
+    <On Terms="Effect.DVaMicroMissilesExplosionSearch.Start; At Effect" Send="Create" />
+    <Host Subject="SOpSplashDamagePositionVariance" />
+    <Duration value="0.150000" />
+    <Magnitude value="30.000000" />
+    <ForceFlags index="FallOff" value="0" />
+    <Radius value="2.500000" />
+  </CActorForceSphere>
+  
+  <CModel id="DVaMechMicroMissilesImpact" parent="OneShotSpellFX">
+	<Model value="Assets\Effects\Storm_Effect_Placeholder_Rocket_Impact\Storm_Effect_Placeholder_Rocket_Impact.m3"/>
+    <ScaleMax X="2.500000" Y="2.500000" Z="2.500000" />
+    <ScaleMin X="2.500000" Y="2.500000" Z="2.500000" />
+  </CModel>
+  
+
+  <CValidatorUnitCompareBehaviorCount id="DVaMicroMissilesCasterHasCastingBehavior">
+    <WhichUnit Value="Caster" />
+    <Compare value="GT" />
+    <Behavior value="DVaMicroMissilesChannelling" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectCreatePersistent id="DVaMicroMissilesMissileFirePersistent">
+    <WhichLocation Value="CasterUnit"/>
+    <TimeScaleSource Value="Caster" />
+	<PeriodCount value="17"/>
+	<PeriodicValidator value="DVaMicroMissilesCasterHasCastingBehavior"/>
+    <PeriodicPeriodArray value="0.125" />
+	<InitialDelay value="0"/>
+	<InitialEffect value="DVaMicroMissilesPersistentLaunchRightInitial"/>
+	<PeriodicEffectArray value="DVaMicroMissilesPersistentLaunchLeftInitial"/>
+	<PeriodicEffectArray value="DVaMicroMissilesPersistentLaunchRightInitial"/>
+	<ExpireDelay value="0.125"/>
+	<ExpireEffect value="DVaMechRemoveMicroMissilesBehavior"/>
+    <!-- <PeriodicOffsetArray X="3"/> -->
+	<!-- <PeriodicOffsetArray X="-3"/> -->
+	<!-- <FinalEffect value="DVaMicroMissilesTrackerUnitProxyRight"/> -->
+  </CEffectCreatePersistent>
+  <CEffectCreatePersistent id="DVaMicroMissilesPersistentLaunchRightInitial">
+    <WhichLocation Value="TargetUnit" />
+    <OffsetVectorStartLocation Value="TargetPoint" />
+    <OffsetVectorEndLocation Value="TargetPoint" />
+    <OffsetFacingFallback Effect="DVaMicroMissileDummySpawnSet" Value="TargetUnit" />
+    <PeriodCount value="1"/>
+	<PeriodicEffectArray value="DVaMicroMissilesPersistentLaunchRight"/>
+    <PeriodicPeriodArray value="0" />
+	<PeriodicOffsetArray X="-0.5"/>
+  </CEffectCreatePersistent>
+  <CEffectCreatePersistent id="DVaMicroMissilesPersistentLaunchRight">
+    <WhichLocation Value="TargetPoint" />
+    <OffsetVectorStartLocation Value="TargetPoint" />
+    <OffsetVectorEndLocation Value="TargetPoint" />
+    <OffsetFacingFallback Effect="DVaMicroMissileDummySpawnSet" Value="TargetUnit" />
+    <PeriodCount value="1"/>
+	<PeriodicEffectArray value="DVaMicroMissilesLaunchRightMissile"/>
+    <PeriodicPeriodArray value="0" />
+	<PeriodicOffsetArray Y="-10"/>
+  </CEffectCreatePersistent>
+  
+  <CEffectLaunchMissile id="DVaMicroMissilesLaunchRightMissile">
+    <Marker>
+      <MatchFlags index="Id" value="1" />
+    </Marker>
+    <LaunchLocation Effect="DVaMicroMissilesPersistentLaunchRight" Value="TargetPoint" />
+    <ImpactLocation>
+      <Value value="TargetPoint" />
+      <ProjectionMultiplier value="1" />
+      <UsesLineDash value="1" />
+      <LineDashType value="AllowedInUnpathable" />
+      <ProjectionTargetValue value="TargetPoint" />
+      <ProjectionDistanceScale value="11" />
+    </ImpactLocation>
+    <AmmoUnit value="DVaMicroMissilesMissile" />
+    <Movers Link="DVaMicroMissilesMissile" />
+    <MeshCollisionEffect value="DVaMicroMissilesExplosionSearch" />
+    <MeshCollisionResponse value="Reflect" />
+    <ImpactEffect value="DVaMicroMissilesImpactSet" />
+    <SharedFlags index="DynamicSearchArea" value="1" />
+    <SearchEffect value="DVaMicroMissilesSearchArea" />
+  </CEffectLaunchMissile>
+  
+  <CEffectCreatePersistent id="DVaMicroMissilesPersistentLaunchLeftInitial">
+    <WhichLocation Value="TargetUnit" />
+    <OffsetVectorStartLocation Value="TargetPoint" />
+    <OffsetVectorEndLocation Value="TargetPoint" />
+    <OffsetFacingFallback Effect="DVaMicroMissileDummySpawnSet" Value="TargetUnit" />
+    <PeriodCount value="1"/>
+	<PeriodicEffectArray value="DVaMicroMissilesPersistentLaunchLeft"/>
+    <PeriodicPeriodArray value="0" />
+    <PeriodicOffsetArray X="0.5"/>
+	<!-- <PeriodicOffsetArray X="-3"/> -->
+  </CEffectCreatePersistent>
+  
+  <CEffectCreatePersistent id="DVaMicroMissilesPersistentLaunchLeft">
+    <WhichLocation Value="TargetPoint" />
+    <OffsetVectorStartLocation Value="TargetPoint" />
+    <OffsetVectorEndLocation Value="TargetPoint" />
+    <OffsetFacingFallback Effect="DVaMicroMissileDummySpawnSet" Value="TargetUnit" />
+    <PeriodCount value="1"/>
+	<PeriodicEffectArray value="DVaMicroMissilesLaunchLeftMissile"/>
+    <PeriodicPeriodArray value="0" />
+    <PeriodicOffsetArray Y="-10"/>
+	<!-- <PeriodicOffsetArray X="-3"/> -->
+  </CEffectCreatePersistent>
+  
+  <CEffectLaunchMissile id="DVaMicroMissilesLaunchLeftMissile">
+    <Marker>
+      <MatchFlags index="Id" value="1" />
+    </Marker>
+    <LaunchLocation Effect="DVaMicroMissilesPersistentLaunchLeft" Value="TargetPoint" />
+    <ImpactLocation>
+      <Value value="TargetPoint" />
+      <ProjectionMultiplier value="1" />
+      <UsesLineDash value="1" />
+      <LineDashType value="AllowedInUnpathable" />
+      <ProjectionTargetValue value="TargetPoint" />
+      <ProjectionDistanceScale value="11" />
+    </ImpactLocation>
+    <AmmoUnit value="DVaMicroMissilesMissile" />
+    <Movers Link="DVaMicroMissilesMissile" />
+    <MeshCollisionEffect value="DVaMicroMissilesImpactSet" />
+    <MeshCollisionResponse value="Reflect" />
+    <ImpactEffect value="DVaMicroMissilesImpactSet" />
+    <SharedFlags index="DynamicSearchArea" value="1" />
+    <SearchEffect value="DVaMicroMissilesSearchArea" />
+  </CEffectLaunchMissile>
+  
+  <CMoverMissile id="DVaMicroMissilesMissile">
+    <MotionPhases>
+      <Driver value="Guidance" />
+      <Acceleration value="3200" />
+      <Speed value="34" />
+      <MaxSpeed value="34" />
+      <ThrowBandYaw value="-360,-360,-360,-360" />
+      <ThrowBandPitch value="-360,-360,-360,-360" />
+      <YawPitchRoll value="5759.6484" />
+      <CheckMeshCollision value="1" />
+      <MeshEdgesCornerRoundingOffset value="0.25" />
+    </MotionPhases>
+  </CMoverMissile>
+  
+
+  <CEffectEnumArea id="DVaMicroMissilesSearchArea">
+    <AreaArray MaxCount="1" Effect="DVaMicroMissilesImpactSet">
+      <RectangleWidth value="0.5" />
+      <RectangleHeight value="1" />
+    </AreaArray>
+    <SearchFilters value="Heroic;Player,Ally,Neutral,ImmuneToSkillshots,Missile,Stasis,Dead,Hidden,Invulnerable" />
+    <RevealerParams HeightMap="Ground" Duration="0.5" ShapeExpansion="1">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+  </CEffectEnumArea>
+  
+
+  <CEffectSet id="DVaMicroMissilesImpactSet">
+    <EffectArray value="ApplyAbilityImpactReveal" />
+    <EffectArray value="DVaMicroMissilesExplosionSearch" />
+    <EffectArray value="StormSuicide" />
+  </CEffectSet>
+  
+  <CEffectEnumArea id="DVaMicroMissilesExplosionSearch">
+    <ImpactLocation Value="SourceUnitOrPoint" />
+    <SearchFilters value="-;Player,Ally,Neutral,ImmuneToAOE,Missile,Stasis,Dead,Hidden,Invulnerable" />
+    <AreaArray Effect="DVaMicroMissilesExplosionImpactSet">
+      <Radius value="2" />
+    </AreaArray>
+    <RevealerParams Duration="0.75" ShapeExpansion="1.5">
+      <RevealFlags index="Unfog" value="1" />
+    </RevealerParams>
+    <SearchFlags index="DoActorSearch" value="1" />
+  </CEffectEnumArea>
+  
+
+  <CEffectSet id="DVaMicroMissilesExplosionImpactSet">
+    <!-- <ValidatorArray value="noMarkers" /> -->
+    <EffectArray value="DVaMicroMissilesDamage" />
+    <EffectArray value="ApplyAbilityImpactReveal" />
+  </CEffectSet>
+  
+  <CEffectDamage id="DVaMicroMissilesDamage" parent="StormSpell">
+    <Amount value="21" />
+    <MultiplicativeModifierArray index="NotHeroic" Validator="TargetIsNotHeroic" Modifier="-0.5" />
+    <LeechValidator index="Life" value="DVaDoesHaveHealingMissilesAndTargetIsHero" />
+    <LeechFraction index="Life" value="0.5" />
+  </CEffectDamage>
+  
+  <CButton id="DVaMicroMissilesOn" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_tychus_ragnarokmissiles.dds" />
+  </CButton>
+  
+  <CActorSound id="DVaMicroLaunch" parent="SoundOneShot">
+    <On Terms="Effect.DVaMicroMissilesPersistentLaunchRightInitial.Start" Send="Create" />
+    <On Terms="Effect.DVaMicroMissilesPersistentLaunchLeftInitial.Start" Send="Create" />
+    <Sound value="DVaMicroLaunch" />
+  </CActorSound>
+  
+  <CSound id="DVaMicroLaunch" parent="_FX_Hero_Spell_Launch">
+    <AssetArray File="assets\sounds\event\lunarfestival\lunarfestival_pickup_rocket_launch_02.ogg" />
+    <Volume value="-20.000000,-20.000000" />
+  </CSound>
+  
+  <CActorSound id="DVaMicroImpact" parent="SoundOneShot">
+    <On Terms="Effect.DVaMicroMissilesExplosionSearch.Start" Send="Create" />
+    <Sound value="DVaMicroImpact" />
+  </CActorSound>
+  
+  <CSound id="DVaMicroImpact" parent="_FX_Hero_Spell_Impact">
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_01.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_02.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_03.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_04.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_05.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_06.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_07.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_08.wav" FacialGroup="" />
+    <AssetArray File="Assets\Sounds\Heroes\Junkrat_Base\Junkrat_FragLauncher_Explosion_09.wav" FacialGroup="" />
+    <Pitch value="-1.000000,1.000000" />
+    <CategoryDuckingLocal value="" />
+    <CategoryDuckingLocalAlly value="" />
+    <CategoryDuckingNonLocal value="" />
+    <Volume value="-14.000000,-14.000000" />
+  </CSound>
+  
+
+  <CEffectSwitch id="DVaPilotWeaponCallMechCooldownSwitch">
+	<Chance value="0"/>
+  </CEffectSwitch>
+  
+
+  <CBehaviorTokenCounter id="DVaMechWeaponChargeEnabler">
+    <InfoFlags index="Hidden" value="1" />
+    <TokenId value="DVaMechWeaponChargeEnabler" />
+    <AtMaxEvents EventId="DVaMechSelfDestructGainCharge" Effect="DVaHealingShellsApplyBehavior" />
+    <Max value="4" />
+    <IncreaseEvents index="0" EventId="" Effect="DVaHealingShellsIncrementSet" />
+  </CBehaviorTokenCounter>
+  
+  <CEffectApplyBehavior id="DVaHealingShellsApplyBehavior">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaHealingShells" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaHealingShells">
+    <Duration value="3" />
+	<InitialEffect value="DVaMechWeaponSelfDestructResetChargeEnablerTokenCounter"/>
+    <Modification>
+      <VitalDamageLeechArray index="Life">
+        <KindArray index="Basic" value="0.35" />
+      </VitalDamageLeechArray>
+      <VitalDamageLeechScoreArray Value="Healing" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaDoesHaveHealingShellsBehavior">
+    <WhichUnit Value="Source" />
+    <Compare value="GT" />
+    <Behavior value="DVaHealingShells" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectSet id="DVaHealingShellsIncrementSet">
+    <ValidatorArray value="DVaDoesHaveHealingShellsBehavior" />
+    <EffectArray value="DVaMechWeaponSelfDestructResetChargeEnablerTokenCounter" />
+    <EffectArray value="DVaMechHealingShellsResetBehaviorDuration" />
+  </CEffectSet>
+  
+  <CEffectModifyBehaviorBuffDuration id="DVaMechHealingShellsResetBehaviorDuration">
+    <WhichUnit Value="Source" />
+    <Behavior value="DVaHealingShells" />
+    <Operation value="Set" />
+    <Value value="3" />
+  </CEffectModifyBehaviorBuffDuration>
+
+  <CEffectModifyTokenCount id="DVaMechWeaponSelfDestructIncrementChargeEnablerTokenCounter">
+    <ValidatorArray value="DVaDoesHaveHealingShellsTalent" />
+  </CEffectModifyTokenCount>
+  
+  <CValidatorPlayerTalent id="DVaDoesHaveHealingShellsTalent">
+    <WhichPlayer Value="Source" />
+    <Find value="1" />
+    <Value value="DVaHealingShells" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaHealingShells" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode.dds" />
+  </CButton>
+  
+  <CTalent id="DVaHealingShells">
+    <Face value="DVaHealingShells" />
+    <Trait value="1" />
+  </CTalent>
+  
+  <CValidatorCombine id="DVaDoesHaveHealingMissilesAndTargetIsHero">
+    <Type value="And" />
+    <CombineArray value="DVaDoesHaveHealingMissilesTalent" />
+    <CombineArray value="TargetIsHero" />
+  </CValidatorCombine>
+
+  <CValidatorPlayerTalent id="DVaDoesHaveHealingMissilesTalent">
+    <WhichPlayer Value="Source" />
+    <Find value="1" />
+    <Value value="DVaHealingMissiles" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaHealingMissiles" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_tychus_ragnarokmissiles.dds" />
+  </CButton>
+  
+  <CTalent id="DVaHealingMissiles">
+    <Face value="DVaHealingMissiles" />
+    <Trait value="1" />
+  </CTalent>
+  
+
+
+  <CValidatorPlayerTalent id="DVaDoesHaveHealingMatrixTalent">
+    <WhichPlayer Value="Source" />
+    <Find value="1" />
+    <Value value="DVaHealingMatrix" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaHealingMatrix" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_defensematrix.dds" />
+  </CButton>
+  
+  <CTalent id="DVaHealingMatrix">
+    <Face value="DVaHealingMatrix" />
+    <Abil value="DVaMechDefenseMatrixOn" />
+  </CTalent>
+
+  <CEffectCreateHealer id="DVaHealingMatrixCreateHealer" parent="StormSelfOnlyHealingSpell">
+    <RechargeVitalRate value="0" />
+    <ImpactUnit Value="Caster" />
+  </CEffectCreateHealer>
+
+  <CEffectApplyBehavior id="DVaHealingMatrixApplyHealingController">
+    <ValidatorArray value="DVaDoesHaveHealingMatrixTalent"/>
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaHealingMatrixController" />
+  </CEffectApplyBehavior>
+
+  <CEffectApplyBehavior id="DVaHealingMatrixSetBehaviorDurationToZeroPointFive">
+    <ValidatorArray value="DVaDoesHaveHealingMatrixTalent"/>
+    <WhichUnit Value="Caster" />
+    <Flags index="UseDuration" value="1" />
+    <Duration value="0.5" />  
+    <Behavior value="DVaHealingMatrixController" />
+  </CEffectApplyBehavior>
+  
+
+  <CValidatorUnitCompareBehaviorCount id="DVaDoesHaveDefenseMatrixHoldChanneling">
+    <WhichUnit Value="Source" />
+    <Compare value="GT" />
+    <Behavior value="DVaDefenseMatrixHoldTargetChanneling" />
+  </CValidatorUnitCompareBehaviorCount>
+  <CEffectApplyBehavior id="DVaHealingMatrixSetBehaviorDurationToZeroPointFiveRequireChannel">
+    <ValidatorArray value="DVaDoesHaveDefenseMatrixHoldChanneling" />
+    <WhichUnit Value="Caster" />
+    <Flags index="UseDuration" value="1" />
+    <Duration value="0.5" />  
+    <Behavior value="DVaHealingMatrixController" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaHealingMatrixController">
+    <MaxStackCount value="1"/>
+    <Duration value="0.5625" />
+    <Period value="0.5" />
+	<PeriodCount value="2"/>
+    <PeriodicEffect value="DVaHealingMatrixSetBehaviorDurationToZeroPointFiveRequireChannel" />
+    <FinalDisplayEffect value="DVaHealingMatrixCreateHealer" />
+    <FinalEffect value="DVaHealingMatrixFinalSet" />
+  </CBehaviorBuff>
+  
+
+  <CEffectSet id="DVaHealingMatrixFinalSet">
+    <EffectArray value="DVaHealingMatrixCreateHealer" />
+    <EffectArray value="DVaHealingMatrixResetCatalogValue" />
+  </CEffectSet>
+  
+  <CEffectModifyCatalogNumeric id="DVaHealingMatrixResetCatalogValue">
+    <CatalogModifications Operation="Set" Reference="Effect,DVaHealingMatrixCreateHealer,RechargeVitalRate">
+      <Value value="0"/>
+    </CatalogModifications>
+  </CEffectModifyCatalogNumeric>
+  
+
+  <CButton id="DVaLockedAbilityE" parent="StormButtonParent">
+    <Icon value="Assets\Textures\hud_btn_bg_ability_locked.dds" />
+  </CButton>
+  
+  <CValidatorPlayerTalent id="DVaPilotHasBigShotBasic">
+    <Find value="1" />
+    <Value value="DVaPilotBigShotBasic" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaPilotBigShotBasic" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_bigshot.dds" />
+  </CButton>
+  
+  <CTalent id="DVaPilotBigShotBasic">
+    <Face value="DVaPilotBigShotBasic" />
+    <Abil value="DVaPilotBigShotNotHeroic" />
+	<Active value="1"/>
+  </CTalent>
+
+  <CAbilEffectTarget id="DVaPilotBigShotNotHeroic">
+    <Activity value="Abil/DVa/DVaBigShot" />
+    <PrepEffect value="DVaBigShotPrepSet" />
+    <Effect value="DVaBigShotInitialSet" />
+    <Flags index="RequireTargetVision" value="0" />
+    <Flags index="TargetVectorLock" value="1" />
+    <Cost>
+      <Cooldown TimeUse="8" />
+    </Cost>
+    <Range value="500" />
+    <CastIntroTime value="0.5" />
+    <ShowProgressArray index="Cast" value="1" />
+    <UninterruptibleArray index="Cast" value="1" />
+    <UninterruptibleArray index="Channel" value="1" />
+    <UninterruptibleArray index="Finish" value="1" />
+    <CursorEffect value="DVaBigShotMissileScan" />
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaPilotBigShot" ShowValidator="DVaPilotHasBigShotBasic">
+      <Flags index="AllowSelfCast" value="0" />
+    </CmdButtonArray>
+    <InterruptArray index="Cast" value="1" />
+    <InterruptCost>
+      <Cooldown Operation="Set" TimeUse="4" />
+    </InterruptCost>
+    <Arc value="360" />
+  </CAbilEffectTarget>
+  
+
+  <CActorQuad id="DVaBigShotGuide" parent="StormGuideVisualQuadDownClosestFantasy" abil="DVaPilotBigShotNotHeroic">
+    <Height value="15.000000" />
+    <Width value="1.500000" />
+  </CActorQuad>
+  
+  <CEffectModifyPlayer id="DVaPilotBigShotModifyCallMechCooldown">
+    <Cost index="0">
+      <Cooldown>
+        <TimeUse value="-2" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  
+  <CEffectDamage id="DVaPilotBigShotDamage" parent="StormSpell">
+    <Amount value="170" />
+  </CEffectDamage>
+  
+
+  <CEffectSet id="DVaBoostersInitialSet">
+    <EffectArray index="0" value="DVaDefenseMatrixHoldTargetCancel" />
+    <EffectArray value="DVaMicroMissilesRemoveBehavior" />
+	
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechBunnyHopInitialSet">
+    <EffectArray index="1" value="DVaDefenseMatrixHoldTargetCancel" />
+    <EffectArray value="DVaMicroMissilesRemoveBehavior" />
+  </CEffectSet>
+  
+  <CEffectSet id="DVaMechSelfDestructInitialAbilityCancelSet">
+    <EffectArray index="1" value="DVaDefenseMatrixHoldTargetCancel" />
+    <EffectArray value="DVaMicroMissilesRemoveBehavior" />
+  </CEffectSet>
+
+  <CButton id="DVaCancelDefenseMatrix" parent="StormButtonParent">
+    <Icon value="Assets\Textures\hud_btn_bg_ability_cancel.dds" />
+    <TooltipFlags index="ShowUsage" value="0" />
+    <TooltipFlags index="ShowCooldown" value="0" />
+  </CButton>
+  
+  <CBehaviorAbility id="DVaCancelDefenseMatrixItem">
+    <Buttons Face="DVaCancelDefenseMatrix" Type="AbilCmd" AbilCmd="DVaDefenseMatrixCancel,Execute" />
+  </CBehaviorAbility>
+  
+  <CAbilEffectInstant id="DVaDefenseMatrixCancel">
+    <Effect value="DVaDefenseMatrixHoldTargetCancel" />
+    <Cost>
+      <Cooldown TimeUse="0.0625" />
+    </Cost>
+    <CmdButtonArray index="Execute" DefaultButtonFace="DVaCancelDefenseMatrix" UseValidator="DVaDoesNotHaveDefenseMatrixTargetingBehavior" />
+  </CAbilEffectInstant>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaDoesNotHaveDefenseMatrixTargetingBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaDefenseMatrixHoldTargetTargeting" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectSet id="DVaDefenseMatrixHoldTargetCancel">
+    <EffectArray value="DVaDefenseMatrixRemoveHoldTargetReleased" />
+    <EffectArray value="DVaDefenseMatrixRemoveHoldTargetDelay" />
+    <EffectArray value="DVaDefenseMatrixRemoveHoldTargetTargeting" />
+    <EffectArray value="DVaDefenseMatrixRemoveHoldTargetChanneling" />
+  </CEffectSet>
+  
+  <CEffectRemoveBehavior id="DVaDefenseMatrixRemoveHoldTargetReleased">
+    <BehaviorLink value="DVaDefenseMatrixHoldTargetReleasedBehavior" />
+    <WhichUnit Value="Caster" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaDefenseMatrixRemoveHoldTargetDelay">
+    <BehaviorLink value="DVaDefneseMatrixHoldTargetInitialDelay" />
+    <WhichUnit Value="Caster" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaDefenseMatrixRemoveHoldTargetTargeting">
+    <BehaviorLink value="DVaDefenseMatrixHoldTargetTargeting" />
+    <WhichUnit Value="Caster" />
+  </CEffectRemoveBehavior>
+  <CEffectRemoveBehavior id="DVaDefenseMatrixRemoveHoldTargetChanneling">
+    <BehaviorLink value="DVaDefenseMatrixHoldTargetChanneling" />
+    <WhichUnit Value="Caster" />
+  </CEffectRemoveBehavior>
+
+  <CValidatorPlayerTalent id="DVaMechHasBunnyHopStormUpgrade">
+    <Find value="1" />
+    <Value value="DVaMechBunnyHopStormUpgrade" />
+  </CValidatorPlayerTalent>
+  <CValidatorPlayerTalent id="DVaMechDoesNotHaveBunnyHopStormUpgrade">
+    <Find value="0" />
+    <Value value="DVaMechBunnyHopStormUpgrade" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMechBunnyHopStormUpgrade" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_bunnyhop.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechBunnyHopStormUpgrade">
+    <Face value="DVaMechBunnyHopStormUpgrade" />
+    <Abil value="DVaBunnyHop" />
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Behavior" />
+        <Entry value="DvaMechBunnyHopActive" />
+        <Field value="Modification.UnifiedMoveSpeedFactor" />
+        <Value value="0.200000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Abil" />
+        <Entry value="DVaMechBunnyHopHeroic" />
+        <Field value="OffCost[0].Cooldown.TimeUse" />
+        <Value value="-10.000000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Abil" />
+        <Entry value="DVaMechBunnyHopHeroic" />
+        <Field value="ExpireCost[0].Cooldown.TimeUse" />
+        <Value value="-10.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+  
+  <CBehaviorBuff id="DVaMechPermanentSlow" >
+    <RemoveValidatorArray value="DVaMechDoesNotHaveBunnyHopStormUpgrade" />
+  </CBehaviorBuff>
+  
+  <CValidatorPlayerTalent id="DVaMechHasSelfDestructStormUpgrade">
+    <Find value="1" />
+    <Value value="DVaMechSelfDestructStormUpgrade" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMechSelfDestructStormUpgrade" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_selfdestruct.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechSelfDestructStormUpgrade">
+    <Face value="DVaMechSelfDestructStormUpgrade" />
+    <Abil value="DVaMechSelfDestructHeroic" />
+  </CTalent>
+  
+  <CEffectSet id="DVaMechSelfDestructDetonationSearchImpactSet">
+    <EffectArray value="DVaSelfDestructStormUpgradeModifyCooldown" />
+  </CEffectSet>
+  
+  <CEffectModifyUnit id="DVaSelfDestructStormUpgradeModifyCooldown">
+    <ValidatorArray value="DVaMechHasSelfDestructStormUpgrade" />
+    <ValidatorArray value="TargetIsHero" />
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaMechSelfDestructHeroic,Execute" CooldownOperation="Add" CooldownTimeUse="-15" />
+  </CEffectModifyUnit>
+  
+</Catalog>
