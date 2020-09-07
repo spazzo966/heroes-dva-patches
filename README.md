@@ -112,4 +112,13 @@ That's it for the "baseline" changes of week 8, now we've got 7 talents to talk 
   * New Level 20 Talent: Bunny Hopper: Remove the passive movespeed reduction from the Mech, Bunny Hop now grants 20% movespeed, Bunny Hop cooldown reduced by 10 seconds.
   * New Level 20 Talent: Bang for Buck: Each enemy Hero hit with Self-Destruct reduces its cooldown by 15 seconds.
   
+Week 9, The Final Week:
 
+  * New Level 1 Talent: Big Game Hunter: After damaging an Enemy Hero with Boosters, increase Booster duration by 0.75 seconds and once that cast of Boosters ends, heal for 6% of the targets max health. Heal amount is increased by 100% for each additional hero hit.
+  * New Level 13 Talent: Scratch One Bogey!: After damaging an enemy hero with Mech Basic Attacks 10 times, the next time Boosters hits that Hero, deal 85% increased damage and slow them by 30% for 2 seconds.
+  * New Level 13 Talent: Charged Up: Increase Damage Dealt with Heroic ability by 30%, and while D.Va's Heroic Ability is able to be cast, she deals 15% increased damage, and her healing taken is increased by 15%
+  * New Level 13 Talent: Giant Scorcher: Micro Missiles deal an additional 1% of the targets maximum life as damage to enemy Heroes, and the cooldown of Micro Missiles is increased by 3 seconds.
+  * New Level 16 Talent: Cannons Online: While Basic Attacking, Basic Ability cooldowns recharge 75% faster if they have more than 50% remaining on their charge, and Energy(required to use Defense Matrix) is regained 50% faster while below 50% Energy
+  * New Level 20 Talent: Slipstream: Allies trailing closely behind D.Va's Mech gain the movespeed bonuses from Boosters
+  * New Level 20 Talent: The Beacon(Requires MEKAfall, available at Level 4): Call Mech cooldown reduced by 40%(scaling, just as Call Mech cooldown does), and the cast range of MEKAfall is increased by 800%
+  

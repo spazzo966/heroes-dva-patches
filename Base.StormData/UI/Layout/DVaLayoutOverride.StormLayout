@@ -189,6 +189,30 @@
         <Anchor side="Right" relative="$parent/HealthBlackOverlayIcon" pos="Max" offset="-1" />
   </Frame>
   <Frame type="Image" name="DVaUnitStatusFrameTemplate/HeroUnitStatusParentFrame/EnergyBlackOverlayIcon" file="DVa">
-    <Alpha val="0"/>
+    <!-- <Alpha val="0"/> -->
   </Frame>
+  
+
+    <Frame type="SelectionUnitStatusPanel" name="DVaScratchOneBogeyStacksContainer">
+        <Anchor relative="$parent"/>
+        <SpecificUnit val="HeroDVaMech"/>
+        <CheckPassengers val="True"/>
+
+        <Frame type="UnitStatusUnitStackingDebuffElement" name="StacksFrame" template="UnitStatus/StackingBehaviorTemplate">
+            <BuffBehavior val="DVaScratchOneBogeyStack"/>
+
+            <Frame type="ProgressBar" name="StacksProgressBar">
+                <Width val="56"/>
+            </Frame>
+
+            <Frame type="Image" name="Stacking">
+                <Texture val="@UI/Storm_UI_HeroUI_NexusHunter_BloodRageStack"/>
+            </Frame>
+
+            <Frame type="Image" name="StacksFull">
+                <Texture val="@UI/Storm_UI_HeroUI_NexusHunter_BloodRageStack_Full"/>
+            </Frame>
+        </Frame>
+    </Frame>
+  
 </Desc>

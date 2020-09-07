@@ -40,6 +40,12 @@
     </Cost>
   </CEffectModifyPlayer>
   
+
+  <CEffectSet id="DVaMechFatalDamageResponseHandledSet">
+    <EffectArray value="DVaPilotCallMechTheBeaconCooldownReduction" />
+  </CEffectSet>
+
+  
   <CButton id="DVaPilotCallMech">
     <TooltipCooldownOverrideText value="Button/OverrideText/DVaCallMechOverride" />
   </CButton>
@@ -245,7 +251,8 @@
 
   <CHero id="DVa">
     <HeroSpecificUIArray index="1" removed="1"/>
-    <TalentTreeArray index="0" Talent="GenericTalentProtectiveShield" Tier="1" Column="1" />
+    <HeroSpecificUIArray Location="HeroSpecificStackingBuffsStatus" DescName="DVaLayoutOverride/DVaScratchOneBogeyStacksContainer" />
+    <TalentTreeArray index="0" Talent="DVaBoostersBigGameHunter" Tier="1" Column="1" />
     <TalentTreeArray index="1" Talent="DVaHealingMatrix" Tier="1" Column="2" />
     <TalentTreeArray index="2" Talent="DVaHealingMissiles" Tier="1" Column="3" />
     <TalentTreeArray index="3" Talent="DVaHealingShells" Tier="1" Column="4" />
@@ -259,11 +266,11 @@
     <TalentTreeArray index="11" Talent="GenericTalentProtectiveShield" Tier="3" Column="4" />
     <TalentTreeArray index="12" Talent="DVaBunnyHop" Tier="4" Column="1" />
     <TalentTreeArray index="13" Talent="DVaSelfDestructHeroic" Tier="4" Column="2" />
-    <TalentTreeArray index="14" Talent="GenericTalentProtectiveShield" Tier="5" Column="1" />
-    <TalentTreeArray index="15" Talent="GenericTalentProtectiveShield" Tier="5" Column="2" />
-    <TalentTreeArray index="16" Talent="GenericTalentProtectiveShield" Tier="5" Column="3" />
+    <TalentTreeArray index="14" Talent="DVaBoostersScratchOneBogey" Tier="5" Column="1" />
+    <TalentTreeArray index="15" Talent="DVaMechChargedUp" Tier="5" Column="2" />
+    <TalentTreeArray index="16" Talent="DVaMicroMissilesMacroMissiles" Tier="5" Column="3" />
     <TalentTreeArray index="17" Talent="GenericTalentProtectiveShield" Tier="5" Column="4" />
-    <TalentTreeArray index="18" Talent="GenericTalentProtectiveShield" Tier="6" Column="1" />
+    <TalentTreeArray index="18" Talent="DVaMechModeCannonsOnline" Tier="6" Column="1" />
     <TalentTreeArray index="19" Talent="GenericTalentProtectiveShield" Tier="6" Column="2" />
     <TalentTreeArray index="20" Talent="GenericTalentProtectiveShield" Tier="6" Column="3" />
     <TalentTreeArray index="21" Talent="GenericTalentProtectiveShield" Tier="6" Column="4" >
@@ -276,8 +283,10 @@
     <TalentTreeArray index="23" Talent="DVaMechSelfDestructStormUpgrade" Tier="7" Column="2" >
       <PrerequisiteTalentArray value="DVaSelfDestructHeroic" />
 	</TalentTreeArray>
-    <TalentTreeArray index="24" Talent="GenericTalentProtectiveShield" Tier="7" Column="3" />
-    <TalentTreeArray index="25" Talent="GenericTalentProtectiveShield" Tier="7" Column="4" />
+    <TalentTreeArray index="24" Talent="DVaMechBoostersSlipstream" Tier="7" Column="3" />
+    <TalentTreeArray index="25" Talent="MEKAfallTheBeacon" Tier="7" Column="4" >
+      <PrerequisiteTalentArray value="DVaPilotCallMechMEKAfall" />
+	</TalentTreeArray>
     <LevelScalingArray index="2" >
       <Modifications>
         <Catalog value="Abil" />
@@ -296,6 +305,12 @@
         <Entry value="DVaPilotCallMechSetCooldown" />
         <Field value="Cost[0].Cooldown.TimeUse" />
         <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Catalog value="Effect" />
+        <Entry value="DVaPilotCallMechTheBeaconCooldownReduction" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="-0.40000" />
       </Modifications>
       <Modifications>
         <Catalog value="Effect" />
@@ -403,6 +418,8 @@
     <BehaviorArray Link="DVaMechPermanentSlow" />
     <BehaviorArray Link="DVaMechPilotUnitTracker" />
     <BehaviorArray Link="DVaCancelDefenseMatrixItem" />
+    <BehaviorArray Link="DVaMechChargedUpCarry" />
+    <BehaviorArray Link="DVaMechCannonsOnline" />
     <WeaponArray Link="DVaMechWeapon" Turret="DVaMechWeaponTurret" />
     <CardLayouts index="0">
       <LayoutButtons index="2" Face="Attack" Type="AbilCmd" AbilCmd="DVaAttack,Execute" Slot="Attack" />
@@ -435,6 +452,29 @@
     <AIThinkTree value="AI\DVaMech.aitree" />
     <UICheckPassengers value="0" />
   </CUnit>
+  
+
+  <CEffectSet id="DVaMechWeaponImpactSet">
+    <EffectArray value="DVaScratchOneBogeyApplyBehavior" />
+  </CEffectSet>
+
+  <CEffectSet id="DVaBoostersImpactSet">
+    <EffectArray value="DVaBoostersBigGameHunterSwitch" />
+    <EffectArray value="DVaBoostersScratchOneBogeyRemoveStacks" />
+  </CEffectSet>
+  
+
+  <CEffectDamage id="DVaBoostersImpactDamage">
+    <MultiplicativeModifierArray index="ScratchOneBogey" Validator="DVaBoostersScratchOneBogeyTargetHas11Stacks" Modifier="0.85" Crit="1"/>
+  </CEffectDamage>
+
+  <CEffectSet id="DVaBoostersOnInitialSet">
+    <EffectArray value="DVaBoostersSlipstreamPersistent" />
+  </CEffectSet>
+
+  <CEffectSet id="DVaBoostersFinalSet">
+    <EffectArray value="DVaBoostersBigGameHunterRemoveHealController" />
+  </CEffectSet>
   
   <CButton id="DVaMechDefenseMatrixHoldTarget" parent="StormButtonParent">
     <!-- <TooltipAppender Validator="DVaDefenseMatrixFusionGeneratorHasTalent" Face="DVaDefenseMatrixFusionGenerator" /> -->
@@ -893,6 +933,10 @@
   <CEffectDamage id="DVaMechSelfDestructDetonationSearchDamage" >
     <FlatModifierArray index="DistanceScaler" Validator="DVaSelfDestructTargetNotInsideDVa" />
     <FlatModifierArray index="CritIndicator" Validator="DVaSelfDestructTargetIsInsideDVa" Crit="1" />
+    <MultiplicativeModifierArray index="ChargedUp" Validator="DVaMechHasChargedUpTalent" Modifier="0.3" />
+  </CEffectDamage>
+  <CEffectDamage id="DVaMechBunnyHopImpactDamage">
+    <MultiplicativeModifierArray index="ChargedUp" Validator="DVaMechHasChargedUpTalent" Modifier="0.3" />
   </CEffectDamage>
   
   <CValidatorLocationCompareRange id="DVaSelfDestructTargetNotInsideDVa">
@@ -1075,8 +1119,8 @@
     <ModifyTurret Action="ClearTarget" Turret="DVaMechWeaponTurret" />
   </CEffectModifyUnit>
   <CEffectModifyUnit id="DVaMicroMissilesApplyCooldown">
-    <ImpactUnit Value="Caster" />
-    <Cost Abil="DVaMicroMissilesOn,Execute" CooldownTimeUse="9" />
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaMicroMissilesOn,Execute" CooldownOperation="Set" CooldownTimeUse="9" />
   </CEffectModifyUnit>
   
 
@@ -1378,14 +1422,15 @@
   <CEffectSet id="DVaMicroMissilesExplosionImpactSet">
     <!-- <ValidatorArray value="noMarkers" /> -->
     <EffectArray value="DVaMicroMissilesDamage" />
+    <EffectArray value="DVaMicroMissilesMacroMissilesDamage" />
     <EffectArray value="ApplyAbilityImpactReveal" />
   </CEffectSet>
   
   <CEffectDamage id="DVaMicroMissilesDamage" parent="StormSpell">
-    <Amount value="21" />
+    <Amount value="25" />
     <MultiplicativeModifierArray index="NotHeroic" Validator="TargetIsNotHeroic" Modifier="-0.5" />
     <LeechValidator index="Life" value="DVaDoesHaveHealingMissilesAndTargetIsHero" />
-    <LeechFraction index="Life" value="0.5" />
+    <LeechFraction index="Life" value="0.6" />
   </CEffectDamage>
   
   <CButton id="DVaMicroMissilesOn" parent="StormButtonParent">
@@ -1783,5 +1828,539 @@
     <ImpactUnit Value="Source" />
     <Cost Abil="DVaMechSelfDestructHeroic,Execute" CooldownOperation="Add" CooldownTimeUse="-15" />
   </CEffectModifyUnit>
+  
+
+  <CValidatorPlayerTalent id="DVaMechBoostersHasBigGameHunter">
+    <Find value="1" />
+    <Value value="DVaBoostersBigGameHunter" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaBoostersBigGameHunter" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters.dds" />
+  </CButton>
+  
+  <CTalent id="DVaBoostersBigGameHunter">
+    <Face value="DVaBoostersBigGameHunter" />
+    <Abil value="DVaBoostersOn" />
+  </CTalent>
+  
+
+  <CEffectSwitch id="DVaBoostersBigGameHunterSwitch">
+    <ValidatorArray value ="TargetIsHero"/>
+    <ValidatorArray value ="DVaMechBoostersHasBigGameHunter"/>
+    <CaseArray Validator="DVaBigGameHunterHasBehavior" Effect="DVaBigGameHunterIncrementTokenCounter" />
+    <CaseDefault value="DVaBigGameHunerApplyHealBehavior" />
+  </CEffectSwitch>
+  
+
+  <CEffectRemoveBehavior id="DVaBoostersBigGameHunterRemoveHealController">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBoostersBigGameHunterHealController" />
+  </CEffectRemoveBehavior>
+  
+  <CEffectModifyTokenCount id="DVaBigGameHunterIncrementTokenCounter" parent="BaseEffectModifyTokenCount">
+    <TokenId value="DVaBigGameHunterHeroHitTokenCounter" />
+  </CEffectModifyTokenCount>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaBigGameHunterHasBehavior">
+    <WhichUnit Value="Caster" />
+    <Compare value="GT" />
+    <Behavior value="DVaBoostersBigGameHunterHealController" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CEffectApplyBehavior id="DVaBigGameHunerApplyHealBehavior">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBoostersBigGameHunterHealController" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaBoostersBigGameHunterHealController">
+    <InitialEffect value="DVaBoostersBigGameHunterApplicationSet"/>
+    <MaxStackCount value="1"/>
+    <Duration value="4" />
+    <Period value="3.9375" />
+	<PeriodCount value="1"/>
+    <PeriodicEffect value="DVaBigGameHunterDummy" />
+    <FinalDisplayEffect value="DVaBigGameHunterCreateHealer" />
+    <FinalEffect value="DVaBigGameHunterHealApplySet" />
+  </CBehaviorBuff>
+
+  <CEffectSet id="DVaBoostersBigGameHunterApplicationSet">
+    <EffectArray value="DVaBoostersBigGameHunterApplyTokenCounter" />
+    <EffectArray value="DVaBoostersBigGameHunterSetHealCatalog" />
+    <EffectArray value="DVaBoostersBigGameHunterFirstHeroHitExtendBoostersDuration" />
+  </CEffectSet>
+  
+
+  <CEffectModifyBehaviorBuffDuration id="DVaBoostersBigGameHunterFirstHeroHitExtendBoostersDuration">
+    <Behavior value="DVaBoostersActive" />
+    <Value value="0.75" />
+    <WhichUnit Value="Caster" />
+  </CEffectModifyBehaviorBuffDuration>
+  
+  <CEffectSet id="DVaBigGameHunterDummy" />
+
+  <CEffectSet id="DVaBigGameHunterHealApplySet">
+    <EffectArray value="DVaBigGameHunterCreateHealer" />
+    <EffectArray value="DVaBoostersBigGameHunterResetHealCatalog" />
+    <EffectArray value="DVaBigGameHunterRemoveTokenCounter" />
+  </CEffectSet>
+  
+  <CAccumulatorVitals id="DVaBigGameHunterTargetAccumulator" parent="BaseVitalAccumulator">
+    <MaxAccumulation value="452607" />
+    <ApplicationRule value="Add" />
+    <Missing value="1" />
+    <VitalType value="Life" />
+    <UnitSource Effect="DVaBoostersImpactSet" Value="Target" />
+    <ModificationType value="PerUnitMaxVital" />
+    <Ratio value="0.06" />
+    <ClampToMaxVitalForFractionalDamage value="1" />
+  </CAccumulatorVitals>
+  
+  <CEffectModifyCatalogNumeric id="DVaBoostersBigGameHunterSetHealCatalog">
+    <CatalogModifications Operation="Set" Reference="Effect,DVaBigGameHunterCreateHealer,RechargeVitalRate">
+      <Value value="0">
+        <AccumulatorArray value="DVaBigGameHunterTargetAccumulator" />
+      </Value>
+    </CatalogModifications>
+  </CEffectModifyCatalogNumeric>
+  <CEffectModifyCatalogNumeric id="DVaBoostersBigGameHunterResetHealCatalog">
+    <CatalogModifications Operation="Set" Reference="Effect,DVaBigGameHunterCreateHealer,RechargeVitalRate">
+      <Value value="0"/>
+    </CatalogModifications>
+  </CEffectModifyCatalogNumeric>
+  
+  <CEffectCreateHealer id="DVaBigGameHunterCreateHealer" parent="StormSelfOnlyHealingSpell">
+    <ImpactUnit Value="Caster" />
+    <RechargeVitalRate value="0" />
+	<MultiplicativeModifierArray index="HeroHitCounter" Accumulator="DVaBigGameHunterHeroHitAccumulator"/>
+  </CEffectCreateHealer>
+  
+  <CAccumulatorToken id="DVaBigGameHunterHeroHitAccumulator" parent="BaseAccumulator">
+    <ApplicationRule value="Add" />
+    <TokenId value="DVaBigGameHunterHeroHitTokenCounter" />
+    <Scale value="1" />
+  </CAccumulatorToken>
+  
+  <CBehaviorTokenCounter id="DVaBigGameHunterHeroHitTokenCounter" parent="StormGenericToken">
+    <Max value="14" />
+  </CBehaviorTokenCounter>
+  
+  <CEffectApplyBehavior id="DVaBoostersBigGameHunterApplyTokenCounter">
+    <WhichUnit Value="Caster" />
+    <Behavior value="DVaBigGameHunterHeroHitTokenCounter" />
+  </CEffectApplyBehavior>
+  <CEffectRemoveBehavior id="DVaBigGameHunterRemoveTokenCounter">
+    <WhichUnit Value="Caster" />
+    <BehaviorLink value="DVaBigGameHunterHeroHitTokenCounter" />
+  </CEffectRemoveBehavior>
+  
+
+  <CValidatorPlayerTalent id="DVaMechHasChargedUpTalent">
+    <Find value="1" />
+    <Value value="DVaMechChargedUp" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMechChargedUp" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechChargedUp">
+    <Face value="DVaMechChargedUp" />
+    <RankArray>
+      <BehaviorArray value="DVaMechChargedUpCarry" />
+    </RankArray>
+    <Trait value="1" />
+  </CTalent>
+  
+
+  <CBehaviorBuff id="DVaMechChargedUpCarry" parent="CarryBehaviorParent">
+    <RemoveValidatorArray value="TargetDoesNotHaveAbathurUltimateEvolutionControl" />
+    <RemoveValidatorArray value="DVaMechHasChargedUpTalent" />
+    <RemoveValidatorArray value="DVaTargetIsMech" />
+    <DisableValidatorArray value="DVaMechChargedUpCombine" />
+    <Modification>
+      <DamageDealtFraction index="Basic" value="0.15" />
+      <DamageDealtFraction index="Ability" value="0.15" />
+      <HealTakenAdditiveMultiplier index="Life" value="0.15" />
+      <VitalRegenMultiplier index="Life" value="0.15" />
+    </Modification>
+  </CBehaviorBuff>
+  
+
+  <CValidatorCombine id="DVaMechChargedUpCombine">
+    <CombineArray value="DVaMechChargedUpCombineBunnyHopAvailable" />
+    <CombineArray value="DVaMechChargedUpCombineSelfDestructAvailable" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaMechChargedUpCombineBunnyHopAvailable">
+    <CombineArray value="CasterHasUltimate1Unlocked" />
+    <CombineArray value="DVaMechHasChargedUpTalent" />
+    <CombineArray value="DVaMechBunnyHopNotActiveAndNotOnCooldown" />
+    <Type value="And" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaMechBunnyHopNotActiveAndNotOnCooldown">
+    <CombineArray value="DVaMechBunnyHopNotOnCooldown" />
+    <CombineArray value="DVaMechMechTargetNotBunnyHopping" />
+    <Type value="And" />
+  </CValidatorCombine>
+  <CValidatorCombine id="DVaMechChargedUpCombineSelfDestructAvailable">
+    <CombineArray value="CasterHasUltimate2Unlocked" />
+    <CombineArray value="DVaMechHasChargedUpTalent" />
+    <CombineArray value="DVaMechSelfDestructNotOnCooldown" />
+    <Type value="And" />
+  </CValidatorCombine>
+  
+
+  <CValidatorUnitCompareCooldown id="DVaMechSelfDestructNotOnCooldown">
+    <CooldownLink value="Abil/DVaMechSelfDestructHeroic" />
+    <Ability value="DVaMechSelfDestructHeroic" />
+    <WhichUnit Value="Source" />
+    <Location value="Player" />
+  </CValidatorUnitCompareCooldown>
+  <CValidatorUnitCompareCooldown id="DVaMechBunnyHopNotOnCooldown">
+    <CooldownLink value="Abil/DVaMechBunnyHopHeroic" />
+    <Ability value="DVaMechBunnyHopHeroic" />
+    <WhichUnit Value="Source" />
+    <Location value="Player" />
+  </CValidatorUnitCompareCooldown>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechMechTargetNotBunnyHopping">
+    <WhichUnit Value="Target" />
+    <Compare value="LT" />
+    <Value value="1" />
+    <Behavior value="DvaMechBunnyHopActive" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+
+  <CValidatorPlayerTalent id="DVaMicroMissilesHasMacroMissiles">
+    <Find value="1" />
+    <Value value="DVaMicroMissilesMacroMissiles" />
+  </CValidatorPlayerTalent>
+  
+  <CValidatorPlayerTalent id="DVaMicroMissilesDoesNotHaveMacroMissiles">
+    <Find value="0" />
+    <Value value="DVaMicroMissilesMacroMissiles" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMicroMissilesMacroMissiles" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_tychus_ragnarokmissiles.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMicroMissilesMacroMissiles">
+    <Face value="DVaMicroMissilesMacroMissiles" />
+    <Abil value="DVaPilotTorpedoDash" />
+    <AbilityModificationArray>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMicroMissilesMacroMissilesDamage" />
+        <Field value="Chance" />
+        <Value value="1.000000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Effect" />
+        <Entry value="DVaMicroMissilesApplyCooldown" />
+        <Field value="Cost[0].CooldownTimeUse" />
+        <Value value="3.000000" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Entry value="DVaMicroMissilesOn" />
+        <Field value="Cost[0].Cooldown.TimeUse" />
+        <Value value="3.000000" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+
+  <CEffectDamage id="DVaMicroMissilesMacroMissilesDamage" parent="StormSpellPercentDamage">
+    <Chance value="0" />
+    <VitalFractionMax index="Life" value="0.01" />
+    <ValidatorArray value="TargetIsHero" />
+  </CEffectDamage>
+  
+  
+  
+  <CValidatorPlayerTalent id="DVaMechBoostersHasSlipstream">
+    <Find value="1" />
+    <Value value="DVaMechBoostersSlipstream" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMechBoostersSlipstream" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechBoostersSlipstream">
+    <Face value="DVaMechBoostersSlipstream" />
+    <Abil value="DVaBoostersOn" />
+  </CTalent>
+
+  <CEffectCreatePersistent id="DVaBoostersSlipstreamPersistent">
+    <ValidatorArray value="DVaMechBoostersHasSlipstream"/>
+    <Marker>
+      <MatchFlags index="Id" value="1" />
+    </Marker>
+    <WhichLocation Value="SourceUnit" />
+    <PeriodCount value="500" />
+    <PeriodicValidator value="DVaMechSourceHasBoostersBehavior" />
+    <PeriodicEffectArray value="DVaBoostersSlipstreamSearch" />
+    <PeriodicPeriodArray value="0.0625" />
+    <TimeScaleSource Value="Caster" />
+    <AINotifySettings AreaEffect="DVaBoostersSlipstreamSearch">
+      <Flags index="Disabled" value="1" />
+    </AINotifySettings>
+  </CEffectCreatePersistent>
+
+  <CEffectEnumArea id="DVaBoostersSlipstreamSearch">
+    <ImpactLocation Value="SourceUnit" />
+    <SearchFilters value="Heroic;Self,Neutral,Enemy,ImmuneToFriendlyAbilities,Dead,Benign"/>
+    <SearchFlags index="DoActorSearch" value="1" />
+    <AreaArray Effect="DVaBoosterSlipstreamImpactSet">
+      <Radius value="1.5" />
+    </AreaArray>
+    <AreaRelativeOffset Y="2.25" />
+    <ValidatorArray value="CasterNotTimeStopped" />
+  </CEffectEnumArea>
+  
+ 
+  <CEffectSet id="DVaBoosterSlipstreamImpactSet">
+    <EffectArray value="DVaSlipstreamApplyBehavior" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaSlipstreamApplyBehavior">
+    <Behavior value="DVaSlipstreamMovementSpeed" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaSlipstreamMovementSpeed">
+    <RemoveValidatorArray value="DVaMechCasterHasBoostersBehavior" />
+    <RemoveValidatorArray value="DVaSlipstreamFacingTowardsDVaCaster" />
+    <Duration value="0.3125"/>
+    <Modification>
+      <MoveSpeedMaximum value="10.8867"/>
+      <MoveSpeedMinimum value="10.8867"/>
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechCasterHasBoostersBehavior">
+    <WhichUnit Effect="DVaBoostersOnInitialSet" Value="CasterUnit" />
+    <Compare value="GE" />
+    <Value value="1" />
+    <Behavior value="DVaBoostersActive" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+  <CValidatorLocationArc id="DVaSlipstreamFacingTowardsDVaCaster">
+    <WhichLocation Effect="DVaBoosterSlipstreamImpactSet" Value="TargetUnit" />
+    <Arc value="50" />
+    <Value Effect="DVaBoostersOnInitialSet" Value="CasterUnit" />
+  </CValidatorLocationArc>
+  
+  
+  <CValidatorPlayerTalent id="DVaMEKAfallHasTheBeacon">
+    <Find value="1" />
+    <Value value="MEKAfallTheBeacon" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="MEKAfallTheBeacon" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_callmech.dds" />
+  </CButton>
+  
+  <CTalent id="MEKAfallTheBeacon">
+    <Face value="MEKAfallTheBeacon" />
+    <Abil value="DVaPilotCallMechMEKAfall" />
+    <AbilityModificationArray ModifyAbil="DVaPilotCallMechMEKAfall" OriginalAbilButton="DVaPilotCallMechMEKAfall" ModifiedAbilButton="DVaPilotCallMechMEKAfall">
+      <Modifications>
+        <Type value="FlatModification" />
+        <Entry value="DVaPilotCallMechMEKAfall" />
+        <Field value="Range" />
+        <Value value="54" />
+      </Modifications>
+      <Modifications>
+        <Type value="FlatModification" />
+        <Catalog value="Actor" />
+        <Entry value="DVaPilotCallMechMEKAfallRangeSplat" />
+        <Field value="Scale" />
+        <Value value="54" />
+      </Modifications>
+    </AbilityModificationArray>
+  </CTalent>
+
+
+  <CEffectModifyPlayer id="DVaPilotCallMechTheBeaconCooldownReduction">
+    <ValidatorArray value="DVaMEKAfallHasTheBeacon"/>
+    <WhichPlayer Value="Origin" />
+    <Cost>
+      <Cooldown>
+        <Link value="Abil/DVaPilotCallMech" />
+        <Location value="Player" />
+        <Operation value="Add" />
+        <TimeUse value="-11.6" />
+      </Cooldown>
+    </Cost>
+  </CEffectModifyPlayer>
+  
+
+  <CValidatorPlayerTalent id="DVaBoostersHasScratchOneBogey">
+    <Find value="1" />
+    <Value value="DVaBoostersScratchOneBogey" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaBoostersScratchOneBogey" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_boosters.dds" />
+  </CButton>
+  
+  <CTalent id="DVaBoostersScratchOneBogey">
+    <Face value="DVaBoostersScratchOneBogey" />
+    <Abil value="DVaBoostersOn" />
+  </CTalent>
+
+  <CEffectApplyBehavior id="DVaScratchOneBogeyApplyBehavior">
+    <ValidatorArray value="DVaBoostersHasScratchOneBogey" />
+    <ValidatorArray value="CasterNotBlindedAndTargetNotEvading" />
+    <ValidatorArray value="TargetIsHero" />
+    <Behavior value="DVaScratchOneBogeyStack" />
+  </CEffectApplyBehavior>
+
+  <CBehaviorBuff id="DVaScratchOneBogeyStack">
+    <BuffFlags index="RefreshStack" value="1" />
+    <MaxStackCount value="9" />
+    <Duration value="5" />
+    <CancelEffect value="DVaScratchOneBogeyProcSet" />
+  </CBehaviorBuff>
+  
+  <CEffectSet id="DVaScratchOneBogeyProcSet">
+    <EffectArray value="DVaScratchOneBogeyApplySlow" />
+  </CEffectSet>
+  
+  <CEffectApplyBehavior id="DVaScratchOneBogeyApplySlow" parent="StormSlowApply">
+    <Behavior value="DVaScratchOneBogeySlow" />
+  </CEffectApplyBehavior>
+  
+  <CBehaviorBuff id="DVaScratchOneBogeySlow" parent="StormSlowParent">
+    <Duration value="2" />
+    <Modification>
+      <UnifiedMoveSpeedFactor value="-0.3" />
+    </Modification>
+  </CBehaviorBuff>
+  
+  <CEffectRemoveBehavior id="DVaBoostersScratchOneBogeyRemoveStacks">
+    <ValidatorArray value="DVaBoostersScratchOneBogeyTargetHas11Stacks"/>
+    <BehaviorLink value="DVaScratchOneBogeyStack" />
+    <Count value="9" />
+    <CancelBehavior value="1" />
+  </CEffectRemoveBehavior>
+
+  <CValidatorUnitCompareBehaviorCount id="DVaBoostersScratchOneBogeyTargetHas11Stacks">
+    <Value value="9" />
+    <Behavior value="DVaScratchOneBogeyStack" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+
+  <CValidatorPlayerTalent id="DVaMechModeHasCannonsOnline">
+    <Find value="1" />
+    <Value value="DVaMechModeCannonsOnline" />
+  </CValidatorPlayerTalent>
+  
+  <CButton id="DVaMechModeCannonsOnline" parent="StormButtonParent">
+    <Icon value="Assets\Textures\storm_ui_icon_dva_mechmode.dds" />
+  </CButton>
+  
+  <CTalent id="DVaMechModeCannonsOnline">
+    <Face value="DVaMechModeCannonsOnline" />
+    <Trait value="1" />
+    <RankArray>
+      <BehaviorArray value="DVaMechCannonsOnline" />
+    </RankArray>
+  </CTalent>
+  
+  <CBehaviorBuff id="DVaMechCannonsOnline" parent="CarryBehaviorParent">
+    <RemoveValidatorArray value="TargetDoesNotHaveAbathurUltimateEvolutionControl" />
+    <RemoveValidatorArray value="DVaMechModeHasCannonsOnline" />
+    <RemoveValidatorArray value="DVaTargetIsMech" />
+    <DisableValidatorArray value="DVaMechBasicAttackActive" />
+	<Period value="0.25"/>
+	<PeriodicEffect value="DVaMechCannonsOnlinePeriodicSet"/>
+  </CBehaviorBuff>
+  
+  <CValidatorUnitCompareBehaviorCount id="DVaMechBasicAttackActive">
+    <WhichUnit Value="Target" />
+    <Compare value="GT" />
+    <Behavior value="DVaMechArtWeaponCasterSoundDummyLoop" />
+  </CValidatorUnitCompareBehaviorCount>
+  
+
+  <CEffectSet id="DVaMechCannonsOnlinePeriodicSet">
+    <EffectArray value="DVaMechCannonsOnlineReduceBoostersCooldown" />
+    <EffectArray value="DVaMechCannonsOnlineReduceMicroMissilesCooldown" />
+    <EffectArray value="DVaMechCannonsOnlineRestoreEnergy" />
+  </CEffectSet>
+  
+  <CEffectModifyUnit id="DVaMechCannonsOnlineReduceBoostersCooldown">
+    <ValidatorArray value="DVaMechBoostersGEHalfCooldownRemaining"/>
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaBoostersOn,Execute" CooldownOperation="Add" CooldownTimeUse="-0.1875" />
+  </CEffectModifyUnit>
+  <CEffectModifyUnit id="DVaMechCannonsOnlineReduceMicroMissilesCooldown">
+    <ValidatorArray value="DVaMechMicroMissilesGEHalfCooldownRemainingCombine"/>
+    <ImpactUnit Value="Source" />
+    <Cost Abil="DVaMicroMissilesOn,Execute" CooldownOperation="Add" CooldownTimeUse="-0.1875" />
+  </CEffectModifyUnit>
+  <CEffectCreateHealer id="DVaMechCannonsOnlineRestoreEnergy" parent="StormManaRestore">
+    <ValidatorArray value="DVaMechEnergyLE50"/>
+    <ImpactUnit Value="Source" />
+    <RechargeVitalRate value="1.25" />
+  </CEffectCreateHealer>
+  
+
+
+  <CValidatorUnitCompareVital id="DVaMechEnergyLE50">
+    <WhichUnit Value="Source" />
+    <Compare value="LE" />
+    <Value value="50" />
+    <Vital value="Energy" />
+  </CValidatorUnitCompareVital>
+
+  <CValidatorUnitCompareCooldown id="DVaMechBoostersGEHalfCooldownRemaining">
+    <WhichUnit Value="Source" />
+    <Compare value="GE" />
+    <CooldownLink value="Abil/DVaBoostersOn" />
+    <Location value="Player" />
+    <Ability value="DVaBoostersOn" />
+    <Value value="4.5" />
+  </CValidatorUnitCompareCooldown>
+  
+
+  <CValidatorCombine id="DVaMechMicroMissilesGEHalfCooldownRemainingCombine">
+    <CombineArray value="DVaMechHasMacroMissilesAndMacroMissilesGEHalfCooldownRemaining" />
+    <CombineArray value="DVaMechHasBaselineMicroMissilesAndGEHalfCooldownRemaining" />
+  </CValidatorCombine>
+
+  <CValidatorCombine id="DVaMechHasMacroMissilesAndMacroMissilesGEHalfCooldownRemaining">
+    <CombineArray value="DVaMicroMissilesHasMacroMissiles" />
+    <CombineArray value="DVaMechMicroMissilesMacroMissilesGEHalfCooldownRemaining" />
+    <Type value="And" />
+  </CValidatorCombine>
+  
+  <CValidatorCombine id="DVaMechHasBaselineMicroMissilesAndGEHalfCooldownRemaining">
+    <CombineArray value="DVaMicroMissilesDoesNotHaveMacroMissiles" />
+    <CombineArray value="DVaMechMicroMissilesUntalentedGEHalfCooldownRemaining" />
+    <Type value="And" />
+  </CValidatorCombine>
+  
+  <CValidatorUnitCompareCooldown id="DVaMechMicroMissilesUntalentedGEHalfCooldownRemaining">
+    <WhichUnit Value="Source" />
+    <Compare value="GE" />
+    <CooldownLink value="Abil/DVaMicroMissilesOn" />
+    <Location value="Unit" />
+    <Ability value="DVaMicroMissilesOn" />
+    <Value value="4.5" />
+  </CValidatorUnitCompareCooldown>
+  
+  <CValidatorUnitCompareCooldown id="DVaMechMicroMissilesMacroMissilesGEHalfCooldownRemaining">
+    <WhichUnit Value="Source" />
+    <Compare value="GE" />
+    <CooldownLink value="Abil/DVaMicroMissilesOn" />
+    <Location value="Unit" />
+    <Ability value="DVaMicroMissilesOn" />
+    <Value value="6" />
+  </CValidatorUnitCompareCooldown>
   
 </Catalog>

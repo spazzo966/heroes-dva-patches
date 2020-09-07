@@ -1821,13 +1821,15 @@ void libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding_Init () {
     TriggerEnable(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, false);
     TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "Ultimate1Unlocked", c_unitBehaviorChangeCreate);
     TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "Ultimate2Unlocked", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechProMovesDamageResponseCarry", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaBoostersCrashCourseQuestToken", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechEmergencyShieldingFatalResponseCarry", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechAblativeArmorDamageResponseCarry", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechExpensivePlatingCarry", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechBargainPlatingCarry", c_unitBehaviorChangeCreate);
-    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechGearedUpCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechProMovesDamageResponseCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaBoostersCrashCourseQuestToken", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechEmergencyShieldingFatalResponseCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechAblativeArmorDamageResponseCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechExpensivePlatingCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechBargainPlatingCarry", c_unitBehaviorChangeCreate);
+    // TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechGearedUpCarry", c_unitBehaviorChangeCreate);
+    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechChargedUpCarry", c_unitBehaviorChangeCreate);
+    TriggerAddEventUnitBehaviorChange(libHDVA_gt_DVaTalentBehaviorAcquiredWhileCargoForwarding, null, "DVaMechCannonsOnline", c_unitBehaviorChangeCreate);
 }
 
 //--------------------------------------------------------------------------------------------------
